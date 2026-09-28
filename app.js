@@ -25,6 +25,9 @@
     document.querySelectorAll('[data-label]').forEach((el) => {
       el.setAttribute('aria-label', lookup(el.dataset.label) ?? '');
     });
+    document.querySelectorAll('[data-placeholder]').forEach((el) => {
+      el.setAttribute('placeholder', lookup(el.dataset.placeholder) ?? '');
+    });
   }
 
   // One line at random, never the same one twice in a row.
@@ -63,6 +66,11 @@
     });
 
     if (name === 'home') renderHome();
+    if (name === 'choose') renderChoose();
+    if (name === 'act' && !renderAct()) {
+      go('home');
+      return;
+    }
 
     // Move focus to the new screen's heading so screen readers follow along.
     if (prev !== null) {
@@ -98,6 +106,226 @@
     } else {
       $('#home-line').textContent = randomLine('home.idleLines');
     }
+  }
+
+  // ---- Choose: option entry ---------------------------------------------
+
+  const MAX_OPTIONS = 7;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  // The options being chosen between. Answers are cached for the whole draft,
+  // so editing the list and ranking again never repeats a question.
+  let draft = null;
+  // The finished ranking, waiting for the Act screen.
+  let pending = null;
+
+  function newDraft() {
+    return { options: [], cache: new Map(), rank: null };
+  }
+
+  const sameText = (a, b) => a.toLowerCase() === b.toLowerCase();
+
+  function addOption(raw) {
+    const text = raw.trim().replace(/\s+/g, ' ');
+    if (!text || draft.options.length >= MAX_OPTIONS) return;
+    if (draft.options.some((o) => sameText(o, text))) return;
+    draft.options.push(text);
+    renderEntry();
+  }
+
+  function removeOption(text) {
+    draft.options = draft.options.filter((o) => o !== text);
+    renderEntry();
+  }
+
+  // Options from earlier sessions, newest first, not already in the list.
+  function suggestions() {
+    const seen = [];
+    [...data.sessions]
+      .sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''))
+      .forEach((s) => (s.options || []).forEach((o) => {
+        if (!seen.some((x) => sameText(x, o)) && !draft.options.some((x) => sameText(x, o))) seen.push(o);
+      }));
+    return seen.slice(0, 8);
+  }
+
+  function chip(text, kind) {
+    const li = document.createElement('li');
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = `chip chip--${kind}`;
+    btn.dataset.option = text;
+    const label = document.createElement('span');
+    label.textContent = text;
+    const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    icon.setAttribute('viewBox', '0 0 24 24');
+    icon.setAttribute('aria-hidden', 'true');
+    icon.innerHTML = kind === 'option' ? '<path d="M7 7l10 10M17 7L7 17"/>' : '<path d="M12 6v12M6 12h12"/>';
+    btn.setAttribute('aria-label', kind === 'option' ? `${STRINGS.choose.remove}: ${text}` : `${STRINGS.choose.add}: ${text}`);
+    btn.append(label, icon);
+    li.append(btn);
+    return li;
+  }
+
+  function renderEntry() {
+    const full = draft.options.length >= MAX_OPTIONS;
+    $('#option-chips').replaceChildren(...draft.options.map((o) => chip(o, 'option')));
+    $('#option-limit').hidden = !full;
+    $('#option-input').disabled = full;
+    $('#option-add').disabled = full;
+    $('#start-compare').disabled = draft.options.length === 0;
+
+    const list = full ? [] : suggestions();
+    $('#suggestions').hidden = list.length === 0;
+    $('#suggestion-chips').replaceChildren(...list.map((o) => chip(o, 'suggestion')));
+  }
+
+  function renderChoose() {
+    if (!draft) draft = newDraft();
+    showEntry();
+  }
+
+  function showEntry() {
+    draft.rank = null;
+    $('#choose-entry').hidden = false;
+    $('#compare').hidden = true;
+    renderEntry();
+  }
+
+  // ---- Choose: pair comparison ------------------------------------------
+  //
+  // Binary insertion sort. Each option, in the order entered, is placed into
+  // the ranked list by comparing it with the middle of the remaining range.
+  // A tie keeps the earlier option ahead.
+
+  const pairKey = (a, b) => JSON.stringify([a, b].sort());
+
+  // Most comparisons binary insertion can need for n options.
+  function maxComparisons(n) {
+    let total = 0;
+    for (let k = 1; k < n; k++) total += Math.ceil(Math.log2(k + 1));
+    return total;
+  }
+
+  function startRank() {
+    const opts = draft.options;
+    if (opts.length === 1) {
+      finishRank([opts[0]]);
+      return;
+    }
+    draft.rank = {
+      ranked: [opts[0]],
+      index: 1,
+      lo: 0,
+      hi: 1,
+      answered: 0,
+      history: [],
+      question: null,
+      busy: false,
+    };
+    $('#choose-entry').hidden = true;
+    $('#compare').hidden = false;
+    nextQuestion();
+    $('#compare-title').setAttribute('tabindex', '-1');
+    $('#compare-title').focus({ preventScroll: true });
+  }
+
+  // An answer is the chosen option's text, or TIE.
+  const TIE = null;
+
+  function applyAnswer(r, candidate, answer) {
+    const mid = Math.floor((r.lo + r.hi) / 2);
+    if (answer === candidate) r.hi = mid;
+    else r.lo = mid + 1; // the ranked option won, or a tie
+  }
+
+  function nextQuestion() {
+    const r = draft.rank;
+    const opts = draft.options;
+
+    while (r.index < opts.length) {
+      const candidate = opts[r.index];
+      if (r.lo >= r.hi) {
+        r.ranked.splice(r.lo, 0, candidate);
+        r.index += 1;
+        r.lo = 0;
+        r.hi = r.ranked.length;
+        continue;
+      }
+      const other = r.ranked[Math.floor((r.lo + r.hi) / 2)];
+      const cached = draft.cache.get(pairKey(candidate, other));
+      if (cached !== undefined) {
+        applyAnswer(r, candidate, cached);
+        continue;
+      }
+      r.question = { candidate, other };
+      renderQuestion();
+      return;
+    }
+
+    finishRank(r.ranked);
+  }
+
+  function renderQuestion() {
+    const r = draft.rank;
+    const { candidate, other } = r.question;
+    const sides = Math.random() < 0.5 ? [candidate, other] : [other, candidate];
+    document.querySelectorAll('#pair .card').forEach((card, i) => {
+      card.textContent = sides[i];
+      card.dataset.option = sides[i];
+      card.classList.remove('is-chosen');
+    });
+    const total = maxComparisons(draft.options.length);
+    $('#progress-fill').style.transform = `scaleX(${Math.min(r.answered / total, 1)})`;
+    r.busy = false;
+  }
+
+  function answer(choice, card) {
+    const r = draft.rank;
+    if (!r || r.busy) return;
+    r.busy = true;
+
+    const { candidate, other } = r.question;
+    r.history.push({
+      ranked: [...r.ranked], index: r.index, lo: r.lo, hi: r.hi,
+      answered: r.answered, question: r.question,
+    });
+    draft.cache.set(pairKey(candidate, other), choice);
+    applyAnswer(r, candidate, choice);
+    r.answered += 1;
+
+    if (card) card.classList.add('is-chosen');
+    setTimeout(nextQuestion, card && !reducedMotion.matches ? 450 : 120);
+  }
+
+  // Re-ask the previous pair, or go back to editing the list.
+  function undo() {
+    const r = draft.rank;
+    if (!r || r.busy) return;
+    const prev = r.history.pop();
+    if (!prev) {
+      showEntry();
+      return;
+    }
+    Object.assign(r, prev);
+    draft.cache.delete(pairKey(prev.question.candidate, prev.question.other));
+    renderQuestion();
+  }
+
+  function finishRank(ranking) {
+    pending = { options: [...draft.options], ranking, createdAt: new Date().toISOString() };
+    $('#progress-fill').style.transform = 'scaleX(1)';
+    draft = null;
+    go('act');
+  }
+
+  // ---- Act --------------------------------------------------------------
+
+  // The full Act screen arrives in phase 3; for now it shows the top pick.
+  function renderAct() {
+    if (!pending) return false;
+    $('#act-pick').textContent = pending.ranking[0];
+    return true;
   }
 
   // ---- About ------------------------------------------------------------
@@ -137,6 +365,37 @@
     $('#find-pull').addEventListener('click', () => go('choose'));
     $('#done-let-go').addEventListener('click', () => go('release'));
     $('#home-add-river').addEventListener('click', () => go('river'));
+
+    $('#option-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = $('#option-input');
+      addOption(input.value);
+      input.value = '';
+      if (!input.disabled) input.focus();
+    });
+    $('#option-chips').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-option]');
+      if (btn) removeOption(btn.dataset.option);
+    });
+    $('#suggestion-chips').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-option]');
+      if (btn) addOption(btn.dataset.option);
+    });
+    $('#start-compare').addEventListener('click', () => {
+      // Include anything typed but not yet added.
+      const input = $('#option-input');
+      if (input.value.trim()) {
+        addOption(input.value);
+        input.value = '';
+      }
+      if (draft.options.length) startRank();
+    });
+    $('#pair').addEventListener('click', (e) => {
+      const card = e.target.closest('.card');
+      if (card) answer(card.dataset.option, card);
+    });
+    $('#compare-tie').addEventListener('click', () => answer(TIE, null));
+    $('#compare-undo').addEventListener('click', undo);
 
     window.addEventListener('hashchange', () => show(screenFromHash()));
     show(screenFromHash());

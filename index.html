@@ -50,13 +50,57 @@
         </div>
       </section>
 
-      <!-- Choose (built in phase 2) -->
+      <!-- Choose: option entry, then the pair comparison -->
       <section class="screen" id="screen-choose" data-screen="choose" aria-labelledby="choose-title" hidden>
-        <h1 class="screen-title" id="choose-title" data-text="choose.title"></h1>
+        <div class="choose-entry" id="choose-entry">
+          <h1 class="screen-title"><label id="choose-title" for="option-input" data-text="choose.title"></label></h1>
+
+          <form class="option-form" id="option-form" autocomplete="off">
+            <input class="option-input" id="option-input" type="text" maxlength="80"
+                   enterkeyhint="enter" data-placeholder="choose.placeholder">
+            <button class="option-add" id="option-add" type="submit" data-label="choose.add">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+          </form>
+
+          <ul class="chips" id="option-chips" aria-live="polite"></ul>
+          <p class="hint" id="option-limit" data-text="choose.limit" hidden></p>
+
+          <div class="suggestions" id="suggestions" hidden>
+            <p class="suggestions-label" data-text="choose.usedBefore"></p>
+            <ul class="chips" id="suggestion-chips"></ul>
+          </div>
+
+          <div class="screen-actions">
+            <button class="btn btn--gold btn--large" id="start-compare" type="button" data-text="choose.findPull" disabled></button>
+          </div>
+        </div>
+
+        <div class="compare" id="compare" hidden>
+          <div class="compare-top">
+            <button class="icon-btn" id="compare-undo" type="button" data-label="choose.back">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+            </button>
+            <div class="progress" aria-hidden="true"><div class="progress-fill" id="progress-fill"></div></div>
+          </div>
+
+          <h1 class="screen-title compare-title" id="compare-title" data-text="choose.comparePrompt"></h1>
+
+          <div class="pair" id="pair">
+            <button class="card" type="button" data-side="0"></button>
+            <button class="card" type="button" data-side="1"></button>
+          </div>
+
+          <button class="link-btn" id="compare-tie" type="button" data-text="choose.aboutTheSame"></button>
+        </div>
       </section>
 
-      <!-- Act (built in phase 3) -->
-      <section class="screen" id="screen-act" data-screen="act" hidden></section>
+      <!-- Act (the compass and buttons arrive in phase 3) -->
+      <section class="screen" id="screen-act" data-screen="act" aria-labelledby="act-pick" hidden>
+        <div class="act-center">
+          <h1 class="act-pick" id="act-pick"></h1>
+        </div>
+      </section>
 
       <!-- Release (built in phase 3) -->
       <section class="screen" id="screen-release" data-screen="release" aria-labelledby="release-title" hidden>

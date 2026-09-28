@@ -32,9 +32,15 @@ const STRINGS = {
 
   choose: {
     title: 'What could you do next?',
+    placeholder: 'Type an option',
+    add: 'Add',
+    remove: 'Remove',
+    usedBefore: 'Used before',
+    limit: 'Seven is enough to choose from.',
     findPull: 'Find my pull',
     comparePrompt: 'Which pulls you more?',
     aboutTheSame: 'About the same',
+    back: 'Back',
   },
 
   act: {
