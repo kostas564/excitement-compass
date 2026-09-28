@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Excitement Compass</title>
+  <meta name="description" content="A free, private app that helps you find what excites you most right now, act on it, and let go of the outcome.">
+  <meta name="theme-color" content="#070a1f" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#eef1f8" media="(prefers-color-scheme: light)">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="sky" id="sky" aria-hidden="true">
+    <div class="sky-glow sky-glow--gold"></div>
+    <div class="sky-glow sky-glow--indigo"></div>
+    <div class="sky-glow sky-glow--cyan"></div>
+    <div class="sky-stars" id="sky-stars"></div>
+    <div class="sky-grain" id="sky-grain"></div>
+    <div class="sky-vignette"></div>
+  </div>
+
+  <div class="app">
+    <p class="notice" id="storage-notice" hidden data-text="storage.unavailable"></p>
+
+    <main class="screens">
+      <!-- Home -->
+      <section class="screen screen--home" id="screen-home" data-screen="home" aria-labelledby="home-title">
+        <h1 class="app-name" id="home-title" data-text="appName"></h1>
+
+        <div class="home-center">
+          <div class="orb" aria-hidden="true"></div>
+
+          <div class="home-idle" id="home-idle">
+            <p class="home-line" id="home-line"></p>
+          </div>
+
+          <div class="home-active" id="home-active" hidden>
+            <p class="home-active-label" data-text="home.activeLabel"></p>
+            <p class="home-pick" id="home-pick"></p>
+          </div>
+        </div>
+
+        <div class="home-actions">
+          <button class="btn btn--gold btn--large" id="find-pull" type="button" data-text="home.findPull"></button>
+          <button class="btn btn--gold btn--large" id="done-let-go" type="button" data-text="home.doneLetGo" hidden></button>
+          <button class="btn-round" id="home-add-river" type="button" data-label="home.addRiver">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- Choose (built in phase 2) -->
+      <section class="screen" id="screen-choose" data-screen="choose" aria-labelledby="choose-title" hidden>
+        <h1 class="screen-title" id="choose-title" data-text="choose.title"></h1>
+      </section>
+
+      <!-- Act (built in phase 3) -->
+      <section class="screen" id="screen-act" data-screen="act" hidden></section>
+
+      <!-- Release (built in phase 3) -->
+      <section class="screen" id="screen-release" data-screen="release" aria-labelledby="release-title" hidden>
+        <h1 class="screen-title" id="release-title" data-text="release.prompt"></h1>
+      </section>
+
+      <!-- River log -->
+      <section class="screen" id="screen-river" data-screen="river" aria-labelledby="river-title" hidden>
+        <h1 class="screen-title" id="river-title" data-text="river.title"></h1>
+        <p class="empty" data-text="river.empty"></p>
+      </section>
+
+      <!-- Look back -->
+      <section class="screen" id="screen-lookback" data-screen="lookback" aria-labelledby="lookback-title" hidden>
+        <h1 class="screen-title" id="lookback-title" data-text="lookBack.title"></h1>
+        <p class="screen-subtitle" data-text="lookBack.subtitle"></p>
+        <p class="empty" data-text="lookBack.empty"></p>
+      </section>
+
+      <!-- About -->
+      <section class="screen screen--about" id="screen-about" data-screen="about" aria-labelledby="about-title" hidden>
+        <h1 class="visually-hidden" id="about-title" data-text="about.title"></h1>
+        <div class="about-lines" id="about-lines"></div>
+        <div class="about-body" id="about-body"></div>
+        <p class="about-credit" id="about-credit"></p>
+      </section>
+    </main>
+
+    <nav class="nav" aria-label="Main">
+      <a class="nav-item" href="#home" data-nav="home">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 5.5l2 6.5-2 6.5-2-6.5z"/></svg>
+        <span data-text="nav.home"></span>
+      </a>
+      <a class="nav-item" href="#river" data-nav="river">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9c3-2.5 6 2.5 9 0s6 2.5 9 0M3 15c3-2.5 6 2.5 9 0s6 2.5 9 0"/></svg>
+        <span data-text="nav.river"></span>
+      </a>
+      <a class="nav-item" href="#lookback" data-nav="lookback">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4.5v4h4"/><path d="M12 8v4.5l3 2"/></svg>
+        <span data-text="nav.lookBack"></span>
+      </a>
+      <a class="nav-item" href="#about" data-nav="about">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.6v.1"/></svg>
+        <span data-text="nav.about"></span>
+      </a>
+    </nav>
+  </div>
+
+  <script src="strings.js"></script>
+  <script src="storage.js"></script>
+  <script src="sky.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

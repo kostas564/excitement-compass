@@ -1,0 +1,11 @@
+{
+  "name": "Excitement Compass",
+  "short_name": "Compass",
+  "description": "Find what excites you most right now, act on it, and let go of the outcome.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#070a1f",
+  "theme_color": "#070a1f",
+  "icons": []
+}
