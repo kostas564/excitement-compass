@@ -7,6 +7,7 @@ const STRINGS = {
 
   nav: {
     home: 'Home',
+    saved: 'Saved',
     river: 'River',
     lookBack: 'Look back',
     about: 'About',
@@ -35,7 +36,8 @@ const STRINGS = {
     placeholder: 'Type an option',
     add: 'Add',
     remove: 'Remove',
-    usedBefore: 'Used before',
+    saved: 'Saved',
+    all: 'all',
     limit: 'Seven is enough to choose from.',
     findPull: 'Find my pull',
     comparePrompt: 'Which pulls you more?',
@@ -69,6 +71,28 @@ const STRINGS = {
       'One more fragment falls into place.',
       "You don't need to see the whole picture. You're part of it.",
     ],
+  },
+
+  saved: {
+    title: 'Saved',
+    subtitle: 'Everything you write is kept here, ready for next time.',
+    placeholder: 'Add an option',
+    add: 'Add to saved',
+    addTo: 'Save to',
+    unsorted: 'Unsorted',
+    emptyGroup: 'Nothing here yet.',
+    newCategory: 'New category',
+    categoryName: 'Category name',
+    create: 'Create',
+    save: 'Save',
+    rename: 'Rename',
+    moveTo: 'Move to',
+    delete: 'Delete',
+    deleteCategory: 'Delete category',
+    confirmDeleteCategory: (name) => `Delete "${name}"? Its options move to Unsorted.`,
+    categoryOptions: (name) => `Options for ${name}`,
+    close: 'Close',
+    defaultCategories: ['Daily goals', 'Long-term goals'],
   },
 
   river: {

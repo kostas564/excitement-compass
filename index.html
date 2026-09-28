@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#070a1f" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#eef1f8" media="(prefers-color-scheme: light)">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="styles.css?v=5">
+  <link rel="stylesheet" href="styles.css?v=6">
 </head>
 <body>
   <div class="sky" id="sky" aria-hidden="true">
@@ -67,7 +67,8 @@
           <p class="hint" id="option-limit" data-text="choose.limit" hidden></p>
 
           <div class="suggestions" id="suggestions" hidden>
-            <p class="suggestions-label" data-text="choose.usedBefore"></p>
+            <p class="suggestions-label" data-text="choose.saved"></p>
+            <div class="tags tags--small" id="suggestion-cats" role="group" data-label="saved.title"></div>
             <ul class="chips" id="suggestion-chips"></ul>
           </div>
 
@@ -161,6 +162,25 @@
         </div>
       </section>
 
+      <!-- Saved: every option written, sorted into categories -->
+      <section class="screen" id="screen-saved" data-screen="saved" aria-labelledby="saved-title" hidden>
+        <h1 class="screen-title" id="saved-title" data-text="saved.title"></h1>
+        <p class="screen-subtitle" data-text="saved.subtitle"></p>
+
+        <form class="option-form" id="saved-form" autocomplete="off">
+          <input class="option-input" id="saved-input" type="text" maxlength="80"
+                 enterkeyhint="enter" data-placeholder="saved.placeholder" data-label="saved.placeholder">
+          <button class="option-add" type="submit" data-label="saved.add">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+        </form>
+        <div class="tags" id="saved-target" role="group" data-label="saved.addTo"></div>
+
+        <div id="saved-groups"></div>
+
+        <button class="btn btn--ghost new-category" id="new-category" type="button" data-text="saved.newCategory"></button>
+      </section>
+
       <!-- River log -->
       <section class="screen" id="screen-river" data-screen="river" aria-labelledby="river-title" hidden>
         <h1 class="screen-title" id="river-title" data-text="river.title"></h1>
@@ -209,6 +229,10 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 5.5l2 6.5-2 6.5-2-6.5z"/></svg>
         <span data-text="nav.home"></span>
       </a>
+      <a class="nav-item" href="#saved" data-nav="saved">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>
+        <span data-text="nav.saved"></span>
+      </a>
       <a class="nav-item" href="#river" data-nav="river">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9c3-2.5 6 2.5 9 0s6 2.5 9 0M3 15c3-2.5 6 2.5 9 0s6 2.5 9 0"/></svg>
         <span data-text="nav.river"></span>
@@ -225,9 +249,18 @@
   </div>
 
   <!-- Bump ?v= on every release so browsers never mix old and new files. -->
-  <script src="strings.js?v=5"></script>
-  <script src="storage.js?v=5"></script>
-  <script src="sky.js?v=5"></script>
-  <script src="app.js?v=5"></script>
+  <!-- One sheet, filled in by app.js, for moving, renaming and deleting. -->
+  <dialog class="sheet" id="sheet" aria-labelledby="sheet-title">
+    <div class="sheet-inner">
+      <h2 class="sheet-title" id="sheet-title"></h2>
+      <div class="sheet-body" id="sheet-body"></div>
+      <button class="link-btn" id="sheet-close" type="button" data-text="saved.close"></button>
+    </div>
+  </dialog>
+
+  <script src="strings.js?v=6"></script>
+  <script src="storage.js?v=6"></script>
+  <script src="sky.js?v=6"></script>
+  <script src="app.js?v=6"></script>
 </body>
 </html>

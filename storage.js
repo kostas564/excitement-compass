@@ -3,7 +3,7 @@
 
 const Storage = (() => {
   const KEY = 'excitement-compass-v1';
-  const SCHEMA_VERSION = 1;
+  const SCHEMA_VERSION = 2;
 
   let available = true;
 
@@ -11,6 +11,9 @@ const Storage = (() => {
     return {
       sessions: [],
       river: [],
+      // Saved options and the categories they are sorted into. null until
+      // the app first builds it (see ensureLibrary in app.js).
+      library: null,
       settings: { theme: 'system', schemaVersion: SCHEMA_VERSION },
     };
   }
@@ -21,6 +24,9 @@ const Storage = (() => {
     if (!raw || typeof raw !== 'object') return data;
     if (Array.isArray(raw.sessions)) data.sessions = raw.sessions;
     if (Array.isArray(raw.river)) data.river = raw.river;
+    if (raw.library && Array.isArray(raw.library.categories) && Array.isArray(raw.library.items)) {
+      data.library = raw.library;
+    }
     if (raw.settings && typeof raw.settings === 'object') {
       data.settings = { ...data.settings, ...raw.settings };
     }

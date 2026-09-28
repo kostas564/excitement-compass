@@ -7,7 +7,7 @@
   const data = Storage.load();
 
   // Screens reached from Home keep Home lit in the bottom navigation.
-  const SCREENS = ['home', 'choose', 'act', 'release', 'river', 'lookback', 'about'];
+  const SCREENS = ['home', 'choose', 'act', 'release', 'saved', 'river', 'lookback', 'about'];
   const NAV_FOR = { choose: 'home', act: 'home', release: 'home' };
 
   let current = null;
@@ -67,6 +67,7 @@
 
     if (name === 'home') renderHome();
     if (name === 'choose') renderChoose();
+    if (name === 'saved') renderSaved();
     if (name === 'river') renderRiver();
     if (name === 'lookback') renderLookBack();
     if ((name === 'act' && !renderAct()) || (name === 'release' && !renderRelease())) {
@@ -112,6 +113,49 @@
     }
   }
 
+  // ---- Saved options library -------------------------------------------
+  //
+  // Every option written is kept here so it never needs typing again.
+  // Items with no categoryId sit in Unsorted.
+
+  const sameText = (a, b) => a.toLowerCase() === b.toLowerCase();
+
+  // Build the library the first time, from options already used.
+  function ensureLibrary() {
+    if (data.library) return;
+    const now = new Date().toISOString();
+    const library = {
+      categories: STRINGS.saved.defaultCategories.map((name) => ({ id: Storage.newId(), name, createdAt: now })),
+      items: [],
+    };
+    [...data.sessions]
+      .sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''))
+      .forEach((s) => (s.options || []).forEach((text) => {
+        if (library.items.some((i) => sameText(i.text, text))) return;
+        library.items.push({ id: Storage.newId(), text, categoryId: null, createdAt: s.createdAt || now, lastUsedAt: s.createdAt || now });
+      }));
+    data.library = library;
+    persist();
+  }
+
+  const libItem = (text) => data.library.items.find((i) => sameText(i.text, text)) || null;
+  const categoryById = (id) => data.library.categories.find((c) => c.id === id) || null;
+
+  function saveOption(text, categoryId = null) {
+    if (libItem(text)) return false;
+    const now = new Date().toISOString();
+    data.library.items.push({ id: Storage.newId(), text, categoryId, createdAt: now, lastUsedAt: now });
+    persist();
+    return true;
+  }
+
+  // Most recently used first.
+  function sortedItems(filterFn) {
+    return data.library.items
+      .filter(filterFn)
+      .sort((a, b) => (b.lastUsedAt || '').localeCompare(a.lastUsedAt || ''));
+  }
+
   // ---- Choose: option entry ---------------------------------------------
 
   const MAX_OPTIONS = 7;
@@ -127,13 +171,14 @@
     return { options: [], cache: new Map(), rank: null };
   }
 
-  const sameText = (a, b) => a.toLowerCase() === b.toLowerCase();
-
   function addOption(raw) {
     const text = raw.trim().replace(/\s+/g, ' ');
     if (!text || draft.options.length >= MAX_OPTIONS) return;
     if (draft.options.some((o) => sameText(o, text))) return;
-    draft.options.push(text);
+    // Use the saved spelling if this option is already saved.
+    const saved = libItem(text);
+    draft.options.push(saved ? saved.text : text);
+    if (!saved) saveOption(text);
     renderEntry();
   }
 
@@ -142,15 +187,37 @@
     renderEntry();
   }
 
-  // Options from earlier sessions, newest first, not already in the list.
+  // Saved options to tap in, filtered by category ('all', 'unsorted' or an id).
+  let chooseCat = 'all';
+
   function suggestions() {
-    const seen = [];
-    [...data.sessions]
-      .sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''))
-      .forEach((s) => (s.options || []).forEach((o) => {
-        if (!seen.some((x) => sameText(x, o)) && !draft.options.some((x) => sameText(x, o))) seen.push(o);
-      }));
-    return seen.slice(0, 8);
+    const notInDraft = (i) => !draft.options.some((o) => sameText(o, i.text));
+    return sortedItems((i) => notInDraft(i) && (
+      chooseCat === 'all'
+      || (chooseCat === 'unsorted' ? !categoryById(i.categoryId) : i.categoryId === chooseCat)
+    ));
+  }
+
+  // Category tabs for the saved options on Choose: only those with something in them.
+  function renderSuggestionCats() {
+    const used = (fn) => data.library.items.some((i) => fn(i) && !draft.options.some((o) => sameText(o, i.text)));
+    const cats = data.library.categories.filter((c) => used((i) => i.categoryId === c.id));
+    const hasUnsorted = used((i) => !categoryById(i.categoryId));
+    const keys = [['all', STRINGS.choose.all], ...cats.map((c) => [c.id, c.name])];
+    if (hasUnsorted) keys.push(['unsorted', STRINGS.saved.unsorted]);
+    if (!keys.some(([k]) => k === chooseCat)) chooseCat = 'all';
+
+    const container = $('#suggestion-cats');
+    container.hidden = keys.length <= 2;
+    container.replaceChildren(...keys.map(([key, label]) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'tag';
+      btn.dataset.cat = key;
+      btn.textContent = label;
+      btn.setAttribute('aria-pressed', String(key === chooseCat));
+      return btn;
+    }));
   }
 
   function chip(text, kind) {
@@ -179,9 +246,10 @@
     $('#option-add').disabled = full;
     $('#start-compare').disabled = draft.options.length === 0;
 
+    if (!full) renderSuggestionCats();
     const list = full ? [] : suggestions();
     $('#suggestions').hidden = list.length === 0;
-    $('#suggestion-chips').replaceChildren(...list.map((o) => chip(o, 'suggestion')));
+    $('#suggestion-chips').replaceChildren(...list.map((i) => chip(i.text, 'suggestion')));
   }
 
   function renderChoose() {
@@ -380,6 +448,11 @@
 
   function onIt() {
     if (!pending) return;
+    const now = new Date().toISOString();
+    pending.options.forEach((text) => {
+      const item = libItem(text);
+      if (item) item.lastUsedAt = now;
+    });
     data.sessions.push({
       id: Storage.newId(),
       createdAt: pending.createdAt,
@@ -440,6 +513,173 @@
     closingTimer = setTimeout(() => {
       if (current === 'release') go('home');
     }, 2600);
+  }
+
+  // ---- Saved screen -----------------------------------------------------
+
+  // Category new options are saved into; null means Unsorted.
+  let savedTarget = null;
+
+  function el(tag, className, text) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
+  function renderSaved() {
+    const cats = data.library.categories;
+    if (savedTarget && !categoryById(savedTarget)) savedTarget = null;
+
+    $('#saved-target').hidden = cats.length === 0;
+    $('#saved-target').replaceChildren(el('span', 'tags-label', STRINGS.saved.addTo), ...cats.map((c) => {
+      const btn = el('button', 'tag', c.name);
+      btn.type = 'button';
+      btn.dataset.cat = c.id;
+      btn.setAttribute('aria-pressed', String(c.id === savedTarget));
+      return btn;
+    }));
+
+    const groups = [...cats.map((c) => ({ cat: c, name: c.name })), { cat: null, name: STRINGS.saved.unsorted }];
+    $('#saved-groups').replaceChildren(...groups.map(({ cat, name }) => {
+      const items = sortedItems((i) => (cat ? i.categoryId === cat.id : !categoryById(i.categoryId)));
+      // Unsorted only shows when something is in it.
+      if (!cat && items.length === 0) return document.createTextNode('');
+
+      const section = el('section', 'group');
+      const head = el('div', 'group-head');
+      head.append(el('h2', 'group-title', name));
+      if (cat) {
+        const more = el('button', 'icon-btn group-more');
+        more.type = 'button';
+        more.dataset.catMenu = cat.id;
+        more.setAttribute('aria-label', STRINGS.saved.categoryOptions(cat.name));
+        more.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="18" cy="12" r="1.3"/></svg>';
+        head.append(more);
+      }
+      section.append(head);
+
+      if (items.length === 0) {
+        section.append(el('p', 'group-empty', STRINGS.saved.emptyGroup));
+      } else {
+        const list = el('ul', 'saved-list');
+        list.append(...items.map((item) => {
+          const li = el('li');
+          const btn = el('button', 'saved-item', item.text);
+          btn.type = 'button';
+          btn.dataset.item = item.id;
+          li.append(btn);
+          return li;
+        }));
+        section.append(list);
+      }
+      return section;
+    }));
+  }
+
+  // ---- Sheet: move, rename, delete ---------------------------------------
+
+  const sheet = $('#sheet');
+
+  function openSheet(title, ...nodes) {
+    $('#sheet-title').textContent = title;
+    $('#sheet-body').replaceChildren(...nodes);
+    if (!sheet.open) sheet.showModal();
+  }
+
+  function closeSheet() {
+    if (sheet.open) sheet.close();
+  }
+
+  function sheetButton(label, className, onClick) {
+    const btn = el('button', className, label);
+    btn.type = 'button';
+    btn.addEventListener('click', onClick);
+    return btn;
+  }
+
+  // A one-field form (name a category), submitted by Enter or the button.
+  function nameForm(value, buttonLabel, onSubmit) {
+    const form = el('form', 'sheet-form');
+    form.autocomplete = 'off';
+    const input = el('input', 'option-input');
+    input.type = 'text';
+    input.maxLength = 40;
+    input.value = value;
+    input.placeholder = STRINGS.saved.categoryName;
+    input.setAttribute('aria-label', STRINGS.saved.categoryName);
+    const submit = el('button', 'btn btn--gold', buttonLabel);
+    submit.type = 'submit';
+    form.append(input, submit);
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = input.value.trim().replace(/\s+/g, ' ');
+      if (name) onSubmit(name);
+    });
+    setTimeout(() => input.focus(), 50);
+    return form;
+  }
+
+  function openItemSheet(item) {
+    const targets = [...data.library.categories.map((c) => [c.id, c.name]), [null, STRINGS.saved.unsorted]];
+    const current = categoryById(item.categoryId) ? item.categoryId : null;
+    const moves = el('div', 'sheet-moves');
+    moves.append(...targets.map(([id, name]) => {
+      const btn = sheetButton(name, 'tag', () => {
+        item.categoryId = id;
+        persist();
+        closeSheet();
+        renderSaved();
+      });
+      btn.setAttribute('aria-pressed', String(id === current));
+      return btn;
+    }));
+    openSheet(
+      item.text,
+      el('p', 'sheet-label', STRINGS.saved.moveTo),
+      moves,
+      sheetButton(STRINGS.saved.delete, 'btn btn--danger', () => {
+        data.library.items = data.library.items.filter((i) => i.id !== item.id);
+        persist();
+        closeSheet();
+        renderSaved();
+      }),
+    );
+  }
+
+  function openCategorySheet(cat) {
+    openSheet(
+      cat.name,
+      el('p', 'sheet-label', STRINGS.saved.rename),
+      nameForm(cat.name, STRINGS.saved.save, (name) => {
+        cat.name = name;
+        persist();
+        closeSheet();
+        renderSaved();
+      }),
+      sheetButton(STRINGS.saved.deleteCategory, 'btn btn--danger', () => {
+        if (!window.confirm(STRINGS.saved.confirmDeleteCategory(cat.name))) return;
+        data.library.items.forEach((i) => { if (i.categoryId === cat.id) i.categoryId = null; });
+        data.library.categories = data.library.categories.filter((c) => c.id !== cat.id);
+        persist();
+        closeSheet();
+        renderSaved();
+      }),
+    );
+  }
+
+  function openNewCategorySheet() {
+    openSheet(
+      STRINGS.saved.newCategory,
+      nameForm('', STRINGS.saved.create, (name) => {
+        const cat = { id: Storage.newId(), name, createdAt: new Date().toISOString() };
+        data.library.categories.push(cat);
+        savedTarget = cat.id;
+        persist();
+        closeSheet();
+        renderSaved();
+      }),
+    );
   }
 
   // ---- River log --------------------------------------------------------
@@ -513,13 +753,6 @@
   }
 
   const timeLabel = (iso) => new Date(iso).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-
-  function el(tag, className, text) {
-    const node = document.createElement(tag);
-    if (className) node.className = className;
-    if (text !== undefined) node.textContent = text;
-    return node;
-  }
 
   function itemMeta(iso, withDay) {
     const meta = el('p', 'item-meta');
@@ -627,6 +860,7 @@
 
   function start() {
     fillText();
+    ensureLibrary();
     renderAbout();
 
     if (!Storage.available) $('#storage-notice').hidden = false;
@@ -648,6 +882,12 @@
     $('#option-chips').addEventListener('click', (e) => {
       const btn = e.target.closest('[data-option]');
       if (btn) removeOption(btn.dataset.option);
+    });
+    $('#suggestion-cats').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-cat]');
+      if (!btn) return;
+      chooseCat = btn.dataset.cat;
+      renderEntry();
     });
     $('#suggestion-chips').addEventListener('click', (e) => {
       const btn = e.target.closest('[data-option]');
@@ -678,6 +918,43 @@
     });
     $('#release-skip').addEventListener('click', () => release(''));
     $('#release-closing').addEventListener('click', () => go('home'));
+
+    $('#saved-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = $('#saved-input');
+      const text = input.value.trim().replace(/\s+/g, ' ');
+      if (text) {
+        const existing = libItem(text);
+        if (!existing) saveOption(text, savedTarget);
+        else if (savedTarget) {
+          existing.categoryId = savedTarget;
+          persist();
+        }
+        renderSaved();
+      }
+      input.value = '';
+    });
+    $('#saved-target').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-cat]');
+      if (!btn) return;
+      savedTarget = savedTarget === btn.dataset.cat ? null : btn.dataset.cat;
+      renderSaved();
+    });
+    $('#saved-groups').addEventListener('click', (e) => {
+      const menu = e.target.closest('[data-cat-menu]');
+      if (menu) {
+        const cat = categoryById(menu.dataset.catMenu);
+        if (cat) openCategorySheet(cat);
+        return;
+      }
+      const btn = e.target.closest('[data-item]');
+      const item = btn && data.library.items.find((i) => i.id === btn.dataset.item);
+      if (item) openItemSheet(item);
+    });
+    $('#new-category').addEventListener('click', openNewCategorySheet);
+    $('#sheet-close').addEventListener('click', closeSheet);
+    // Tapping outside the sheet closes it.
+    sheet.addEventListener('click', (e) => { if (e.target === sheet) closeSheet(); });
 
     $('#river-form').addEventListener('submit', (e) => {
       e.preventDefault();

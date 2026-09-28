@@ -22,10 +22,11 @@ The app is one loop of three steps, with a log beside it that you can add to at 
 
 If the top pick can't happen now, Act moves down the ranking instead of sending you back to Choose.
 
-- **Home.** Shows the current pick if one is active, with a "Done, let go" button. Otherwise one large button: "Find my pull". A small + opens the River log from here. Bottom navigation: Home, River, Look back, About.
-- **Choose.** One text field: "What could you do next?" Enter adds each option as a chip, 2 to 7 options. Options used before appear as tap-to-add suggestions. "Find my pull" starts the pair comparison. With only one option, skip straight to Act.
+- **Home.** Shows the current pick if one is active, with a "Done, let go" button. Otherwise one large button: "Find my pull". A small + opens the River log from here. Bottom navigation: Home, Saved, River, Look back, About.
+- **Choose.** One text field: "What could you do next?" Enter adds each option as a chip, 2 to 7 options. Saved options appear as tap-to-add suggestions, with category tabs when more than one category has something in it. "Find my pull" starts the pair comparison. With only one option, skip straight to Act.
 - **Act.** The top pick shown large, a compass needle swinging to point at it. Two buttons: "I'm on it" and "Not possible right now". The second moves to the next option in the ranking with a calm line such as "That's fine. Here's the next strongest pull you can follow." "I'm on it" returns Home with the pick active.
 - **Release.** Tapping "Done, let go" opens an optional one-line field, "What happened?", with a Skip. A short closing line appears ("Released."), then Home. No counters, no congratulations.
+- **Saved.** Every option typed on Choose is saved automatically, so it never needs typing again. Options can also be added here directly, into a chosen category. Options are sorted into categories the user creates, renames and deletes; the app starts with "Daily goals" and "Long-term goals", and anything not sorted sits in Unsorted. Tap an option to move it to another category or delete it. Deleting a category moves its options to Unsorted. Deleting a saved option never changes history in Look back.
 - **River log.** One text line, an optional tag (sign, synchronicity, feeling, idea), and an automatic timestamp. If a pick is active, the entry links to it.
 - **Look back.** Subtitle: "Step back and see the whole film." A reverse timeline grouped by day: picks, skipped options shown faintly, release notes and river entries side by side. Filter by tag, plus a simple text search. No charts or totals.
 - **About.** What the app is for, in its own words, plus settings: export, import, delete all data.
@@ -113,6 +114,7 @@ All data stays in the user's browser. There are no accounts, no server, no analy
 - **Data model.**
   - `sessions`: id, createdAt, options (text list), ranking (ordered option list), skipped (options marked "not possible"), pick, status (active / released), releasedAt, note.
   - `river`: id, createdAt, text, tag, sessionId (if a pick was active).
+  - `library`: `categories` (id, name, createdAt) and `items` (id, text, categoryId or null for Unsorted, createdAt, lastUsedAt). Built on first load from options in earlier sessions (schema version 2).
   - `settings`: theme, schemaVersion.
 - **Backup.** Export downloads a dated `.json` file. Import reads one back and merges by id, never duplicating entries. A clear warning that clearing browser data erases everything not exported.
 - **Delete all.** In About, behind a confirm dialog.
