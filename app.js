@@ -67,6 +67,8 @@
 
     if (name === 'home') renderHome();
     if (name === 'choose') renderChoose();
+    if (name === 'river') renderRiver();
+    if (name === 'lookback') renderLookBack();
     if ((name === 'act' && !renderAct()) || (name === 'release' && !renderRelease())) {
       go('home');
       return;
@@ -83,9 +85,11 @@
     }
   }
 
+  // Show the screen straight away (so a tap can still focus a field on
+  // phones), then record it in the address for the back button.
   function go(name) {
-    if (location.hash === `#${name}`) show(name);
-    else location.hash = name;
+    show(name);
+    if (current === name && location.hash !== `#${name}`) location.hash = name;
   }
 
   // ---- Home -------------------------------------------------------------
@@ -438,6 +442,161 @@
     }, 2600);
   }
 
+  // ---- River log --------------------------------------------------------
+
+  const TAGS = Object.keys(STRINGS.river.tags);
+  let riverTag = null;
+
+  function tagButtons(container, selected, withAll) {
+    const keys = withAll ? ['all', ...TAGS] : TAGS;
+    container.replaceChildren(...keys.map((key) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'tag';
+      btn.dataset.tag = key;
+      btn.textContent = key === 'all' ? STRINGS.lookBack.all : STRINGS.river.tags[key];
+      btn.setAttribute('aria-pressed', String(key === (selected || 'all')));
+      return btn;
+    }));
+  }
+
+  function sessionById(id) {
+    return data.sessions.find((s) => s.id === id) || null;
+  }
+
+  function renderRiver() {
+    tagButtons($('#river-tags'), riverTag, false);
+    const session = activeSession();
+    $('#river-linked').hidden = !session;
+    if (session) $('#river-linked').textContent = `${STRINGS.river.linked}: ${session.pick}`;
+
+    const entries = [...data.river].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+    $('#river-empty').hidden = entries.length > 0;
+    $('#river-list').replaceChildren(...entries.map((e) => riverItem(e, true)));
+  }
+
+  function addRiver(raw) {
+    const text = raw.trim().replace(/\s+/g, ' ');
+    if (!text) return;
+    const session = activeSession();
+    data.river.push({
+      id: Storage.newId(),
+      createdAt: new Date().toISOString(),
+      text,
+      tag: riverTag,
+      sessionId: session ? session.id : null,
+    });
+    persist();
+    riverTag = null;
+    renderRiver();
+  }
+
+  // ---- Look back --------------------------------------------------------
+
+  const lookFilter = { tag: null, query: '' };
+
+  const dayKey = (iso) => {
+    const d = new Date(iso);
+    return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+  };
+
+  function dayLabel(iso) {
+    const d = new Date(iso);
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+    if (dayKey(iso) === dayKey(today.toISOString())) return STRINGS.lookBack.today;
+    if (dayKey(iso) === dayKey(yesterday.toISOString())) return STRINGS.lookBack.yesterday;
+    const opts = { weekday: 'long', day: 'numeric', month: 'long' };
+    if (d.getFullYear() !== today.getFullYear()) opts.year = 'numeric';
+    return d.toLocaleDateString('en-GB', opts);
+  }
+
+  const timeLabel = (iso) => new Date(iso).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+
+  function el(tag, className, text) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
+  function itemMeta(iso, withDay) {
+    const meta = el('p', 'item-meta');
+    const time = el('time', null, withDay ? `${dayLabel(iso)}, ${timeLabel(iso)}` : timeLabel(iso));
+    time.dateTime = iso;
+    meta.append(time);
+    return meta;
+  }
+
+  function riverItem(entry, withDay) {
+    const li = el('li', 'item item--river');
+    const meta = itemMeta(entry.createdAt, withDay);
+    if (entry.tag && STRINGS.river.tags[entry.tag]) meta.append(el('span', 'item-tag', STRINGS.river.tags[entry.tag]));
+    li.append(meta, el('p', 'item-text', entry.text));
+    const session = entry.sessionId && sessionById(entry.sessionId);
+    if (session) li.append(el('p', 'item-link', `${STRINGS.river.linked}: ${session.pick}`));
+    return li;
+  }
+
+  function sessionItem(session) {
+    const li = el('li', 'item item--pick');
+    const meta = itemMeta(session.createdAt, false);
+    if (session.status === 'active') meta.append(el('span', 'item-tag item-tag--live', STRINGS.lookBack.following));
+    li.append(meta, el('p', 'item-pick', session.pick));
+    const skipped = (session.skipped || []).filter((o) => o !== session.pick);
+    if (skipped.length) li.append(el('p', 'item-skipped', `${STRINGS.lookBack.notNow} ${skipped.join(', ')}`));
+    if (session.note) li.append(el('p', 'item-note', session.note));
+    return li;
+  }
+
+  function matches(texts) {
+    const q = lookFilter.query.trim().toLowerCase();
+    return !q || texts.some((t) => t && t.toLowerCase().includes(q));
+  }
+
+  function renderLookBack() {
+    tagButtons($('#lookback-tags'), lookFilter.tag, true);
+
+    const items = [];
+    if (!lookFilter.tag) {
+      data.sessions.forEach((s) => {
+        if (matches([s.pick, s.note, ...(s.options || [])])) items.push({ at: s.createdAt, node: () => sessionItem(s) });
+      });
+    }
+    data.river.forEach((e) => {
+      if (lookFilter.tag && e.tag !== lookFilter.tag) return;
+      const session = e.sessionId && sessionById(e.sessionId);
+      if (matches([e.text, session && session.pick])) items.push({ at: e.createdAt, node: () => riverItem(e, false) });
+    });
+    items.sort((a, b) => b.at.localeCompare(a.at));
+
+    const hasAny = data.sessions.length > 0 || data.river.length > 0;
+    $('#lookback-filters').hidden = !hasAny;
+    $('#lookback-empty').hidden = items.length > 0;
+    $('#lookback-empty').textContent = hasAny ? STRINGS.lookBack.noMatch : STRINGS.lookBack.empty;
+
+    const days = [];
+    items.forEach((item) => {
+      const key = dayKey(item.at);
+      let day = days[days.length - 1];
+      if (!day || day.key !== key) {
+        day = { key, at: item.at, items: [] };
+        days.push(day);
+      }
+      day.items.push(item);
+    });
+
+    $('#lookback-days').replaceChildren(...days.map((day) => {
+      const section = el('section', 'day');
+      section.append(el('h2', 'day-title', dayLabel(day.at)));
+      const list = el('ol', 'timeline');
+      list.append(...day.items.map((item) => item.node()));
+      section.append(list);
+      return section;
+    }));
+  }
+
   // ---- About ------------------------------------------------------------
 
   function renderAbout() {
@@ -474,7 +633,10 @@
 
     $('#find-pull').addEventListener('click', () => go('choose'));
     $('#done-let-go').addEventListener('click', () => go('release'));
-    $('#home-add-river').addEventListener('click', () => go('river'));
+    $('#home-add-river').addEventListener('click', () => {
+      go('river');
+      $('#river-input').focus();
+    });
 
     $('#option-form').addEventListener('submit', (e) => {
       e.preventDefault();
@@ -516,6 +678,29 @@
     });
     $('#release-skip').addEventListener('click', () => release(''));
     $('#release-closing').addEventListener('click', () => go('home'));
+
+    $('#river-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      addRiver($('#river-input').value);
+      $('#river-input').value = '';
+    });
+    $('#river-tags').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-tag]');
+      if (!btn) return;
+      riverTag = riverTag === btn.dataset.tag ? null : btn.dataset.tag;
+      tagButtons($('#river-tags'), riverTag, false);
+    });
+
+    $('#lookback-search').addEventListener('input', (e) => {
+      lookFilter.query = e.target.value;
+      renderLookBack();
+    });
+    $('#lookback-tags').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-tag]');
+      if (!btn) return;
+      lookFilter.tag = btn.dataset.tag === 'all' ? null : btn.dataset.tag;
+      renderLookBack();
+    });
 
     window.addEventListener('hashchange', () => show(screenFromHash()));
     show(screenFromHash());

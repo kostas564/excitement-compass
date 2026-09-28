@@ -73,6 +73,10 @@ const STRINGS = {
 
   river: {
     title: 'River',
+    placeholder: 'What did you notice?',
+    add: 'Add to the river',
+    tagLabel: 'Tag',
+    linked: 'While following',
     empty: 'Small coincidences are where the pieces start to connect. Note them here.',
     tags: {
       sign: 'sign',
@@ -86,6 +90,14 @@ const STRINGS = {
     title: 'Look back',
     subtitle: 'Step back and see the whole film.',
     empty: "Your path will appear here as you walk it. Later, you'll see the whole film.",
+    noMatch: 'Nothing here matches.',
+    search: 'Search',
+    filterLabel: 'Filter by tag',
+    all: 'all',
+    today: 'Today',
+    yesterday: 'Yesterday',
+    notNow: 'Not now:',
+    following: 'Following now',
   },
 
   about: {

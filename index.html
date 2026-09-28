@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#070a1f" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#eef1f8" media="(prefers-color-scheme: light)">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="styles.css?v=4">
+  <link rel="stylesheet" href="styles.css?v=5">
 </head>
 <body>
   <div class="sky" id="sky" aria-hidden="true">
@@ -164,14 +164,35 @@
       <!-- River log -->
       <section class="screen" id="screen-river" data-screen="river" aria-labelledby="river-title" hidden>
         <h1 class="screen-title" id="river-title" data-text="river.title"></h1>
-        <p class="empty" data-text="river.empty"></p>
+
+        <form class="option-form" id="river-form" autocomplete="off">
+          <input class="option-input" id="river-input" type="text" maxlength="200"
+                 enterkeyhint="done" data-placeholder="river.placeholder" data-label="river.placeholder">
+          <button class="option-add" id="river-add" type="submit" data-label="river.add">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+        </form>
+
+        <div class="tags" id="river-tags" role="group" data-label="river.tagLabel"></div>
+        <p class="river-linked" id="river-linked" hidden></p>
+
+        <p class="empty" id="river-empty" data-text="river.empty"></p>
+        <ol class="timeline" id="river-list"></ol>
       </section>
 
       <!-- Look back -->
       <section class="screen" id="screen-lookback" data-screen="lookback" aria-labelledby="lookback-title" hidden>
         <h1 class="screen-title" id="lookback-title" data-text="lookBack.title"></h1>
         <p class="screen-subtitle" data-text="lookBack.subtitle"></p>
-        <p class="empty" data-text="lookBack.empty"></p>
+
+        <div class="lookback-filters" id="lookback-filters">
+          <input class="option-input search-input" id="lookback-search" type="search"
+                 enterkeyhint="search" data-placeholder="lookBack.search" data-label="lookBack.search">
+          <div class="tags" id="lookback-tags" role="group" data-label="lookBack.filterLabel"></div>
+        </div>
+
+        <p class="empty" id="lookback-empty"></p>
+        <div id="lookback-days"></div>
       </section>
 
       <!-- About -->
@@ -204,9 +225,9 @@
   </div>
 
   <!-- Bump ?v= on every release so browsers never mix old and new files. -->
-  <script src="strings.js?v=4"></script>
-  <script src="storage.js?v=4"></script>
-  <script src="sky.js?v=4"></script>
-  <script src="app.js?v=4"></script>
+  <script src="strings.js?v=5"></script>
+  <script src="storage.js?v=5"></script>
+  <script src="sky.js?v=5"></script>
+  <script src="app.js?v=5"></script>
 </body>
 </html>
