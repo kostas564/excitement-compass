@@ -56,6 +56,8 @@ const STRINGS = {
 
   release: {
     prompt: 'What happened?',
+    placeholder: 'One line, if you like',
+    letGo: 'Let go',
     skip: 'Skip',
     closingLines: [
       'Released.',

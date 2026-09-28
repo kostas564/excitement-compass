@@ -67,7 +67,7 @@
 
     if (name === 'home') renderHome();
     if (name === 'choose') renderChoose();
-    if (name === 'act' && !renderAct()) {
+    if ((name === 'act' && !renderAct()) || (name === 'release' && !renderRelease())) {
       go('home');
       return;
     }
@@ -313,7 +313,13 @@
   }
 
   function finishRank(ranking) {
-    pending = { options: [...draft.options], ranking, createdAt: new Date().toISOString() };
+    pending = {
+      options: [...draft.options],
+      ranking,
+      skipped: [],
+      position: 0,
+      createdAt: new Date().toISOString(),
+    };
     $('#progress-fill').style.transform = 'scaleX(1)';
     draft = null;
     go('act');
@@ -321,11 +327,115 @@
 
   // ---- Act --------------------------------------------------------------
 
-  // The full Act screen arrives in phase 3; for now it shows the top pick.
+  function persist() {
+    const ok = Storage.save(data);
+    $('#storage-notice').hidden = ok;
+  }
+
   function renderAct() {
     if (!pending) return false;
-    $('#act-pick').textContent = pending.ranking[0];
+    $('#act-line').textContent = '';
+    showPick();
     return true;
+  }
+
+  function showPick() {
+    $('#act-pick').textContent = pending.ranking[pending.position];
+    swingNeedle();
+  }
+
+  // The needle swings in from a random angle and settles on the pick,
+  // then the geometry brightens for a moment.
+  let swing = null;
+  function swingNeedle() {
+    const needle = $('#needle');
+    const compass = $('#compass');
+    compass.classList.remove('is-lit');
+    if (swing) swing.cancel();
+
+    const settle = () => {
+      compass.classList.add('is-lit');
+      setTimeout(() => compass.classList.remove('is-lit'), 1400);
+    };
+
+    if (reducedMotion.matches || !needle.animate) {
+      settle();
+      return;
+    }
+
+    const from = (Math.random() < 0.5 ? -1 : 1) * (100 + Math.random() * 80);
+    swing = needle.animate([
+      { transform: `rotate(${from}deg)` },
+      { transform: `rotate(${-from * 0.28}deg)`, offset: 0.45 },
+      { transform: `rotate(${from * 0.1}deg)`, offset: 0.7 },
+      { transform: `rotate(${-from * 0.03}deg)`, offset: 0.87 },
+      { transform: 'rotate(0deg)' },
+    ], { duration: 1800, easing: 'cubic-bezier(0.3, 0.7, 0.4, 1)' });
+    swing.onfinish = settle;
+  }
+
+  function onIt() {
+    if (!pending) return;
+    data.sessions.push({
+      id: Storage.newId(),
+      createdAt: pending.createdAt,
+      options: pending.options,
+      ranking: pending.ranking,
+      skipped: pending.skipped,
+      pick: pending.ranking[pending.position],
+      status: 'active',
+      releasedAt: null,
+      note: '',
+    });
+    persist();
+    pending = null;
+    go('home');
+  }
+
+  // Move down the ranking. Past the last option, start again with a fresh list.
+  function notPossible() {
+    if (!pending) return;
+    pending.skipped.push(pending.ranking[pending.position]);
+    if (pending.position >= pending.ranking.length - 1) {
+      pending = null;
+      go('choose');
+      return;
+    }
+    pending.position += 1;
+    $('#act-line').textContent = randomLine('act.nextLines');
+    showPick();
+  }
+
+  // ---- Release ----------------------------------------------------------
+
+  let closingTimer = null;
+
+  function renderRelease() {
+    const session = activeSession();
+    if (!session) return false;
+    clearTimeout(closingTimer);
+    $('#release-form').hidden = false;
+    $('#release-closing').hidden = true;
+    $('#release-pick').textContent = session.pick;
+    $('#release-note').value = '';
+    return true;
+  }
+
+  function release(note) {
+    const session = activeSession();
+    if (!session) return;
+    session.status = 'released';
+    session.releasedAt = new Date().toISOString();
+    session.note = note.trim();
+    persist();
+
+    $('#release-form').hidden = true;
+    $('#release-closing').hidden = false;
+    $('#release-line').textContent = randomLine('release.closingLines');
+    $('#release-line').focus({ preventScroll: true });
+    closingTimer = setTimeout(() => {
+      if (current === 'release') go('home');
+    }, 2600);
   }
 
   // ---- About ------------------------------------------------------------
@@ -396,6 +506,16 @@
     });
     $('#compare-tie').addEventListener('click', () => answer(TIE, null));
     $('#compare-undo').addEventListener('click', undo);
+
+    $('#act-on-it').addEventListener('click', onIt);
+    $('#act-not-possible').addEventListener('click', notPossible);
+
+    $('#release-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      release($('#release-note').value);
+    });
+    $('#release-skip').addEventListener('click', () => release(''));
+    $('#release-closing').addEventListener('click', () => go('home'));
 
     window.addEventListener('hashchange', () => show(screenFromHash()));
     show(screenFromHash());

@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#070a1f" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#eef1f8" media="(prefers-color-scheme: light)">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="styles.css?v=3">
+  <link rel="stylesheet" href="styles.css?v=4">
 </head>
 <body>
   <div class="sky" id="sky" aria-hidden="true">
@@ -95,16 +95,70 @@
         </div>
       </section>
 
-      <!-- Act (the compass and buttons arrive in phase 3) -->
+      <!-- Act: the top pick, with the compass pointing at it -->
       <section class="screen" id="screen-act" data-screen="act" aria-labelledby="act-pick" hidden>
         <div class="act-center">
+          <p class="act-line" id="act-line" aria-live="polite"></p>
           <h1 class="act-pick" id="act-pick"></h1>
+          <svg class="compass" id="compass" viewBox="-100 -100 200 200" aria-hidden="true">
+            <defs>
+              <filter id="compass-glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="2.2" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <linearGradient id="needle-gold" x1="0" y1="-1" x2="0" y2="1" gradientUnits="objectBoundingBox">
+                <stop offset="0" style="stop-color: #fff3d6"/>
+                <stop offset="0.5" style="stop-color: var(--gold)"/>
+                <stop offset="1" style="stop-color: var(--amber)"/>
+              </linearGradient>
+            </defs>
+            <g class="compass-geometry" filter="url(#compass-glow)">
+              <circle r="92"/>
+              <circle r="86" class="faint"/>
+              <path d="M0 -82L0 -96M22.26 -83.07L23.81 -88.87M43 -74.48L46 -79.67M60.81 -60.81L65.05 -65.05M74.48 -43L79.67 -46M83.07 -22.26L88.87 -23.81M82 -0L96 -0M83.07 22.26L88.87 23.81M74.48 43L79.67 46M60.81 60.81L65.05 65.05M43 74.48L46 79.67M22.26 83.07L23.81 88.87M0 82L0 96M-22.26 83.07L-23.81 88.87M-43 74.48L-46 79.67M-60.81 60.81L-65.05 65.05M-74.48 43L-79.67 46M-83.07 22.26L-88.87 23.81M-82 0L-96 0M-83.07 -22.26L-88.87 -23.81M-74.48 -43L-79.67 -46M-60.81 -60.81L-65.05 -65.05M-43 -74.48L-46 -79.67M-22.26 -83.07L-23.81 -88.87"/>
+              <path class="metatron" d="M0 0L0 -33M0 0L28.58 -16.5M0 0L28.58 16.5M0 0L0 33M0 0L-28.58 16.5M0 0L-28.58 -16.5M0 0L0 -66M0 0L57.16 -33M0 0L57.16 33M0 0L0 66M0 0L-57.16 33M0 0L-57.16 -33M0 -33L28.58 -16.5M0 -33L28.58 16.5M0 -33L0 33M0 -33L-28.58 16.5M0 -33L-28.58 -16.5M0 -33L0 -66M0 -33L57.16 -33M0 -33L57.16 33M0 -33L0 66M0 -33L-57.16 33M0 -33L-57.16 -33M28.58 -16.5L28.58 16.5M28.58 -16.5L0 33M28.58 -16.5L-28.58 16.5M28.58 -16.5L-28.58 -16.5M28.58 -16.5L0 -66M28.58 -16.5L57.16 -33M28.58 -16.5L57.16 33M28.58 -16.5L0 66M28.58 -16.5L-57.16 33M28.58 -16.5L-57.16 -33M28.58 16.5L0 33M28.58 16.5L-28.58 16.5M28.58 16.5L-28.58 -16.5M28.58 16.5L0 -66M28.58 16.5L57.16 -33M28.58 16.5L57.16 33M28.58 16.5L0 66M28.58 16.5L-57.16 33M28.58 16.5L-57.16 -33M0 33L-28.58 16.5M0 33L-28.58 -16.5M0 33L0 -66M0 33L57.16 -33M0 33L57.16 33M0 33L0 66M0 33L-57.16 33M0 33L-57.16 -33M-28.58 16.5L-28.58 -16.5M-28.58 16.5L0 -66M-28.58 16.5L57.16 -33M-28.58 16.5L57.16 33M-28.58 16.5L0 66M-28.58 16.5L-57.16 33M-28.58 16.5L-57.16 -33M-28.58 -16.5L0 -66M-28.58 -16.5L57.16 -33M-28.58 -16.5L57.16 33M-28.58 -16.5L0 66M-28.58 -16.5L-57.16 33M-28.58 -16.5L-57.16 -33M0 -66L57.16 -33M0 -66L57.16 33M0 -66L0 66M0 -66L-57.16 33M0 -66L-57.16 -33M57.16 -33L57.16 33M57.16 -33L0 66M57.16 -33L-57.16 33M57.16 -33L-57.16 -33M57.16 33L0 66M57.16 33L-57.16 33M57.16 33L-57.16 -33M0 66L-57.16 33M0 66L-57.16 -33M-57.16 33L-57.16 -33"/>
+              <circle r="66"/>
+              <circle cx="16.5" cy="-28.58" r="33"/>
+              <circle cx="33" cy="-0" r="33"/>
+              <circle cx="16.5" cy="28.58" r="33"/>
+              <circle cx="-16.5" cy="28.58" r="33"/>
+              <circle cx="-33" cy="0" r="33"/>
+              <circle cx="-16.5" cy="-28.58" r="33"/>
+              <circle r="33"/>
+              <polygon points="0,-66 57.16,-33 57.16,33 0,66 -57.16,33 -57.16,-33"/>
+            </g>
+            <g class="needle" id="needle" filter="url(#compass-glow)">
+              <polygon class="needle-north" points="0,-80 5,-5 0,0 -5,-5"/>
+              <polygon class="needle-south" points="0,48 5,5 0,0 -5,5"/>
+              <polygon class="needle-cross" points="-20,0 0,-2.6 20,0 0,2.6"/>
+              <circle class="needle-hub" r="3.2"/>
+            </g>
+          </svg>
+        </div>
+
+        <div class="stack-actions">
+          <button class="btn btn--gold btn--large" id="act-on-it" type="button" data-text="act.onIt"></button>
+          <button class="btn btn--ghost" id="act-not-possible" type="button" data-text="act.notPossible"></button>
         </div>
       </section>
 
-      <!-- Release (built in phase 3) -->
+      <!-- Release: an optional note, then a short closing line -->
       <section class="screen" id="screen-release" data-screen="release" aria-labelledby="release-title" hidden>
-        <h1 class="screen-title" id="release-title" data-text="release.prompt"></h1>
+        <form class="release-form" id="release-form" autocomplete="off">
+          <p class="release-pick" id="release-pick"></p>
+          <h1 class="screen-title"><label id="release-title" for="release-note" data-text="release.prompt"></label></h1>
+          <input class="option-input release-input" id="release-note" type="text" maxlength="200"
+                 enterkeyhint="done" data-placeholder="release.placeholder">
+
+          <div class="stack-actions">
+            <button class="btn btn--gold btn--large" type="submit" data-text="release.letGo"></button>
+            <button class="link-btn" id="release-skip" type="button" data-text="release.skip"></button>
+          </div>
+        </form>
+
+        <div class="release-closing" id="release-closing" hidden>
+          <p class="release-line" id="release-line" tabindex="-1"></p>
+        </div>
       </section>
 
       <!-- River log -->
@@ -150,9 +204,9 @@
   </div>
 
   <!-- Bump ?v= on every release so browsers never mix old and new files. -->
-  <script src="strings.js?v=3"></script>
-  <script src="storage.js?v=3"></script>
-  <script src="sky.js?v=3"></script>
-  <script src="app.js?v=3"></script>
+  <script src="strings.js?v=4"></script>
+  <script src="storage.js?v=4"></script>
+  <script src="sky.js?v=4"></script>
+  <script src="app.js?v=4"></script>
 </body>
 </html>
