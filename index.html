@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#070a1f" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#eef1f8" media="(prefers-color-scheme: light)">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="styles.css?v=6">
+  <link rel="stylesheet" href="styles.css?v=7">
 </head>
 <body>
   <div class="sky" id="sky" aria-hidden="true">
@@ -220,6 +220,19 @@
         <h1 class="visually-hidden" id="about-title" data-text="about.title"></h1>
         <div class="about-lines" id="about-lines"></div>
         <div class="about-body" id="about-body"></div>
+
+        <section class="about-data" aria-labelledby="about-data-title">
+          <h2 class="group-title" id="about-data-title" data-text="about.dataTitle"></h2>
+          <div class="data-action">
+            <button class="btn btn--ghost" id="clear-history" type="button" data-text="about.clearHistory"></button>
+            <p class="data-hint" data-text="about.clearHistoryHint"></p>
+          </div>
+          <div class="data-action">
+            <button class="btn btn--danger" id="reset-app" type="button" data-text="about.reset"></button>
+            <p class="data-hint" data-text="about.resetHint"></p>
+          </div>
+        </section>
+
         <p class="about-credit" id="about-credit"></p>
       </section>
     </main>
@@ -258,9 +271,9 @@
     </div>
   </dialog>
 
-  <script src="strings.js?v=6"></script>
-  <script src="storage.js?v=6"></script>
-  <script src="sky.js?v=6"></script>
-  <script src="app.js?v=6"></script>
+  <script src="strings.js?v=7"></script>
+  <script src="storage.js?v=7"></script>
+  <script src="sky.js?v=7"></script>
+  <script src="app.js?v=7"></script>
 </body>
 </html>

@@ -95,6 +95,17 @@ const STRINGS = {
     defaultCategories: ['Daily goals', 'Long-term goals'],
   },
 
+  edit: {
+    riverTitle: 'River entry',
+    text: 'Text',
+    note: 'What happened?',
+    notePlaceholder: 'One line, if you like',
+    save: 'Save',
+    delete: 'Delete',
+    confirmDeleteRiver: "Delete this entry? This can't be undone.",
+    confirmDeletePick: "Delete this pick and its note from your history? This can't be undone.",
+  },
+
   river: {
     title: 'River',
     placeholder: 'What did you notice?',
@@ -141,6 +152,13 @@ const STRINGS = {
     creditName: 'Fragments of Coherence',
     creditAfter: ', a publication about consciousness, meaning and the bigger picture.',
     creditUrl: 'https://fragmentsofcoherence.substack.com',
+    dataTitle: 'Your data',
+    clearHistory: 'Clear history',
+    clearHistoryHint: 'Removes your picks, notes and river entries. Your saved options stay.',
+    confirmClearHistory: "Clear all picks, notes and river entries? Your saved options stay. This can't be undone.",
+    reset: 'Reset the app',
+    resetHint: 'Removes everything, including saved options and categories, and starts fresh.',
+    confirmReset: "Remove everything and start fresh? This can't be undone.",
   },
 
   storage: {

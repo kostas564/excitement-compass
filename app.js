@@ -755,32 +755,175 @@
   const timeLabel = (iso) => new Date(iso).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
 
   function itemMeta(iso, withDay) {
-    const meta = el('p', 'item-meta');
+    const meta = el('span', 'item-meta');
     const time = el('time', null, withDay ? `${dayLabel(iso)}, ${timeLabel(iso)}` : timeLabel(iso));
     time.dateTime = iso;
     meta.append(time);
     return meta;
   }
 
+  // Each timeline entry is a button that opens it for editing.
+  function itemButton(className, dataKey, id) {
+    const btn = el('button', `item ${className}`);
+    btn.type = 'button';
+    btn.dataset[dataKey] = id;
+    return btn;
+  }
+
   function riverItem(entry, withDay) {
-    const li = el('li', 'item item--river');
+    const btn = itemButton('item--river', 'river', entry.id);
     const meta = itemMeta(entry.createdAt, withDay);
     if (entry.tag && STRINGS.river.tags[entry.tag]) meta.append(el('span', 'item-tag', STRINGS.river.tags[entry.tag]));
-    li.append(meta, el('p', 'item-text', entry.text));
+    btn.append(meta, el('span', 'item-text', entry.text));
     const session = entry.sessionId && sessionById(entry.sessionId);
-    if (session) li.append(el('p', 'item-link', `${STRINGS.river.linked}: ${session.pick}`));
+    if (session) btn.append(el('span', 'item-link', `${STRINGS.river.linked}: ${session.pick}`));
+    const li = el('li');
+    li.append(btn);
     return li;
   }
 
   function sessionItem(session) {
-    const li = el('li', 'item item--pick');
+    const btn = itemButton('item--pick', 'session', session.id);
     const meta = itemMeta(session.createdAt, false);
     if (session.status === 'active') meta.append(el('span', 'item-tag item-tag--live', STRINGS.lookBack.following));
-    li.append(meta, el('p', 'item-pick', session.pick));
+    btn.append(meta, el('span', 'item-pick', session.pick));
     const skipped = (session.skipped || []).filter((o) => o !== session.pick);
-    if (skipped.length) li.append(el('p', 'item-skipped', `${STRINGS.lookBack.notNow} ${skipped.join(', ')}`));
-    if (session.note) li.append(el('p', 'item-note', session.note));
+    if (skipped.length) btn.append(el('span', 'item-skipped', `${STRINGS.lookBack.notNow} ${skipped.join(', ')}`));
+    if (session.note) btn.append(el('span', 'item-note', session.note));
+    const li = el('li');
+    li.append(btn);
     return li;
+  }
+
+  // ---- Editing river entries and picks -----------------------------------
+
+  function refreshTimeline() {
+    if (current === 'river') renderRiver();
+    if (current === 'lookback') renderLookBack();
+  }
+
+  // A text field plus a Save button, submitted by Enter or the button.
+  function textForm({ value, label, placeholder, maxLength, extra = [], onSubmit }) {
+    const form = el('form', 'sheet-form');
+    form.autocomplete = 'off';
+    const input = el('input', 'option-input');
+    input.type = 'text';
+    input.maxLength = maxLength;
+    input.value = value;
+    input.placeholder = placeholder || '';
+    input.setAttribute('aria-label', label);
+    const submit = el('button', 'btn btn--gold', STRINGS.edit.save);
+    submit.type = 'submit';
+    form.append(input, ...extra, submit);
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      onSubmit(input.value.trim().replace(/\s+/g, ' '));
+    });
+    return form;
+  }
+
+  function openRiverSheet(entry) {
+    let tag = entry.tag || null;
+    const tags = el('div', 'tags');
+    const drawTags = () => tagButtons(tags, tag, false);
+    tags.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-tag]');
+      if (!btn) return;
+      tag = tag === btn.dataset.tag ? null : btn.dataset.tag;
+      drawTags();
+    });
+    drawTags();
+
+    openSheet(
+      STRINGS.edit.riverTitle,
+      textForm({
+        value: entry.text,
+        label: STRINGS.edit.text,
+        maxLength: 200,
+        extra: [tags],
+        onSubmit: (text) => {
+          if (!text) return;
+          entry.text = text;
+          entry.tag = tag;
+          persist();
+          closeSheet();
+          refreshTimeline();
+        },
+      }),
+      sheetButton(STRINGS.edit.delete, 'btn btn--danger', () => {
+        if (!window.confirm(STRINGS.edit.confirmDeleteRiver)) return;
+        data.river = data.river.filter((r) => r.id !== entry.id);
+        persist();
+        closeSheet();
+        refreshTimeline();
+      }),
+    );
+  }
+
+  function openPickSheet(session) {
+    openSheet(
+      session.pick,
+      el('p', 'sheet-label', STRINGS.edit.note),
+      textForm({
+        value: session.note || '',
+        label: STRINGS.edit.note,
+        placeholder: STRINGS.edit.notePlaceholder,
+        maxLength: 200,
+        onSubmit: (note) => {
+          session.note = note;
+          persist();
+          closeSheet();
+          refreshTimeline();
+        },
+      }),
+      sheetButton(STRINGS.edit.delete, 'btn btn--danger', () => {
+        if (!window.confirm(STRINGS.edit.confirmDeletePick)) return;
+        data.sessions = data.sessions.filter((s) => s.id !== session.id);
+        persist();
+        closeSheet();
+        refreshTimeline();
+      }),
+    );
+  }
+
+  function onTimelineClick(e) {
+    const riverBtn = e.target.closest('[data-river]');
+    if (riverBtn) {
+      const entry = data.river.find((r) => r.id === riverBtn.dataset.river);
+      if (entry) openRiverSheet(entry);
+      return;
+    }
+    const pickBtn = e.target.closest('[data-session]');
+    if (pickBtn) {
+      const session = sessionById(pickBtn.dataset.session);
+      if (session) openPickSheet(session);
+    }
+  }
+
+  // ---- Clear history and reset -------------------------------------------
+
+  function clearHistory() {
+    if (!window.confirm(STRINGS.about.confirmClearHistory)) return;
+    data.sessions = [];
+    data.river = [];
+    pending = null;
+    persist();
+    go('home');
+  }
+
+  function resetApp() {
+    if (!window.confirm(STRINGS.about.confirmReset)) return;
+    Storage.clear();
+    const fresh = Storage.load();
+    Object.keys(data).forEach((key) => delete data[key]);
+    Object.assign(data, fresh);
+    ensureLibrary();
+    pending = null;
+    draft = null;
+    riverTag = null;
+    savedTarget = null;
+    chooseCat = 'all';
+    go('home');
   }
 
   function matches(texts) {
@@ -967,6 +1110,11 @@
       riverTag = riverTag === btn.dataset.tag ? null : btn.dataset.tag;
       tagButtons($('#river-tags'), riverTag, false);
     });
+
+    $('#river-list').addEventListener('click', onTimelineClick);
+    $('#lookback-days').addEventListener('click', onTimelineClick);
+    $('#clear-history').addEventListener('click', clearHistory);
+    $('#reset-app').addEventListener('click', resetApp);
 
     $('#lookback-search').addEventListener('input', (e) => {
       lookFilter.query = e.target.value;

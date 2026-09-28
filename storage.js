@@ -69,6 +69,14 @@ const Storage = (() => {
     }
   }
 
+  // Remove everything this app has stored in this browser.
+  function clear() {
+    try {
+      localStorage.removeItem(KEY);
+      localStorage.removeItem(`${KEY}-unreadable`);
+    } catch (err) { /* nothing stored, or storage blocked */ }
+  }
+
   function newId() {
     try {
       if (crypto.randomUUID) return crypto.randomUUID();
@@ -79,6 +87,7 @@ const Storage = (() => {
   return {
     load,
     save,
+    clear,
     newId,
     get available() { return available; },
   };

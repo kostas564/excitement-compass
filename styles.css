@@ -1092,6 +1092,13 @@ h1:focus {
 }
 
 .item {
+  display: block;
+  width: 100%;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
   padding: 14px 16px;
   border-radius: 16px;
   border: 1px solid var(--glass-edge);
@@ -1127,6 +1134,14 @@ h1:focus {
 .item-tag--live {
   border-color: var(--gold);
   color: var(--gold-text);
+}
+
+.item-text,
+.item-pick,
+.item-skipped,
+.item-note,
+.item-link {
+  display: block;
 }
 
 .item-text {
@@ -1222,6 +1237,29 @@ h1:focus {
 
 .about-credit {
   margin-top: 48px;
+  font-size: 14px;
+  color: var(--text-faint);
+}
+
+.about-data {
+  margin-top: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.data-action {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.data-action .btn {
+  width: 100%;
+  margin-top: 0;
+}
+
+.data-hint {
   font-size: 14px;
   color: var(--text-faint);
 }

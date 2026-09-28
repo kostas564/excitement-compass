@@ -29,7 +29,8 @@ If the top pick can't happen now, Act moves down the ranking instead of sending 
 - **Saved.** Every option typed on Choose is saved automatically, so it never needs typing again. Options can also be added here directly, into a chosen category. Options are sorted into categories the user creates, renames and deletes; the app starts with "Daily goals" and "Long-term goals", and anything not sorted sits in Unsorted. Tap an option to move it to another category or delete it. Deleting a category moves its options to Unsorted. Deleting a saved option never changes history in Look back.
 - **River log.** One text line, an optional tag (sign, synchronicity, feeling, idea), and an automatic timestamp. If a pick is active, the entry links to it.
 - **Look back.** Subtitle: "Step back and see the whole film." A reverse timeline grouped by day: picks, skipped options shown faintly, release notes and river entries side by side. Filter by tag, plus a simple text search. No charts or totals.
-- **About.** What the app is for, in its own words, plus settings: export, import, delete all data.
+- **Editing.** Tap a river entry (in River or Look back) to change its text or tag, or delete it. Tap a pick in Look back to change its release note, or delete it. Every delete asks first.
+- **About.** What the app is for, in its own words, plus settings: export, import, and two ways to start over, each behind a confirm dialog: **Clear history** (picks, notes and river entries; saved options stay) and **Reset the app** (everything, including saved options and categories).
 
 ## Words in the app
 
