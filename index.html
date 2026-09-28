@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#070a1f" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#eef1f8" media="(prefers-color-scheme: light)">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=3">
 </head>
 <body>
   <div class="sky" id="sky" aria-hidden="true">
@@ -149,9 +149,10 @@
     </nav>
   </div>
 
-  <script src="strings.js"></script>
-  <script src="storage.js"></script>
-  <script src="sky.js"></script>
-  <script src="app.js"></script>
+  <!-- Bump ?v= on every release so browsers never mix old and new files. -->
+  <script src="strings.js?v=3"></script>
+  <script src="storage.js?v=3"></script>
+  <script src="sky.js?v=3"></script>
+  <script src="app.js?v=3"></script>
 </body>
 </html>
