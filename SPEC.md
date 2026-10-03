@@ -30,7 +30,7 @@ If the top pick can't happen now, Act moves down the ranking instead of sending 
 - **River log.** One text line, an optional tag (sign, synchronicity, feeling, idea), and an automatic timestamp. If a pick is active, the entry links to it.
 - **Look back.** Subtitle: "Step back and see the whole film." A reverse timeline grouped by day: picks, skipped options shown faintly, release notes and river entries side by side. Filter by tag, plus a simple text search. No charts or totals.
 - **Editing.** Tap a river entry (in River or Look back) to change its text or tag, or delete it. Tap a pick in Look back to change its release note, or delete it. Every delete asks first.
-- **About.** What the app is for, in its own words, plus settings: export, import, and two ways to start over, each behind a confirm dialog: **Clear history** (picks, notes and river entries; saved options stay) and **Reset the app** (everything, including saved options and categories).
+- **About.** What the app is for, in its own words, plus settings: an **Install the app** button (the browser's install prompt where there is one, otherwise short Add to Home Screen steps; hidden once installed), export, import, and two ways to start over, each behind a confirm dialog: **Clear history** (picks, notes and river entries; saved options stay) and **Reset the app** (everything, including saved options and categories).
 
 ## Words in the app
 

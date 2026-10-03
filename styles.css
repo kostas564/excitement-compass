@@ -1269,6 +1269,31 @@ h1:focus {
   padding: 0 12px;
 }
 
+.steps {
+  margin: 0;
+  padding-left: 1.4em;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--text-dim);
+}
+
+.steps li::marker {
+  color: var(--gold-text);
+}
+
+.step-icon {
+  width: 22px;
+  height: 22px;
+  margin-left: 6px;
+  vertical-align: -5px;
+  fill: none;
+  stroke: var(--cyan);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 .data-status {
   min-height: 1.4em;
   font-size: 15px;

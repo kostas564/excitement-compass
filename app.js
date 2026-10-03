@@ -920,6 +920,7 @@
     ensureLibrary();
     applyTheme(data.settings.theme);
     renderThemeChoice();
+    renderInstall();
     $('#data-status').textContent = '';
     pending = null;
     draft = null;
@@ -1003,6 +1004,50 @@
       btn.setAttribute('aria-pressed', String(key === theme));
       return btn;
     }));
+  }
+
+  // ---- Install ----------------------------------------------------------
+  //
+  // Chrome and Edge offer a real install prompt, which we hold on to until
+  // the button is tapped. iPhones have no prompt, so the button shows the
+  // steps instead. Once installed, the section hides.
+
+  let installPrompt = null;
+
+  const isInstalled = () => window.matchMedia('(display-mode: standalone)').matches
+    || window.navigator.standalone === true;
+
+  const isIos = () => /iphone|ipad|ipod/i.test(navigator.userAgent)
+    || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+  function renderInstall() {
+    $('#install-section').hidden = isInstalled();
+  }
+
+  // The iOS Share icon: a box with an arrow pointing up.
+  const SHARE_ICON = '<svg class="step-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 9H6.5A1.5 1.5 0 0 0 5 10.5v8A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 17.5 9H16M12 3.5V14M8.5 7 12 3.5 15.5 7"/></svg>';
+
+  function showInstallSteps() {
+    const ios = isIos();
+    const list = el('ol', 'steps');
+    (ios ? STRINGS.about.installIos : STRINGS.about.installOther).forEach((text, i) => {
+      const li = el('li', null, text);
+      if (ios && i === 0) li.insertAdjacentHTML('beforeend', SHARE_ICON);
+      list.append(li);
+    });
+    openSheet(STRINGS.about.installStepsTitle, list);
+  }
+
+  async function install() {
+    if (!installPrompt) {
+      showInstallSteps();
+      return;
+    }
+    const prompt = installPrompt;
+    installPrompt = null;
+    prompt.prompt();
+    try { await prompt.userChoice; } catch (err) { /* dismissed */ }
+    renderInstall();
   }
 
   // ---- Backup -----------------------------------------------------------
@@ -1230,6 +1275,17 @@
       applyTheme(data.settings.theme);
       renderThemeChoice();
     });
+    renderInstall();
+    $('#install-app').addEventListener('click', install);
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      installPrompt = e;
+    });
+    window.addEventListener('appinstalled', () => {
+      installPrompt = null;
+      renderInstall();
+    });
+
     $('#export-data').addEventListener('click', exportData);
     $('#import-data').addEventListener('click', () => {
       $('#data-status').textContent = '';

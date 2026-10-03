@@ -32,7 +32,7 @@
       if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
     } catch (e) {}
   </script>
-  <link rel="stylesheet" href="styles.css?v=8">
+  <link rel="stylesheet" href="styles.css?v=9">
 </head>
 <body>
   <div class="sky" id="sky" aria-hidden="true">
@@ -245,6 +245,14 @@
         <div class="about-lines" id="about-lines"></div>
         <div class="about-body" id="about-body"></div>
 
+        <section class="about-data" id="install-section" aria-labelledby="about-install-title">
+          <h2 class="group-title" id="about-install-title" data-text="about.installTitle"></h2>
+          <div class="data-action">
+            <button class="btn btn--gold" id="install-app" type="button" data-text="about.installButton"></button>
+            <p class="data-hint" data-text="about.installHint"></p>
+          </div>
+        </section>
+
         <section class="about-data" aria-labelledby="about-theme-title">
           <h2 class="group-title" id="about-theme-title" data-text="about.themeTitle"></h2>
           <div class="tags" id="theme-choice" role="group" data-label="about.themeTitle"></div>
@@ -307,9 +315,9 @@
     </div>
   </dialog>
 
-  <script src="strings.js?v=8"></script>
-  <script src="storage.js?v=8"></script>
-  <script src="sky.js?v=8"></script>
-  <script src="app.js?v=8"></script>
+  <script src="strings.js?v=9"></script>
+  <script src="storage.js?v=9"></script>
+  <script src="sky.js?v=9"></script>
+  <script src="app.js?v=9"></script>
 </body>
 </html>
