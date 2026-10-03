@@ -1013,8 +1013,11 @@
   // steps instead. Once installed, the section hides.
 
   let installPrompt = null;
+  // The tab you install from stays a browser tab, so remember the install.
+  let justInstalled = false;
 
-  const isInstalled = () => window.matchMedia('(display-mode: standalone)').matches
+  const isInstalled = () => justInstalled
+    || window.matchMedia('(display-mode: standalone)').matches
     || window.navigator.standalone === true;
 
   const isIos = () => /iphone|ipad|ipod/i.test(navigator.userAgent)
@@ -1283,6 +1286,7 @@
     });
     window.addEventListener('appinstalled', () => {
       installPrompt = null;
+      justInstalled = true;
       renderInstall();
     });
 
