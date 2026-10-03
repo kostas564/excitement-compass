@@ -129,7 +129,7 @@ The app is inspired by the Fragments of Coherence brand, not a copy of its paint
 - **Background.** Generated in code, no image files. A deep night gradient with soft, blurred glows of light, fine grain and tiny stars (details below). Modern and calm, with no paint effect.
 - **Sacred geometry compass.** The compass is drawn in SVG with fine gold lines: a flower of life ring, a hexagon inside, and a star-shaped needle. It glows softly. When the needle settles on the pick, the geometry brightens for a moment, then calms.
 - **Warmth means the pull.** In the pair comparison, both cards start cool (indigo, cyan edge). The one you tap fills with warm gold light before the next pair appears. The chosen pick on Act is the only fully warm element on the screen.
-- **Light theme.** A dawn version: pale sky tones with the same gold, following the phone's setting, with a manual toggle in About.
+- **Light theme.** A dawn version: pale sky tones with the same gold, following the phone's setting, with a manual choice in About (Match phone, Dark, Light).
 - **Type.** One readable sans-serif for everything, large sizes, generous spacing. Body text at least 17 px on phones. The three About lines can use an elegant serif.
 - **Motion.** Soft fades between screens and the one needle animation. Everything respects the phone's reduced-motion setting.
 - **Voice.** Short, second person, never pushy. No exclamation marks, no emoji.
@@ -143,8 +143,8 @@ Every visual is drawn by the app's own code, so Claude Code builds all of it and
 - **Night sky (`sky.js` and CSS).** A navy-to-violet gradient with two or three large, very blurred glows, like distant light in a clear night sky: a gold-amber glow behind the compass, and faint indigo and cyan glows near the edges. The glows drift very slowly, about one full cycle a minute, and stay still when reduced motion is on. On top: a subtle film grain (a tiny tiled noise texture made in code) and about 120 small white stars, a few twinkling gently. A soft vignette darkens the edges.
 - **Compass (inline SVG).** Crisp, thin gold lines: a flower of life ring, a hexagon, a faint Metatron's cube pattern, and a slim star-shaped needle. A soft gold glow via an SVG blur filter. Clean and precise, like a modern instrument.
 - **Cards and buttons.** Frosted glass panels: slightly transparent indigo with a background blur and a fine cyan edge. The chosen card fills with a warm gold glow. The main button is solid gold with dark text.
-- **App icons.** A hand-written `icon.svg`: a gold compass star in a thin flower of life circle on deep indigo. A small Node script (`tools/make-icons.mjs`, using `sharp`) exports the 192 px, 512 px and maskable PNGs.
-- **Share image.** A `share.html` page draws the sky and the compass at 1200 × 630 px with the name "Excitement Compass". Claude Code screenshots it with Playwright to make `share.png` for link previews on Substack and social media.
+- **App icons.** A hand-written `icon.svg`: a gold compass star in a thin flower of life circle on deep indigo. `tools/make-images.sh` exports the 192 px, 512 px, maskable and Apple touch PNGs using macOS's built-in `qlmanage` and `sips` (no Node needed).
+- **Share image.** `share.svg` draws the sky and the compass at 1200 × 630 px with the name "Excitement Compass". `tools/make-images.sh` renders it to `share.png` for link previews on Substack and social media.
 
 ## Tech stack and files
 
@@ -159,7 +159,10 @@ Plain HTML, CSS and JavaScript with no framework and no build step, hosted free 
 | `strings.js` | All interface text in one place |
 | `sw.js` | Service worker for offline use |
 | `manifest.webmanifest` | Name, colours, icons for home-screen install |
-| `icons/` | App icons at 192 and 512 px, plus a maskable version |
+| `sky.js` | Stars and film grain for the night sky |
+| `icon.svg`, `icons/` | App icon source; PNGs at 192 and 512 px, maskable, and Apple touch |
+| `share.svg`, `share.png` | Link preview image |
+| `tools/make-images.sh` | Rebuilds the PNGs from the SVGs |
 | `README.md` | What it is, privacy note, how to run locally |
 | `LICENSE` | MIT, so others can reuse it |
 

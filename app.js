@@ -918,6 +918,9 @@
     Object.keys(data).forEach((key) => delete data[key]);
     Object.assign(data, fresh);
     ensureLibrary();
+    applyTheme(data.settings.theme);
+    renderThemeChoice();
+    $('#data-status').textContent = '';
     pending = null;
     draft = null;
     riverTag = null;
@@ -973,6 +976,110 @@
     }));
   }
 
+  // ---- Theme ------------------------------------------------------------
+
+  const THEME_COLORS = { dark: '#070a1f', light: '#eef1f8' };
+
+  function applyTheme(theme) {
+    const root = document.documentElement;
+    const metas = document.querySelectorAll('meta[name="theme-color"]');
+    if (theme === 'light' || theme === 'dark') {
+      root.setAttribute('data-theme', theme);
+      metas.forEach((m) => m.setAttribute('content', THEME_COLORS[theme]));
+    } else {
+      root.removeAttribute('data-theme');
+      metas.forEach((m) => {
+        m.setAttribute('content', m.media.includes('light') ? THEME_COLORS.light : THEME_COLORS.dark);
+      });
+    }
+  }
+
+  function renderThemeChoice() {
+    const theme = data.settings.theme || 'system';
+    $('#theme-choice').replaceChildren(...Object.entries(STRINGS.about.themes).map(([key, label]) => {
+      const btn = el('button', 'tag', label);
+      btn.type = 'button';
+      btn.dataset.theme = key;
+      btn.setAttribute('aria-pressed', String(key === theme));
+      return btn;
+    }));
+  }
+
+  // ---- Backup -----------------------------------------------------------
+
+  function exportData() {
+    const d = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    const name = `excitement-compass-${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}.json`;
+    const backup = { app: 'excitement-compass', exportedAt: d.toISOString(), ...data };
+    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = el('a');
+    a.href = url;
+    a.download = name;
+    document.body.append(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  // Add anything from a backup that isn't here yet. Matching is by id, and
+  // saved options and categories also match by name, so nothing doubles up.
+  // Returns how many sessions, river entries and saved options were added.
+  function mergeBackup(incoming) {
+    let added = 0;
+    const addNew = (target, list) => (list || []).forEach((item) => {
+      if (!item || !item.id || target.some((x) => x.id === item.id)) return;
+      target.push(item);
+      added += 1;
+    });
+    addNew(data.sessions, incoming.sessions);
+    addNew(data.river, incoming.river);
+
+    if (incoming.library) {
+      const catIds = {};
+      incoming.library.categories.forEach((c) => {
+        if (!c || !c.id || !c.name) return;
+        const same = data.library.categories.find((x) => x.id === c.id || sameText(x.name, c.name));
+        if (same) catIds[c.id] = same.id;
+        else {
+          data.library.categories.push(c);
+          catIds[c.id] = c.id;
+        }
+      });
+      incoming.library.items.forEach((i) => {
+        if (!i || !i.id || !i.text) return;
+        if (data.library.items.some((x) => x.id === i.id || sameText(x.text, i.text))) return;
+        data.library.items.push({ ...i, categoryId: catIds[i.categoryId] || null });
+        added += 1;
+      });
+    }
+
+    // Only one pick can be active: keep the newest, release the rest.
+    const active = data.sessions
+      .filter((s) => s.status === 'active')
+      .sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+    active.slice(1).forEach((s) => {
+      s.status = 'released';
+      s.releasedAt = s.releasedAt || s.createdAt;
+    });
+    return added;
+  }
+
+  async function importData(file) {
+    const status = $('#data-status');
+    try {
+      const raw = JSON.parse(await file.text());
+      const valid = raw && (raw.app === 'excitement-compass' || Array.isArray(raw.sessions));
+      if (!valid) throw new Error('not a backup');
+      const added = mergeBackup(Storage.normalise(raw));
+      persist();
+      status.textContent = STRINGS.about.importDone(added);
+    } catch (err) {
+      status.textContent = STRINGS.about.importFailed;
+    }
+  }
+
   // ---- About ------------------------------------------------------------
 
   function renderAbout() {
@@ -1004,6 +1111,8 @@
   function start() {
     fillText();
     ensureLibrary();
+    applyTheme(data.settings.theme);
+    renderThemeChoice();
     renderAbout();
 
     if (!Storage.available) $('#storage-notice').hidden = false;
@@ -1113,6 +1222,24 @@
 
     $('#river-list').addEventListener('click', onTimelineClick);
     $('#lookback-days').addEventListener('click', onTimelineClick);
+    $('#theme-choice').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-theme]');
+      if (!btn) return;
+      data.settings.theme = btn.dataset.theme;
+      persist();
+      applyTheme(data.settings.theme);
+      renderThemeChoice();
+    });
+    $('#export-data').addEventListener('click', exportData);
+    $('#import-data').addEventListener('click', () => {
+      $('#data-status').textContent = '';
+      $('#import-file').click();
+    });
+    $('#import-file').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) importData(file);
+      e.target.value = '';
+    });
     $('#clear-history').addEventListener('click', clearHistory);
     $('#reset-app').addEventListener('click', resetApp);
 
@@ -1129,6 +1256,11 @@
 
     window.addEventListener('hashchange', () => show(screenFromHash()));
     show(screenFromHash());
+
+    // Keep the app's files on the device so it opens without a connection.
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
   }
 
   start();

@@ -27,7 +27,7 @@
 
   --text: #f3efe6;
   --text-dim: rgba(243, 239, 230, 0.74);
-  --text-faint: rgba(243, 239, 230, 0.5);
+  --text-faint: rgba(243, 239, 230, 0.6);
 
   --glass: rgba(34, 38, 96, 0.42);
   --glass-edge: rgba(127, 220, 239, 0.26);
@@ -65,7 +65,7 @@
 
     --text: #1b1d3a;
     --text-dim: rgba(27, 29, 58, 0.76);
-    --text-faint: rgba(27, 29, 58, 0.56);
+    --text-faint: rgba(27, 29, 58, 0.68);
 
     --glass: rgba(255, 255, 255, 0.55);
     --glass-edge: rgba(11, 109, 134, 0.24);
@@ -96,7 +96,7 @@
 
   --text: #1b1d3a;
   --text-dim: rgba(27, 29, 58, 0.76);
-  --text-faint: rgba(27, 29, 58, 0.56);
+  --text-faint: rgba(27, 29, 58, 0.68);
 
   --glass: rgba(255, 255, 255, 0.55);
   --glass-edge: rgba(11, 109, 134, 0.24);
@@ -1257,6 +1257,26 @@ h1:focus {
 .data-action .btn {
   width: 100%;
   margin-top: 0;
+}
+
+.data-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.data-row .btn {
+  padding: 0 12px;
+}
+
+.data-status {
+  min-height: 1.4em;
+  font-size: 15px;
+  color: var(--text-dim);
+}
+
+.data-status:empty {
+  min-height: 0;
 }
 
 .data-hint {

@@ -152,7 +152,16 @@ const STRINGS = {
     creditName: 'Fragments of Coherence',
     creditAfter: ', a publication about consciousness, meaning and the bigger picture.',
     creditUrl: 'https://fragmentsofcoherence.substack.com',
+    themeTitle: 'Theme',
+    themes: { system: 'Match phone', dark: 'Dark', light: 'Light' },
     dataTitle: 'Your data',
+    backupHint: 'Everything lives in this browser only. Clearing your browser data erases it, so download a backup now and then.',
+    export: 'Download backup',
+    import: 'Restore backup',
+    importDone: (n) => (n === 0
+      ? 'Nothing new to add. Everything in that backup is already here.'
+      : `Restored ${n} ${n === 1 ? 'item' : 'items'}.`),
+    importFailed: "That file isn't an Excitement Compass backup.",
     clearHistory: 'Clear history',
     clearHistoryHint: 'Removes your picks, notes and river entries. Your saved options stay.',
     confirmClearHistory: "Clear all picks, notes and river entries? Your saved options stay. This can't be undone.",

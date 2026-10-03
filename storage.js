@@ -88,6 +88,7 @@ const Storage = (() => {
     load,
     save,
     clear,
+    normalise,
     newId,
     get available() { return available; },
   };

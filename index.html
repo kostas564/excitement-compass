@@ -8,7 +8,31 @@
   <meta name="theme-color" content="#070a1f" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#eef1f8" media="(prefers-color-scheme: light)">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="styles.css?v=7">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Compass">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Excitement Compass">
+  <meta property="og:description" content="A free, private app that helps you find what excites you most right now, act on it, and let go of the outcome.">
+  <meta property="og:url" content="https://kostas564.github.io/excitement-compass/">
+  <meta property="og:image" content="https://kostas564.github.io/excitement-compass/share.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="A gold sacred geometry compass on a night sky, with the words Excitement Compass">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Apply a saved light or dark choice before the page draws, to avoid a flash. -->
+  <script>
+    try {
+      var t = JSON.parse(localStorage.getItem('excitement-compass-v1')).settings.theme;
+      if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  </script>
+  <link rel="stylesheet" href="styles.css?v=8">
 </head>
 <body>
   <div class="sky" id="sky" aria-hidden="true">
@@ -221,8 +245,20 @@
         <div class="about-lines" id="about-lines"></div>
         <div class="about-body" id="about-body"></div>
 
+        <section class="about-data" aria-labelledby="about-theme-title">
+          <h2 class="group-title" id="about-theme-title" data-text="about.themeTitle"></h2>
+          <div class="tags" id="theme-choice" role="group" data-label="about.themeTitle"></div>
+        </section>
+
         <section class="about-data" aria-labelledby="about-data-title">
           <h2 class="group-title" id="about-data-title" data-text="about.dataTitle"></h2>
+          <p class="data-hint" data-text="about.backupHint"></p>
+          <div class="data-row">
+            <button class="btn btn--ghost" id="export-data" type="button" data-text="about.export"></button>
+            <button class="btn btn--ghost" id="import-data" type="button" data-text="about.import"></button>
+            <input type="file" id="import-file" accept="application/json,.json" hidden>
+          </div>
+          <p class="data-status" id="data-status" role="status"></p>
           <div class="data-action">
             <button class="btn btn--ghost" id="clear-history" type="button" data-text="about.clearHistory"></button>
             <p class="data-hint" data-text="about.clearHistoryHint"></p>
@@ -271,9 +307,9 @@
     </div>
   </dialog>
 
-  <script src="strings.js?v=7"></script>
-  <script src="storage.js?v=7"></script>
-  <script src="sky.js?v=7"></script>
-  <script src="app.js?v=7"></script>
+  <script src="strings.js?v=8"></script>
+  <script src="storage.js?v=8"></script>
+  <script src="sky.js?v=8"></script>
+  <script src="app.js?v=8"></script>
 </body>
 </html>
