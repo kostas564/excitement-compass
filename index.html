@@ -47,7 +47,7 @@
       document.documentElement.style.setProperty('--app-height', h + 'px');
     })();
   </script>
-  <link rel="stylesheet" href="styles.css?v=40">
+  <link rel="stylesheet" href="styles.css?v=41">
 </head>
 <body>
   <div class="sky" id="sky" aria-hidden="true">
@@ -287,6 +287,27 @@
           </div>
 
           <button class="link-btn" id="compare-tie" type="button" data-text="choose.aboutTheSame"></button>
+          <button class="link-btn link-btn--quiet" id="compare-coin" type="button" data-text="coin.link"></button>
+
+          <div class="coin-layer" id="coin-layer" role="dialog" aria-modal="true" aria-labelledby="coin-title" hidden>
+            <h2 class="coin-title" id="coin-title" data-text="coin.title"></h2>
+            <div class="coin-stage" aria-hidden="true">
+              <div class="coin" id="coin">
+                <div class="coin-face coin-face--heads"><svg viewBox="-20 -20 40 40"><polygon points="0,-15 3,-3 15,0 3,3 0,15 -3,3 -15,0 -3,-3"/><circle r="2.2"/></svg></div>
+                <div class="coin-face coin-face--tails"><svg viewBox="-20 -20 40 40"><circle r="14"/><circle r="6"/><circle cx="0" cy="-14" r="1.6"/><circle cx="12.1" cy="7" r="1.6"/><circle cx="-12.1" cy="7" r="1.6"/></svg></div>
+              </div>
+            </div>
+            <ul class="coin-sides" id="coin-sides"></ul>
+            <div class="coin-result" id="coin-result" aria-live="polite" hidden>
+              <p class="coin-landed"><span data-text="coin.landed"></span> <span class="coin-pick" id="coin-pick"></span></p>
+              <p class="coin-notice" data-text="coin.notice"></p>
+              <div class="stack-actions">
+                <button class="btn btn--gold btn--large" id="coin-keep" type="button" data-text="coin.keep"></button>
+                <button class="btn btn--ghost" id="coin-other" type="button" data-text="coin.other"></button>
+              </div>
+            </div>
+            <button class="link-btn" id="coin-back" type="button" data-text="coin.back"></button>
+          </div>
         </div>
       </section>
 
@@ -533,9 +554,9 @@
     </div>
   </dialog>
 
-  <script src="strings.js?v=40"></script>
-  <script src="storage.js?v=40"></script>
-  <script src="sky.js?v=40"></script>
-  <script src="app.js?v=40"></script>
+  <script src="strings.js?v=41"></script>
+  <script src="storage.js?v=41"></script>
+  <script src="sky.js?v=41"></script>
+  <script src="app.js?v=41"></script>
 </body>
 </html>

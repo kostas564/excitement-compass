@@ -100,6 +100,7 @@
     $('#home-scene').classList.toggle('is-strong', name === 'act');
     if (name === 'home') renderHome();
     if (name !== 'settle') stopSettle();
+    if (name !== 'choose') { clearTimeout(coinTimer); $('#coin-layer').hidden = true; }
     if (name === 'choose') renderChoose();
     if (name === 'saved') renderSaved();
     if (name === 'river') renderRiver();
@@ -580,6 +581,66 @@
       drawThreads();
     }
     setTimeout(nextQuestion, card && !reducedMotion.matches ? 400 : 120);
+  }
+
+  // ---- Not sure: flip a coin ---------------------------------------------
+  //
+  // The coin picks one side. The point is the person's own reaction to it:
+  // relief means keep it, a pang of "I wanted the other one" means choose that.
+
+  let coinTimer = null;
+  let coinSides = null;
+  let coinIndex = 0;
+
+  function openCoin() {
+    const r = draft && draft.rank;
+    if (!r || r.busy || !r.question) return;
+    const cards = [...document.querySelectorAll('#pair .card')];
+    coinSides = cards.map((c) => c.dataset.option);
+    const bits = new Uint8Array(1);
+    (window.crypto || window.msCrypto).getRandomValues(bits);
+    coinIndex = bits[0] & 1;
+
+    const [heads, tails] = coinSides;
+    $('#coin-sides').replaceChildren(
+      ...[[STRINGS.coin.heads, heads], [STRINGS.coin.tails, tails]].map(([label, text]) => {
+        const li = el('li');
+        li.append(el('span', 'coin-side-label', label), el('span', 'coin-side-text', text));
+        return li;
+      }),
+    );
+    $('#coin-result').hidden = true;
+    const coin = $('#coin');
+    coin.className = 'coin';
+    coin.style.setProperty('--end', coinIndex === 0 ? '1800deg' : '1980deg');
+    $('#coin-layer').hidden = false;
+    void coin.offsetWidth;
+    const still = reducedMotion.matches;
+    coin.classList.add(still ? (coinIndex === 0 ? 'is-heads' : 'is-tails') : 'is-flipping');
+    clearTimeout(coinTimer);
+    coinTimer = setTimeout(showCoinResult, still ? 500 : 1700);
+    $('#coin-back').focus({ preventScroll: true });
+  }
+
+  function showCoinResult() {
+    $('#coin').className = `coin ${coinIndex === 0 ? 'is-heads' : 'is-tails'}`;
+    $('#coin-pick').textContent = coinSides[coinIndex];
+    $('#coin-result').hidden = false;
+    $('#coin-keep').focus({ preventScroll: true });
+  }
+
+  function closeCoin() {
+    clearTimeout(coinTimer);
+    $('#coin-layer').hidden = true;
+    $('#compare-coin').focus({ preventScroll: true });
+  }
+
+  function chooseFromCoin(side) {
+    const choice = coinSides[side];
+    clearTimeout(coinTimer);
+    $('#coin-layer').hidden = true;
+    const card = [...document.querySelectorAll('#pair .card')].find((c) => c.dataset.option === choice);
+    answer(choice, card || null);
   }
 
   // Re-ask the previous pair, or go back to editing the list.
@@ -1571,6 +1632,11 @@
       if (card) answer(card.dataset.option, card);
     });
     $('#compare-tie').addEventListener('click', () => answer(TIE, null));
+    $('#compare-coin').addEventListener('click', openCoin);
+    $('#coin-back').addEventListener('click', closeCoin);
+    $('#coin-keep').addEventListener('click', () => chooseFromCoin(coinIndex));
+    $('#coin-other').addEventListener('click', () => chooseFromCoin(1 - coinIndex));
+    $('#coin-layer').addEventListener('keydown', (e) => { if (e.key === 'Escape') closeCoin(); });
     $('#compare-undo').addEventListener('click', undo);
 
     $('#act-on-it').addEventListener('click', onIt);

@@ -104,6 +104,19 @@ const STRINGS = {
     ],
   },
 
+  coin: {
+    link: 'Not sure? Flip a coin',
+    title: 'Let the coin decide',
+    heads: 'Heads',
+    tails: 'Tails',
+    flipping: 'Flipping…',
+    landed: 'The coin says',
+    notice: 'Notice how that feels. Relief? Or a small "oh, I wanted the other one"?',
+    keep: 'Go with it',
+    other: 'I wanted the other one',
+    back: 'Back',
+  },
+
   settle: {
     title: 'Arrive. Then choose.',
     breatheIn: 'Breathe in',
