@@ -118,6 +118,17 @@ const STRINGS = {
     back: 'Back',
   },
 
+  outcome: {
+    question: 'Where is this now?',
+    complete: 'Complete',
+    completeHint: 'I did it, or did what I could.',
+    pulling: 'Still pulling',
+    pullingHint: "It's not finished with me.",
+    faded: 'It faded',
+    fadedHint: "The pull has gone, and that's fine.",
+    back: 'Back',
+  },
+
   release: {
     prompt: 'What happened?',
     placeholder: 'One line, if you like',

@@ -33,7 +33,7 @@
     } catch (e) {}
     if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
   </script>
-  <link rel="stylesheet" href="styles.css?v=23">
+  <link rel="stylesheet" href="styles.css?v=24">
 </head>
 <body>
   <div class="sky" id="sky" aria-hidden="true">
@@ -291,6 +291,18 @@
         </div>
       </section>
 
+      <!-- Where is this now? -->
+      <section class="screen screen--outcome" id="screen-outcome" data-screen="outcome" aria-labelledby="outcome-pick" hidden>
+        <h1 class="outcome-pick" id="outcome-pick"></h1>
+        <p class="outcome-question" data-text="outcome.question"></p>
+        <div class="outcome-options" role="group" aria-labelledby="outcome-pick">
+          <button class="outcome-btn" type="button" data-outcome="complete"><span class="outcome-name" data-text="outcome.complete"></span><span class="outcome-hint" data-text="outcome.completeHint"></span></button>
+          <button class="outcome-btn" type="button" data-outcome="pulling"><span class="outcome-name" data-text="outcome.pulling"></span><span class="outcome-hint" data-text="outcome.pullingHint"></span></button>
+          <button class="outcome-btn" type="button" data-outcome="faded"><span class="outcome-name" data-text="outcome.faded"></span><span class="outcome-hint" data-text="outcome.fadedHint"></span></button>
+        </div>
+        <button class="link-btn outcome-back" id="outcome-back" type="button" data-text="outcome.back"></button>
+      </section>
+
       <!-- Settle first -->
       <section class="screen screen--settle" id="screen-settle" data-screen="settle" aria-labelledby="settle-title" hidden>
         <svg class="settle-svg" id="settle-svg" viewBox="0 0 390 844" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
@@ -505,9 +517,9 @@
     </div>
   </dialog>
 
-  <script src="strings.js?v=23"></script>
-  <script src="storage.js?v=23"></script>
-  <script src="sky.js?v=23"></script>
-  <script src="app.js?v=23"></script>
+  <script src="strings.js?v=24"></script>
+  <script src="storage.js?v=24"></script>
+  <script src="sky.js?v=24"></script>
+  <script src="app.js?v=24"></script>
 </body>
 </html>

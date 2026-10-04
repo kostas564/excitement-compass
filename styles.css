@@ -1745,3 +1745,64 @@ h1:focus {
   transform: translateX(20px);
   background: var(--gold);
 }
+
+/* ---- Where is this now? ---- */
+
+.outcome-pick {
+  margin-top: 28px;
+  font-family: var(--font-serif);
+  font-size: 40px;
+  line-height: 1.08;
+  font-weight: 600;
+  color: var(--gold-light);
+  text-align: center;
+  text-shadow: 0 0 14px #070b2e;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+.outcome-question {
+  margin-top: 14px;
+  text-align: center;
+  color: var(--text-dim);
+}
+
+.outcome-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.outcome-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-height: 88px;
+  padding: 16px 20px;
+  border-radius: 22px;
+  border: 1px solid var(--glass-edge);
+  background: var(--glass);
+  color: var(--text);
+  text-align: center;
+  cursor: pointer;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.outcome-name {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  line-height: 1.1;
+  font-weight: 600;
+}
+
+.outcome-hint {
+  font-size: 13px;
+  color: var(--text-faint);
+}
+
+.outcome-back {
+  margin: 16px auto 0;
+}

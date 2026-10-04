@@ -7,8 +7,8 @@
   const data = Storage.load();
 
   // Screens reached from Home keep Home lit in the bottom navigation.
-  const SCREENS = ['home', 'choose', 'settle', 'act', 'smaller', 'release', 'saved', 'river', 'lookback', 'about'];
-  const NAV_FOR = { choose: 'home', settle: 'home', act: 'home', smaller: 'home', release: 'home' };
+  const SCREENS = ['home', 'choose', 'settle', 'act', 'smaller', 'outcome', 'release', 'saved', 'river', 'lookback', 'about'];
+  const NAV_FOR = { choose: 'home', settle: 'home', act: 'home', smaller: 'home', outcome: 'home', release: 'home' };
 
   let current = null;
 
@@ -102,7 +102,7 @@
     if (name === 'saved') renderSaved();
     if (name === 'river') renderRiver();
     if (name === 'lookback') renderLookBack();
-    if ((name === 'act' && !renderAct()) || (name === 'smaller' && !renderSmaller()) || (name === 'settle' && !renderSettle()) || (name === 'release' && !renderRelease())) {
+    if ((name === 'act' && !renderAct()) || (name === 'smaller' && !renderSmaller()) || (name === 'settle' && !renderSettle()) || (name === 'outcome' && !renderOutcome()) || (name === 'release' && !renderRelease())) {
       go('home');
       return;
     }
@@ -707,6 +707,21 @@
 
   let closingTimer = null;
 
+  // ---- Where is this now? -----------------------------------------------
+  //
+  // Complete and faded both release the pick (faded is marked on the
+  // session). Still pulling changes nothing and returns Home.
+
+  let releaseOutcome = 'complete';
+
+  function renderOutcome() {
+    const session = activeSession();
+    if (!session) return false;
+    releaseOutcome = 'complete';
+    $('#outcome-pick').textContent = session.pick;
+    return true;
+  }
+
   function renderRelease() {
     const session = activeSession();
     if (!session) return false;
@@ -722,6 +737,8 @@
     const session = activeSession();
     if (!session) return;
     session.status = 'released';
+    session.outcome = releaseOutcome;
+    releaseOutcome = 'complete';
     session.releasedAt = new Date().toISOString();
     session.note = note.trim();
     persist();
@@ -1390,7 +1407,17 @@
     if (!Storage.available) $('#storage-notice').hidden = false;
 
     $('#find-pull').addEventListener('click', () => go('choose'));
-    $('#done-let-go').addEventListener('click', () => go('release'));
+    $('#done-let-go').addEventListener('click', () => go('outcome'));
+    $('#outcome-back').addEventListener('click', () => go('home'));
+    document.querySelectorAll('.outcome-btn').forEach((btn) => btn.addEventListener('click', () => {
+      const outcome = btn.dataset.outcome;
+      if (outcome === 'pulling') {
+        go('home');
+        return;
+      }
+      releaseOutcome = outcome;
+      go('release');
+    }));
     $('#home-add-river').addEventListener('click', () => {
       go('river');
       $('#river-input').focus();
