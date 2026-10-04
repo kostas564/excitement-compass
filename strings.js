@@ -2,6 +2,10 @@
 // Where a key holds a list, the app shows one line at random and never
 // the same one twice in a row.
 
+// TODO: confirm this Substack address for "Fragments of Coherence". It is the
+// address the app has used so far and has not been checked.
+const FRAGMENTS_OF_COHERENCE_URL = 'https://fragmentsofcoherence.substack.com';
+
 const STRINGS = {
   appName: 'Excitement Compass',
 
@@ -228,7 +232,7 @@ const STRINGS = {
     creditBefore: 'A free gift from ',
     creditName: 'Fragments of Coherence',
     creditAfter: ', a publication about consciousness, meaning and the bigger picture.',
-    creditUrl: 'https://fragmentsofcoherence.substack.com',
+    creditUrl: FRAGMENTS_OF_COHERENCE_URL,
     settleSwitch: 'Settle before choosing',
     installTitle: 'Install',
     installButton: 'Install the app',

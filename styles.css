@@ -620,7 +620,8 @@ h1:focus {
 }
 
 .option-input:focus {
-  outline: none;
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
   border-color: var(--cyan);
 }
 
@@ -1570,7 +1571,7 @@ h1:focus {
 }
 
 .smaller-chips .chip {
-  min-height: 40px;
+  min-height: 48px;
   padding: 0 16px;
   border-style: solid;
   border-color: rgba(127, 224, 240, 0.28);
@@ -1717,19 +1718,30 @@ h1:focus {
 .switch {
   flex: none;
   position: relative;
+  width: 56px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.switch::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 8px;
   width: 52px;
   height: 32px;
-  padding: 0;
   border-radius: 999px;
   border: 1px solid var(--glass-edge);
   background: var(--glass);
-  cursor: pointer;
 }
 
 .switch span {
   position: absolute;
-  top: 3px;
-  left: 3px;
+  top: 12px;
+  left: 6px;
   width: 24px;
   height: 24px;
   border-radius: 50%;
@@ -1737,7 +1749,7 @@ h1:focus {
   transition: transform 0.25s var(--ease), background 0.25s var(--ease);
 }
 
-.switch[aria-checked="true"] {
+.switch[aria-checked="true"]::before {
   border-color: var(--gold);
 }
 
@@ -1971,7 +1983,8 @@ h1:focus {
 }
 
 #lookback-tags .tag {
-  min-height: 40px;
+  min-width: 48px;
+  min-height: 48px;
   padding: 0 16px;
   font-size: 13px;
 }
