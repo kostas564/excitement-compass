@@ -268,6 +268,19 @@ const STRINGS = {
     importDone: (n) => (n === 0
       ? 'Nothing new to add. Everything in that backup is already here.'
       : `Restored ${n} ${n === 1 ? 'item' : 'items'}.`),
+    downloadTitle: (name) => `Your backup is ready: ${name}`,
+    downloadSteps: [
+      'On an iPhone, a preview may open. Tap the share button, then Save to Files. On Android or a computer, the file goes to your Downloads.',
+      'Keep it somewhere safe, such as iCloud Drive or Google Drive, or email it to yourself.',
+      'It holds everything you have written here, so only share it with people you trust.',
+    ],
+    restoreTitle: 'To restore a backup',
+    restoreSteps: [
+      'Tap Choose backup file below.',
+      'Find the file you saved earlier. Its name looks like excitement-compass-2026-01-01.json.',
+      'Select it. Anything new in the backup is added; nothing you have now is removed or replaced.',
+    ],
+    chooseFile: 'Choose backup file',
     importFailed: "That file isn't an Excitement Compass backup.",
     clearHistory: 'Clear history',
     clearHistoryHint: 'Removes your picks, notes and river entries. Your saved options stay.',

@@ -1462,6 +1462,22 @@
 
   // ---- Backup -----------------------------------------------------------
 
+  // A short how-to under the backup buttons: a heading, numbered steps and,
+  // optionally, one button.
+  function showDataGuide(title, steps, action) {
+    const box = $('#data-status');
+    const heading = el('p', 'data-guide-title', title);
+    const list = el('ol', 'data-guide-steps');
+    steps.forEach((text) => list.append(el('li', null, text)));
+    box.replaceChildren(heading, list);
+    if (action) {
+      const btn = el('button', 'btn btn--ghost data-guide-action', action.label);
+      btn.type = 'button';
+      btn.addEventListener('click', action.run);
+      box.append(btn);
+    }
+  }
+
   function exportData() {
     const d = new Date();
     const pad = (n) => String(n).padStart(2, '0');
@@ -1476,6 +1492,7 @@
     a.click();
     a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
+    showDataGuide(STRINGS.about.downloadTitle(name), STRINGS.about.downloadSteps);
   }
 
   // Add anything from a backup that isn't here yet. Matching is by id, and
@@ -1730,8 +1747,10 @@
 
     $('#export-data').addEventListener('click', exportData);
     $('#import-data').addEventListener('click', () => {
-      $('#data-status').textContent = '';
-      $('#import-file').click();
+      showDataGuide(STRINGS.about.restoreTitle, STRINGS.about.restoreSteps, {
+        label: STRINGS.about.chooseFile,
+        run: () => $('#import-file').click(),
+      });
     });
     $('#import-file').addEventListener('change', (e) => {
       const file = e.target.files[0];

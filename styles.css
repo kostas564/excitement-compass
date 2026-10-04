@@ -2487,3 +2487,32 @@ h1:focus {
     animation: none;
   }
 }
+
+/* ---- About: backup instructions ---- */
+
+.data-guide-title {
+  margin: 4px 0 8px;
+  font-weight: 600;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+.data-guide-steps {
+  margin: 0 0 12px;
+  padding-left: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 15px;
+  color: var(--text-dim);
+}
+
+.data-guide-action {
+  width: 100%;
+  margin-bottom: 24px;
+  border-color: var(--cyan);
+}
+
+.data-status:not(:empty) {
+  margin-bottom: 8px;
+}
