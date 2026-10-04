@@ -69,7 +69,7 @@
     --gold: #efb04a;
     --amber: #e3913a;
     --on-gold: #1d1433;
-    --gold-text: #8a5708;
+    --gold-text: #7d4e06;
     --gold-light: #8a5708;
     --card-chosen-text: #1b1d3a;
     --card-chosen-bg: radial-gradient(circle at 50% 0%, rgba(239, 176, 74, 0.6), rgba(255, 255, 255, 0.7) 70%);
@@ -104,7 +104,7 @@
   --gold: #efb04a;
   --amber: #e3913a;
   --on-gold: #1d1433;
-  --gold-text: #8a5708;
+  --gold-text: #7d4e06;
   --gold-light: #8a5708;
   --card-chosen-text: #1b1d3a;
   --card-chosen-bg: radial-gradient(circle at 50% 0%, rgba(239, 176, 74, 0.6), rgba(255, 255, 255, 0.7) 70%);
@@ -2087,7 +2087,7 @@ h1:focus {
   color-scheme: dark;
   --text: #f6ecd8;
   --text-dim: rgba(236, 239, 255, 0.82);
-  --text-faint: rgba(236, 239, 255, 0.7);
+  --text-faint: rgba(236, 239, 255, 0.84);
   --glass: rgba(20, 28, 78, 0.6);
   --glass-edge: rgba(127, 224, 240, 0.28);
   --nav-bg: rgba(12, 16, 50, 0.78);
@@ -2135,7 +2135,7 @@ h1:focus {
     color-scheme: dark;
     --text: #f6ecd8;
     --text-dim: rgba(236, 239, 255, 0.82);
-    --text-faint: rgba(236, 239, 255, 0.7);
+    --text-faint: rgba(236, 239, 255, 0.84);
     --glass: rgba(20, 28, 78, 0.6);
     --glass-edge: rgba(127, 224, 240, 0.28);
     --nav-bg: rgba(12, 16, 50, 0.78);
