@@ -94,7 +94,7 @@
     });
 
     document.body.classList.toggle('on-home', name === 'home');
-    document.body.classList.toggle('scene-dark', name === 'settle');
+    document.body.classList.toggle('scene-dark', name === 'settle' || name === 'lookback');
     document.body.classList.toggle('scene-dawn', name === 'home' || name === 'act');
     $('#home-scene').hidden = name !== 'home' && name !== 'act';
     $('#home-scene').classList.toggle('is-strong', name === 'act');
