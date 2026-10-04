@@ -36,7 +36,18 @@
     } catch (e) {}
     if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
   </script>
-  <link rel="stylesheet" href="styles.css?v=38">
+  <!-- Fix the app's height before the first paint. iOS can open an installed
+       app with a short viewport and correct it later, which made everything
+       jump down; the screen's own height does not change. -->
+  <script>
+    (function () {
+      var standalone = navigator.standalone === true ||
+        (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+      var h = Math.max(window.innerHeight, standalone ? screen.height : 0);
+      document.documentElement.style.setProperty('--app-height', h + 'px');
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css?v=39">
 </head>
 <body>
   <div class="sky" id="sky" aria-hidden="true">
@@ -522,9 +533,9 @@
     </div>
   </dialog>
 
-  <script src="strings.js?v=38"></script>
-  <script src="storage.js?v=38"></script>
-  <script src="sky.js?v=38"></script>
-  <script src="app.js?v=38"></script>
+  <script src="strings.js?v=39"></script>
+  <script src="storage.js?v=39"></script>
+  <script src="sky.js?v=39"></script>
+  <script src="app.js?v=39"></script>
 </body>
 </html>
