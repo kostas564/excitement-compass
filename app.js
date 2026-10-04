@@ -93,6 +93,8 @@
       else el.removeAttribute('aria-current');
     });
 
+    document.body.classList.toggle('on-home', name === 'home');
+    $('#home-scene').hidden = name !== 'home';
     if (name === 'home') renderHome();
     if (name === 'choose') renderChoose();
     if (name === 'saved') renderSaved();
@@ -133,6 +135,7 @@
     $('#home-active').hidden = !session;
     $('#find-pull').hidden = !!session;
     $('#done-let-go').hidden = !session;
+    $('#home-scene').classList.toggle('is-active', !!session);
 
     if (session) {
       $('#home-pick').textContent = session.pick;

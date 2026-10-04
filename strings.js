@@ -17,7 +17,7 @@ const STRINGS = {
     findPull: 'Find my pull',
     addRiver: 'Add to the river log',
     nextQuote: 'Show another line',
-    activeLabel: 'You are following',
+    activeLabel: 'Your pull',
     doneLetGo: 'Done, let go',
     idleLines: [
       'What feels most alive right now?',
