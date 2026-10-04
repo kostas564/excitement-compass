@@ -2300,7 +2300,8 @@ h1:focus {
   max-width: 480px;
   margin: 0;
   transform: translateX(-50%);
-  color: var(--text-dim);
+  color: var(--text);
+  opacity: 0.9;
   text-shadow: 0 0 10px #070b2e;
   pointer-events: none;
 }
