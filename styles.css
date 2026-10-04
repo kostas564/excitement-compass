@@ -1603,25 +1603,40 @@ h1:focus {
 }
 
 .settle-flower,
-.settle-halo {
+.settle-halo,
+.settle-spin {
   transform-box: view-box;
   transform-origin: 195px 330px;
-  transition: transform 6s ease-in-out, opacity 6s ease-in-out;
+}
+
+.settle-flower,
+.settle-halo {
+  transition: transform 3s ease-in-out, opacity 3s ease-in-out;
 }
 
 .settle-halo {
-  opacity: 0.75;
+  opacity: 0.6;
+}
+
+/* A slow turn all the way through, so it never looks stuck. */
+.settle-spin {
+  animation: settle-spin 5s ease-in-out forwards;
+}
+
+@keyframes settle-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(45deg); }
 }
 
 .settle-svg.is-in .settle-flower {
-  transform: scale(1.16);
-  transition-duration: 4s;
+  transform: scale(1.35);
+  transition-duration: 2s;
 }
 
 .settle-svg.is-in .settle-halo {
-  transform: scale(1.12);
+  transform: scale(1.3);
   opacity: 1;
-  transition-duration: 4s;
+  transition-duration: 2s;
 }
 
 .settle-text {
@@ -1679,9 +1694,11 @@ h1:focus {
 
 @media (prefers-reduced-motion: reduce) {
   .settle-flower,
-  .settle-halo {
+  .settle-halo,
+  .settle-spin {
     transition: none !important;
     transform: none !important;
+    animation: none !important;
   }
 }
 

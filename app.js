@@ -327,11 +327,12 @@
 
   // ---- Settle first -----------------------------------------------------
   //
-  // Three slow breaths (4 seconds in, 6 out), then the comparison begins.
+  // One slow breath (2 seconds in, 3 out), then the comparison begins.
 
   let afterSettle = false;
   let settleTimers = [];
-  const BREATHS = 3;
+  const SETTLE_IN = 2000;
+  const SETTLE_TOTAL = 5000;
 
   function stopSettle() {
     settleTimers.forEach(clearTimeout);
@@ -355,21 +356,18 @@
     svg.classList.remove('is-in');
 
     const later = (ms, fn) => settleTimers.push(setTimeout(fn, ms));
-    for (let n = 0; n < BREATHS; n++) {
-      const t0 = n * 10000;
-      later(t0, () => {
-        label.textContent = STRINGS.settle.breatheIn;
-        svg.classList.add('is-in');
-      });
-      later(t0 + 4000, () => {
-        label.textContent = STRINGS.settle.breatheOut;
-        svg.classList.remove('is-in');
-      });
-      later(t0 + 10000, () => {
-        dots[n].classList.add('is-filled');
-        if (n === BREATHS - 1) leaveSettle();
-      });
-    }
+    later(0, () => {
+      label.textContent = STRINGS.settle.breatheIn;
+      svg.classList.add('is-in');
+    });
+    later(SETTLE_IN, () => {
+      label.textContent = STRINGS.settle.breatheOut;
+      svg.classList.remove('is-in');
+    });
+    dots.forEach((d, n) => later(((n + 1) * SETTLE_TOTAL) / dots.length, () => {
+      d.classList.add('is-filled');
+      if (n === dots.length - 1) leaveSettle();
+    }));
     // Start the first breath once the screen has drawn, so it can animate.
     label.textContent = STRINGS.settle.breatheIn;
     requestAnimationFrame(() => requestAnimationFrame(() => svg.classList.add('is-in')));
