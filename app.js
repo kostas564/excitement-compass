@@ -14,16 +14,37 @@
 
   // iOS can open an installed app with a stale, too-short viewport, which
   // leaves the bottom bar floating above the screen edge until something
-  // forces a re-layout. Nudge the layout a few times right after opening.
+  // forces a re-layout. Size the app from the real screen height instead,
+  // and re-check a few times right after opening.
+  const standalone = window.navigator.standalone === true ||
+    window.matchMedia('(display-mode: standalone)').matches;
+  const debug = /[?&]debug\b/.test(location.search);
+  let debugEl = null;
+
   function settleViewport() {
+    const root = document.documentElement;
+    const inner = window.innerHeight;
+    const vv = window.visualViewport ? window.visualViewport.height : inner;
+    const full = standalone ? Math.max(inner, vv, screen.height) : Math.max(inner, vv);
+    root.style.setProperty('--app-height', `${full}px`);
     const nav = $('.nav');
-    if (!nav) return;
-    nav.style.bottom = '-1px';
-    void nav.offsetHeight;
-    nav.style.bottom = '';
-    window.dispatchEvent(new Event('resize'));
+    if (nav) {
+      // Pin the bar to the real bottom edge even if the viewport reads short.
+      nav.style.bottom = 'auto';
+      nav.style.top = `${full - nav.offsetHeight}px`;
+      void nav.offsetHeight;
+    }
+    if (debug) {
+      if (!debugEl) {
+        debugEl = document.createElement('pre');
+        debugEl.style.cssText = 'position:fixed;top:60px;left:8px;z-index:99;margin:0;padding:6px;background:#000c;color:#0f0;font:11px monospace;pointer-events:none';
+        document.body.appendChild(debugEl);
+      }
+      debugEl.textContent = `inner ${inner}\nvv ${vv}\nscreen ${screen.height}\nstandalone ${standalone}\nusing ${full}`;
+    }
   }
   [0, 150, 500, 1200, 2500].forEach((ms) => setTimeout(settleViewport, ms));
+  window.addEventListener('resize', settleViewport);
   window.addEventListener('pageshow', settleViewport);
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) settleViewport();
