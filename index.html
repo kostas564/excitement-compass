@@ -36,7 +36,7 @@
     } catch (e) {}
     if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
   </script>
-  <link rel="stylesheet" href="styles.css?v=31">
+  <link rel="stylesheet" href="styles.css?v=33">
 </head>
 <body>
   <div class="sky" id="sky" aria-hidden="true">
@@ -70,6 +70,7 @@
 <stop offset="0" stop-color="#bfeaf5" stop-opacity="0.9"/>
 <stop offset="1" stop-color="#7fe0f0" stop-opacity="0"/>
 </radialGradient>
+<radialGradient id="hs-sunhalo"><stop offset="0" stop-color="#ffe2a8" stop-opacity="0.95"/><stop offset="0.35" stop-color="#ffbf80" stop-opacity="0.5"/><stop offset="1" stop-color="#ffb26b" stop-opacity="0"/></radialGradient>
 <linearGradient id="hs-horizon" x1="0" y1="410" x2="0" y2="492" gradientUnits="userSpaceOnUse">
 <stop offset="0" stop-color="#2fc3d0" stop-opacity="0"/>
 <stop offset="0.6" stop-color="#2fc3d0" stop-opacity="0.3"/>
@@ -129,6 +130,7 @@
 <line x1="195" y1="88" x2="195" y2="136"/><line x1="171" y1="112" x2="219" y2="112"/>
 </g></g>
 
+<g class="dawn-sun"><circle cx="304" cy="470" r="150" fill="url(#hs-sunhalo)"/><circle cx="304" cy="470" r="30" fill="#fff3d2"/></g>
 <rect x="0" y="410" width="390" height="90" fill="url(#hs-horizon)"/>
 <path d="M0 494 C60 472 110 480 170 488 C230 496 280 470 340 476 C365 478 380 482 390 480 L390 844 L0 844Z" fill="#0c1240"/>
 <path d="M0 506 C100 492 290 492 390 506 L390 844 L0 844Z" fill="#070a22"/>
@@ -520,9 +522,9 @@
     </div>
   </dialog>
 
-  <script src="strings.js?v=31"></script>
-  <script src="storage.js?v=31"></script>
-  <script src="sky.js?v=31"></script>
-  <script src="app.js?v=31"></script>
+  <script src="strings.js?v=33"></script>
+  <script src="storage.js?v=33"></script>
+  <script src="sky.js?v=33"></script>
+  <script src="app.js?v=33"></script>
 </body>
 </html>
