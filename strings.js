@@ -206,6 +206,10 @@ const STRINGS = {
     yesterday: 'Yesterday',
     notNow: 'Not now:',
     following: 'Following now',
+    now: 'Now',
+    faded: 'faded',
+    ghostLabel: 'Already there',
+    ghostText: 'Countless frames, not yet seen',
   },
 
   about: {

@@ -1032,6 +1032,86 @@
     return li;
   }
 
+  // ---- Film frames --------------------------------------------------------
+
+  // A small deterministic hash and random stream, so a frame's picture comes
+  // from its id and never changes between visits.
+  function seededRandom(text) {
+    let h = 2166136261;
+    for (let i = 0; i < text.length; i++) h = Math.imul(h ^ text.charCodeAt(i), 16777619);
+    let a = h >>> 0;
+    return () => {
+      a = (a + 0x6D2B79F5) >>> 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  // A miniature night sky: one soft glow, a few stars and a dark hill.
+  function frameThumb(id, active) {
+    const rand = seededRandom(String(id));
+    const gx = Math.round(18 + rand() * 64);
+    const gy = Math.round(32 + rand() * 26);
+    const hue = rand() < 0.5 ? '243, 196, 108' : '127, 224, 240';
+    const glow = active ? '243, 196, 108' : hue;
+    const thumb = el('span', 'frame-thumb');
+    thumb.setAttribute('aria-hidden', 'true');
+    thumb.style.background =
+      `radial-gradient(circle at ${gx}% ${gy}%, #fff3d2 0 2px, rgba(${glow}, 0.5) 3px 10px, rgba(${glow}, 0.12) 11px 38px, transparent 62px), ` +
+      `linear-gradient(180deg, #0c1240, ${active ? '#221a5c' : '#1a1750'})`;
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+      stars.push(`${(rand() * 94 + 3).toFixed(1)}cqw ${(rand() * 52 + 4).toFixed(0)}px 0 ${rand() < 0.4 ? 0.5 : 0}px rgba(255,255,255,${(0.4 + rand() * 0.5).toFixed(2)})`);
+    }
+    const starLayer = el('span', 'frame-stars');
+    starLayer.style.boxShadow = stars.join(', ');
+    thumb.append(starLayer, el('span', 'frame-hill'));
+    return thumb;
+  }
+
+  function frameLabel(iso, active) {
+    const day = active ? STRINGS.lookBack.now : dayLabel(iso);
+    return `${day} · ${timeLabel(iso)}`.toUpperCase();
+  }
+
+  function frameButton(dataKey, id, iso, active) {
+    const btn = itemButton(`frame${active ? ' frame--now' : ''}`, dataKey, id);
+    const label = el('span', 'frame-label');
+    const time = el('time', null, frameLabel(iso, active));
+    time.dateTime = iso;
+    label.append(time);
+    return { btn, label };
+  }
+
+  function sessionFrame(session) {
+    const active = session.status === 'active';
+    const { btn, label } = frameButton('session', session.id, session.createdAt, active);
+    if (session.outcome === 'faded') label.append(el('span', 'frame-tag', STRINGS.lookBack.faded));
+    const body = el('span', 'frame-body');
+    body.append(label, el('span', 'frame-text', session.pick));
+    const skipped = (session.skipped || []).filter((o) => o !== session.pick);
+    if (skipped.length) body.append(el('span', 'item-skipped', `${STRINGS.lookBack.notNow} ${skipped.join(', ')}`));
+    if (session.note) body.append(el('span', 'item-note', session.note));
+    btn.append(frameThumb(session.id, active), body);
+    const li = el('li');
+    li.append(btn);
+    return li;
+  }
+
+  function riverFrame(entry) {
+    const { btn, label } = frameButton('river', entry.id, entry.createdAt, false);
+    if (entry.tag && STRINGS.river.tags[entry.tag]) label.append(el('span', 'frame-tag', STRINGS.river.tags[entry.tag]));
+    const body = el('span', 'frame-body');
+    body.append(label, el('span', 'frame-text', entry.text));
+    const session = entry.sessionId && sessionById(entry.sessionId);
+    if (session) body.append(el('span', 'item-link', `${STRINGS.river.linked}: ${session.pick}`));
+    btn.append(frameThumb(entry.id, false), body);
+    const li = el('li');
+    li.append(btn);
+    return li;
+  }
+
   // ---- Editing river entries and picks -----------------------------------
 
   function refreshTimeline() {
@@ -1178,13 +1258,13 @@
     const items = [];
     if (!lookFilter.tag) {
       data.sessions.forEach((s) => {
-        if (matches([s.pick, s.note, ...(s.options || [])])) items.push({ at: s.createdAt, node: () => sessionItem(s) });
+        if (matches([s.pick, s.note, ...(s.options || [])])) items.push({ at: s.createdAt, node: () => sessionFrame(s) });
       });
     }
     data.river.forEach((e) => {
       if (lookFilter.tag && e.tag !== lookFilter.tag) return;
       const session = e.sessionId && sessionById(e.sessionId);
-      if (matches([e.text, session && session.pick])) items.push({ at: e.createdAt, node: () => riverItem(e, false) });
+      if (matches([e.text, session && session.pick])) items.push({ at: e.createdAt, node: () => riverFrame(e) });
     });
     items.sort((a, b) => b.at.localeCompare(a.at));
 
@@ -1193,25 +1273,48 @@
     $('#lookback-empty').hidden = items.length > 0;
     $('#lookback-empty').textContent = hasAny ? STRINGS.lookBack.noMatch : STRINGS.lookBack.empty;
 
-    const days = [];
-    items.forEach((item) => {
-      const key = dayKey(item.at);
-      let day = days[days.length - 1];
-      if (!day || day.key !== key) {
-        day = { key, at: item.at, items: [] };
-        days.push(day);
-      }
-      day.items.push(item);
-    });
+    const strip = $('#lookback-days');
+    const list = el('ol', 'frames');
+    const ghost = el('li', 'frame-ghost');
+    ghost.append(el('span', 'frame-ghost-label', STRINGS.lookBack.ghostLabel), el('span', 'frame-ghost-text', STRINGS.lookBack.ghostText));
+    ghost.setAttribute('aria-hidden', 'true');
+    list.append(ghost);
+    strip.replaceChildren(list);
+    appendFrames(list, items);
+  }
 
-    $('#lookback-days').replaceChildren(...days.map((day) => {
-      const section = el('section', 'day');
-      section.append(el('h2', 'day-title', dayLabel(day.at)));
-      const list = el('ol', 'timeline');
-      list.append(...day.items.map((item) => item.node()));
-      section.append(list);
-      return section;
-    }));
+  // Frames are added in chunks as the person scrolls, so a long history
+  // stays smooth on a phone.
+  const FRAME_CHUNK = 30;
+  let frameObserver = null;
+
+  function appendFrames(list, items) {
+    if (frameObserver) frameObserver.disconnect();
+    let next = 0;
+    const more = () => {
+      const stop = Math.min(next + FRAME_CHUNK, items.length);
+      const frag = document.createDocumentFragment();
+      for (; next < stop; next++) frag.append(items[next].node());
+      list.querySelector('.frame-sentinel')?.remove();
+      list.append(frag);
+      if (next < items.length) {
+        const sentinel = el('li', 'frame-sentinel');
+        sentinel.setAttribute('aria-hidden', 'true');
+        list.append(sentinel);
+        if ('IntersectionObserver' in window) {
+          frameObserver = new IntersectionObserver((entries) => {
+            if (entries.some((e) => e.isIntersecting)) {
+              frameObserver.disconnect();
+              more();
+            }
+          }, { rootMargin: '600px' });
+          frameObserver.observe(sentinel);
+        } else {
+          more();
+        }
+      }
+    };
+    more();
   }
 
   // ---- Theme ------------------------------------------------------------
