@@ -76,6 +76,7 @@ const STRINGS = {
   choose: {
     title: 'What could you do next?',
     placeholder: 'Type an option',
+    placeholderExamples: ['Make a coffee', 'Go for a walk', 'Call a friend', 'Water the plants', 'Write one line'],
     add: 'Add',
     remove: 'Remove',
     saved: 'Saved',

@@ -33,7 +33,7 @@
     } catch (e) {}
     if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
   </script>
-  <link rel="stylesheet" href="styles.css?v=19">
+  <link rel="stylesheet" href="styles.css?v=20">
 </head>
 <body>
   <div class="sky" id="sky" aria-hidden="true">
@@ -216,7 +216,7 @@
 
           <form class="option-form" id="option-form" autocomplete="off">
             <input class="option-input" id="option-input" type="text" maxlength="80"
-                   enterkeyhint="enter" data-placeholder="choose.placeholder">
+                   enterkeyhint="enter">
             <button class="option-add" id="option-add" type="submit" data-label="choose.add">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
             </button>
@@ -237,6 +237,25 @@
         </div>
 
         <div class="compare" id="compare" hidden>
+          <svg class="threads" id="threads" aria-hidden="true" focusable="false">
+            <defs>
+              <radialGradient id="th-orb-grad" cx="0.4" cy="0.35" r="0.7">
+                <stop offset="0" stop-color="#fffaf0"/><stop offset="0.5" stop-color="#fbdf9a"/><stop offset="1" stop-color="#e29a45"/>
+              </radialGradient>
+              <radialGradient id="th-halo-grad">
+                <stop offset="0" stop-color="#f3c46c" stop-opacity="0.34"/><stop offset="1" stop-color="#f3c46c" stop-opacity="0"/>
+              </radialGradient>
+              <filter id="th-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5"/></filter>
+            </defs>
+            <circle id="th-halo-c" r="150" fill="url(#th-halo-grad)"/>
+            <g id="th-flower" fill="none" stroke="#f3c46c" stroke-width="0.6" stroke-opacity="0.26"></g>
+            <path class="thread thread--0" id="thread-0" fill="none" stroke-linecap="round"/>
+            <path class="thread thread--1" id="thread-1" fill="none" stroke-linecap="round"/>
+            <path class="thread-glow" id="thread-glow" fill="none" stroke-linecap="round" filter="url(#th-blur)"/>
+            <circle id="th-ring" r="14" fill="#f8d58a" opacity="0.25"/>
+            <circle id="th-orb" r="7" fill="url(#th-orb-grad)"/>
+          </svg>
+
           <div class="compare-top">
             <button class="icon-btn" id="compare-undo" type="button" data-label="choose.back">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
@@ -450,9 +469,9 @@
     </div>
   </dialog>
 
-  <script src="strings.js?v=19"></script>
-  <script src="storage.js?v=19"></script>
-  <script src="sky.js?v=19"></script>
-  <script src="app.js?v=19"></script>
+  <script src="strings.js?v=20"></script>
+  <script src="storage.js?v=20"></script>
+  <script src="sky.js?v=20"></script>
+  <script src="app.js?v=20"></script>
 </body>
 </html>

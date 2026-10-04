@@ -324,6 +324,20 @@
     renderEntry();
   }
 
+  // The empty field gently suggests small everyday examples.
+  (() => {
+    const input = $('#option-input');
+    const examples = STRINGS.choose.placeholderExamples;
+    let n = 0;
+    input.setAttribute('placeholder', examples[0]);
+    if (reducedMotion.matches) return;
+    setInterval(() => {
+      if (current !== 'choose' || input.value || document.activeElement === input) return;
+      n = (n + 1) % examples.length;
+      input.setAttribute('placeholder', examples[n]);
+    }, 3500);
+  })();
+
   // ---- Choose: pair comparison ------------------------------------------
   //
   // Binary insertion sort. Each option, in the order entered, is placed into
@@ -407,9 +421,83 @@
       card.dataset.option = sides[i];
       card.classList.remove('is-chosen');
     });
+    $('#pair').classList.remove('has-choice');
+    leanSide = null;
+    drawThreads();
     const total = maxComparisons(draft.options.length);
     $('#progress-fill').style.transform = `scaleX(${Math.min(r.answered / total, 1)})`;
     r.busy = false;
+  }
+
+  // Two threads run from a small origin point to the two cards. The one to
+  // the card being leaned toward (hovered, focused or chosen) turns gold.
+  let leanSide = null;
+  const SVGNS = 'http://www.w3.org/2000/svg';
+
+  function drawThreads() {
+    const box = $('#compare');
+    const svg = $('#threads');
+    if (!box || box.hidden || !svg) return;
+    const cards = [...document.querySelectorAll('#pair .card')];
+    const b = box.getBoundingClientRect();
+    const title = $('#compare-title').getBoundingClientRect();
+    const ox = b.width / 2;
+    const oy = title.bottom - b.top + 40;
+    const stacked = cards[1].getBoundingClientRect().top > cards[0].getBoundingClientRect().bottom - 4;
+
+    const setC = (id, cx, cy) => { const c = $(id); c.setAttribute('cx', cx); c.setAttribute('cy', cy); };
+    setC('#th-halo-c', ox, oy);
+    setC('#th-orb', ox, oy);
+    setC('#th-ring', ox, oy);
+    const flower = $('#th-flower');
+    if (!flower.childNodes.length) {
+      const r = 12;
+      [[0, 0], [0, -r], [r * 0.87, -r / 2], [r * 0.87, r / 2], [0, r], [-r * 0.87, r / 2], [-r * 0.87, -r / 2]].forEach(([dx, dy]) => {
+        const c = document.createElementNS(SVGNS, 'circle');
+        c.setAttribute('r', r);
+        c.dataset.dx = dx; c.dataset.dy = dy;
+        flower.append(c);
+      });
+    }
+    flower.childNodes.forEach((c) => {
+      c.setAttribute('cx', ox + Number(c.dataset.dx));
+      c.setAttribute('cy', oy + Number(c.dataset.dy));
+    });
+
+    const paths = cards.map((card, i) => {
+      const r = card.getBoundingClientRect();
+      let tx = r.left + r.width / 2 - b.left;
+      let ty = r.top - b.top;
+      if (stacked && i === 1) {
+        // Run down the left margin to the second card's edge.
+        tx = r.left - b.left;
+        ty = r.top + r.height / 2 - b.top;
+        return `M${ox} ${oy} C${ox - 40} ${oy + 30} ${-4} ${oy + 60} ${-4} ${ty - 40} S${-4} ${ty} ${tx} ${ty}`;
+      }
+      const dy = Math.max(ty - oy, 20);
+      return `M${ox} ${oy} C${ox + (tx - ox) * 0.1} ${oy + dy * 0.5} ${tx - (tx - ox) * 0.3} ${oy + dy * 0.6} ${tx} ${ty}`;
+    });
+    paths.forEach((d, i) => {
+      const el = $(`#thread-${i}`);
+      el.setAttribute('d', d);
+      el.classList.toggle('is-lit', leanSide === i);
+    });
+    const glow = $('#thread-glow');
+    glow.setAttribute('d', leanSide === null ? '' : paths[leanSide]);
+    svg.setAttribute('width', b.width);
+    svg.setAttribute('height', b.height);
+  }
+
+  function lean(e) {
+    const card = e.target.closest && e.target.closest('.card');
+    if (e.type === 'pointerout' || e.type === 'focusout') {
+      if (draft && draft.rank && !draft.rank.busy) { leanSide = null; drawThreads(); }
+      return;
+    }
+    if (card && draft && draft.rank && !draft.rank.busy) {
+      leanSide = Number(card.dataset.side);
+      drawThreads();
+    }
   }
 
   function answer(choice, card) {
@@ -426,8 +514,13 @@
     applyAnswer(r, candidate, choice);
     r.answered += 1;
 
-    if (card) card.classList.add('is-chosen');
-    setTimeout(nextQuestion, card && !reducedMotion.matches ? 450 : 120);
+    if (card) {
+      card.classList.add('is-chosen');
+      $('#pair').classList.add('has-choice');
+      leanSide = Number(card.dataset.side);
+      drawThreads();
+    }
+    setTimeout(nextQuestion, card && !reducedMotion.matches ? 400 : 120);
   }
 
   // Re-ask the previous pair, or go back to editing the list.
@@ -1262,6 +1355,9 @@
       }
       if (draft.options.length) startRank();
     });
+    ['pointerover', 'pointerout', 'focusin', 'focusout'].forEach((t) => $('#pair').addEventListener(t, lean));
+    window.addEventListener('resize', drawThreads);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(drawThreads);
     $('#pair').addEventListener('click', (e) => {
       const card = e.target.closest('.card');
       if (card) answer(card.dataset.option, card);
