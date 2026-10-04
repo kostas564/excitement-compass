@@ -141,6 +141,23 @@
     }
   }
 
+  // Tapping the idle line brings the next one.
+  function nextHomeLine() {
+    if (activeSession()) return;
+    const el = $('#home-line');
+    el.textContent = randomLine('home.idleLines');
+    el.classList.remove('is-entering');
+    void el.offsetWidth;
+    el.classList.add('is-entering');
+  }
+  $('#home-line').addEventListener('click', nextHomeLine);
+  $('#home-line').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      nextHomeLine();
+    }
+  });
+
   // ---- Saved options library -------------------------------------------
   //
   // Every option written is kept here so it never needs typing again.

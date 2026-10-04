@@ -438,6 +438,13 @@ h1:focus {
   font-weight: 500;
   letter-spacing: -0.01em;
   text-wrap: balance;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.home-line.is-entering {
+  animation: fade-in 0.35s var(--ease);
 }
 
 .home-active-label {

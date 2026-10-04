@@ -32,7 +32,7 @@
       if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
     } catch (e) {}
   </script>
-  <link rel="stylesheet" href="styles.css?v=13">
+  <link rel="stylesheet" href="styles.css?v=14">
 </head>
 <body>
   <div class="sky" id="sky" aria-hidden="true">
@@ -56,7 +56,7 @@
           <div class="orb" aria-hidden="true"></div>
 
           <div class="home-idle" id="home-idle">
-            <p class="home-line" id="home-line"></p>
+            <p class="home-line" id="home-line" role="button" tabindex="0" data-label="home.nextQuote"></p>
           </div>
 
           <div class="home-active" id="home-active" hidden>
@@ -315,9 +315,9 @@
     </div>
   </dialog>
 
-  <script src="strings.js?v=13"></script>
-  <script src="storage.js?v=13"></script>
-  <script src="sky.js?v=13"></script>
-  <script src="app.js?v=13"></script>
+  <script src="strings.js?v=14"></script>
+  <script src="storage.js?v=14"></script>
+  <script src="sky.js?v=14"></script>
+  <script src="app.js?v=14"></script>
 </body>
 </html>

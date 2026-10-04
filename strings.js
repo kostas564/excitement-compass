@@ -16,6 +16,7 @@ const STRINGS = {
   home: {
     findPull: 'Find my pull',
     addRiver: 'Add to the river log',
+    nextQuote: 'Show another line',
     activeLabel: 'You are following',
     doneLetGo: 'Done, let go',
     idleLines: [
