@@ -94,7 +94,7 @@
     });
 
     document.body.classList.toggle('on-home', name === 'home');
-    document.body.classList.toggle('scene-dark', name === 'settle' || name === 'lookback');
+    document.body.classList.toggle('scene-dark', name === 'settle');
     document.body.classList.toggle('scene-dawn', name === 'home' || name === 'act');
     $('#home-scene').hidden = name !== 'home' && name !== 'act';
     $('#home-scene').classList.toggle('is-strong', name === 'act');
@@ -1055,16 +1055,16 @@
     const rand = seededRandom(String(id));
     const gx = Math.round(18 + rand() * 64);
     const gy = Math.round(32 + rand() * 26);
-    const hue = rand() < 0.5 ? '243, 196, 108' : '127, 224, 240';
-    const glow = active ? '243, 196, 108' : hue;
+    const cool = rand() < 0.5;
+    const glow = active || cool ? '243, 196, 108' : '127, 224, 240';
     const thumb = el('span', 'frame-thumb');
     thumb.setAttribute('aria-hidden', 'true');
-    thumb.style.background =
-      `radial-gradient(circle at ${gx}% ${gy}%, #fff3d2 0 2px, rgba(${glow}, 0.5) 3px 10px, rgba(${glow}, 0.12) 11px 38px, transparent 62px), ` +
-      `linear-gradient(180deg, #0c1240, ${active ? '#221a5c' : '#1a1750'})`;
+    thumb.style.setProperty('--gx', `${gx}%`);
+    thumb.style.setProperty('--gy', `${gy}%`);
+    thumb.style.setProperty('--glow', glow);
     const stars = [];
     for (let i = 0; i < 5; i++) {
-      stars.push(`${(rand() * 94 + 3).toFixed(1)}cqw ${(rand() * 52 + 4).toFixed(0)}px 0 ${rand() < 0.4 ? 0.5 : 0}px rgba(255,255,255,${(0.4 + rand() * 0.5).toFixed(2)})`);
+      stars.push(`${(rand() * 94 + 3).toFixed(1)}cqw ${(rand() * 52 + 4).toFixed(0)}px 0 ${rand() < 0.4 ? 0.5 : 0}px rgba(var(--star-rgb, 255, 255, 255),${(0.4 + rand() * 0.5).toFixed(2)})`);
     }
     const starLayer = el('span', 'frame-stars');
     starLayer.style.boxShadow = stars.join(', ');
