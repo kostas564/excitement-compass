@@ -3,7 +3,7 @@
 // Bump VERSION together with the ?v= numbers in index.html on every release.
 // The new worker then caches the new files and removes the old cache.
 
-const VERSION = '15';
+const VERSION = '16';
 const CACHE = `excitement-compass-v${VERSION}`;
 const FILES = [
   './',
@@ -15,6 +15,13 @@ const FILES = [
   `app.js?v=${VERSION}`,
   'manifest.webmanifest',
   'icon.svg',
+  'fonts/cormorant-garamond-latin-500-normal.woff2',
+  'fonts/cormorant-garamond-latin-600-normal.woff2',
+  'fonts/cormorant-garamond-latin-500-italic.woff2',
+  'fonts/manrope-latin-400-normal.woff2',
+  'fonts/manrope-latin-500-normal.woff2',
+  'fonts/manrope-latin-600-normal.woff2',
+  'fonts/manrope-latin-700-normal.woff2',
   'icons/icon-192.png',
   'icons/icon-512.png',
   'icons/icon-maskable-512.png',

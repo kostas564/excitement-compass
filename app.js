@@ -1024,7 +1024,7 @@
 
   // ---- Theme ------------------------------------------------------------
 
-  const THEME_COLORS = { dark: '#070a1f', light: '#eef1f8' };
+  const THEME_COLORS = { dark: '#050823', light: '#eef1f8' };
 
   function applyTheme(theme) {
     const root = document.documentElement;
