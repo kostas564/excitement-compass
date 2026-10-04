@@ -14,7 +14,7 @@ const Storage = (() => {
       // Saved options and the categories they are sorted into. null until
       // the app first builds it (see ensureLibrary in app.js).
       library: null,
-      settings: { theme: 'system', schemaVersion: SCHEMA_VERSION },
+      settings: { theme: 'dark', schemaVersion: SCHEMA_VERSION },
     };
   }
 

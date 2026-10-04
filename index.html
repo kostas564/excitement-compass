@@ -25,14 +25,15 @@
   <meta property="og:image:alt" content="A gold sacred geometry compass on a night sky, with the words Excitement Compass">
   <meta name="twitter:card" content="summary_large_image">
 
-  <!-- Apply a saved light or dark choice before the page draws, to avoid a flash. -->
+  <!-- Apply the saved theme (dark unless chosen otherwise) before the page draws, to avoid a flash. -->
   <script>
+    var t = 'dark';
     try {
-      var t = JSON.parse(localStorage.getItem('excitement-compass-v1')).settings.theme;
-      if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      t = JSON.parse(localStorage.getItem('excitement-compass-v1')).settings.theme || 'dark';
     } catch (e) {}
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
   </script>
-  <link rel="stylesheet" href="styles.css?v=14">
+  <link rel="stylesheet" href="styles.css?v=15">
 </head>
 <body>
   <div class="sky" id="sky" aria-hidden="true">
@@ -315,9 +316,9 @@
     </div>
   </dialog>
 
-  <script src="strings.js?v=14"></script>
-  <script src="storage.js?v=14"></script>
-  <script src="sky.js?v=14"></script>
-  <script src="app.js?v=14"></script>
+  <script src="strings.js?v=15"></script>
+  <script src="storage.js?v=15"></script>
+  <script src="sky.js?v=15"></script>
+  <script src="app.js?v=15"></script>
 </body>
 </html>

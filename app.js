@@ -1041,7 +1041,7 @@
   }
 
   function renderThemeChoice() {
-    const theme = data.settings.theme || 'system';
+    const theme = data.settings.theme || 'dark';
     $('#theme-choice').replaceChildren(...Object.entries(STRINGS.about.themes).map(([key, label]) => {
       const btn = el('button', 'tag', label);
       btn.type = 'button';
