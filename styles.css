@@ -1988,3 +1988,15 @@ h1:focus {
   padding: 0 16px;
   font-size: 13px;
 }
+
+/* Home and Act hold fixed-position text. A transform on their screen would
+   make that text start lower and jump up, so these screens fade only. */
+.screen--home.is-entering,
+#screen-act.is-entering {
+  animation: fade-only 0.35s var(--ease);
+}
+
+@keyframes fade-only {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
