@@ -12,6 +12,23 @@
 
   let current = null;
 
+  // iOS can open an installed app with a stale, too-short viewport, which
+  // leaves the bottom bar floating above the screen edge until something
+  // forces a re-layout. Nudge the layout a few times right after opening.
+  function settleViewport() {
+    const nav = $('.nav');
+    if (!nav) return;
+    nav.style.bottom = '-1px';
+    void nav.offsetHeight;
+    nav.style.bottom = '';
+    window.dispatchEvent(new Event('resize'));
+  }
+  [0, 150, 500, 1200, 2500].forEach((ms) => setTimeout(settleViewport, ms));
+  window.addEventListener('pageshow', settleViewport);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) settleViewport();
+  });
+
   // ---- Text -------------------------------------------------------------
 
   function lookup(path) {
