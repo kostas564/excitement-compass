@@ -18,8 +18,6 @@
   // and re-check a few times right after opening.
   const standalone = window.navigator.standalone === true ||
     window.matchMedia('(display-mode: standalone)').matches;
-  const debug = /[?&]debug\b/.test(location.search);
-  let debugEl = null;
 
   function settleViewport() {
     const root = document.documentElement;
@@ -33,14 +31,6 @@
       nav.style.bottom = 'auto';
       nav.style.top = `${full - nav.offsetHeight}px`;
       void nav.offsetHeight;
-    }
-    if (debug) {
-      if (!debugEl) {
-        debugEl = document.createElement('pre');
-        debugEl.style.cssText = 'position:fixed;top:60px;left:8px;z-index:99;margin:0;padding:6px;background:#000c;color:#0f0;font:11px monospace;pointer-events:none';
-        document.body.appendChild(debugEl);
-      }
-      debugEl.textContent = `inner ${inner}\nvv ${vv}\nscreen ${screen.height}\nstandalone ${standalone}\nusing ${full}`;
     }
   }
   [0, 150, 500, 1200, 2500].forEach((ms) => setTimeout(settleViewport, ms));
