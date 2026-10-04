@@ -94,6 +94,7 @@
     });
 
     document.body.classList.toggle('on-home', name === 'home');
+    document.body.classList.toggle('scene-dark', ['home', 'act', 'settle'].includes(name));
     $('#home-scene').hidden = name !== 'home' && name !== 'act';
     $('#home-scene').classList.toggle('is-strong', name === 'act');
     if (name === 'home') renderHome();

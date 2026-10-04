@@ -70,6 +70,9 @@
     --amber: #e3913a;
     --on-gold: #1d1433;
     --gold-text: #8a5708;
+    --gold-light: #8a5708;
+    --card-chosen-text: #1b1d3a;
+    --card-chosen-bg: radial-gradient(circle at 50% 0%, rgba(239, 176, 74, 0.6), rgba(255, 255, 255, 0.7) 70%);
   --compass-line: #c4841c;
     --gold-glow: rgba(239, 176, 74, 0.45);
     --cyan: #0b6d86;
@@ -102,6 +105,9 @@
   --amber: #e3913a;
   --on-gold: #1d1433;
   --gold-text: #8a5708;
+  --gold-light: #8a5708;
+  --card-chosen-text: #1b1d3a;
+  --card-chosen-bg: radial-gradient(circle at 50% 0%, rgba(239, 176, 74, 0.6), rgba(255, 255, 255, 0.7) 70%);
   --compass-line: #c4841c;
   --gold-glow: rgba(239, 176, 74, 0.45);
   --cyan: #0b6d86;
@@ -809,7 +815,7 @@ h1:focus {
   border-radius: var(--radius);
   border: 1px solid var(--glass-edge);
   background: var(--glass);
-  color: rgba(246, 236, 216, 0.8);
+  color: var(--text);
   font-family: var(--font-serif);
   font-size: 27px;
   font-weight: 600;
@@ -827,9 +833,9 @@ h1:focus {
 }
 
 .card.is-chosen {
-  background: radial-gradient(circle at 50% 0%, rgba(243, 196, 108, 0.34), rgba(20, 28, 78, 0.7) 70%);
+  background: var(--card-chosen-bg, radial-gradient(circle at 50% 0%, rgba(243, 196, 108, 0.34), rgba(20, 28, 78, 0.7) 70%));
   border-color: var(--gold);
-  color: #fff3d2;
+  color: var(--card-chosen-text, #fff3d2);
   box-shadow: 0 0 34px rgba(243, 196, 108, 0.3);
 }
 
@@ -1574,8 +1580,8 @@ h1:focus {
   min-height: 48px;
   padding: 0 16px;
   border-style: solid;
-  border-color: rgba(127, 224, 240, 0.28);
-  background: rgba(20, 28, 78, 0.5);
+  border-color: var(--glass-edge);
+  background: var(--glass);
   font-size: 13px;
   color: var(--text-dim);
 }
@@ -1999,4 +2005,90 @@ h1:focus {
 @keyframes fade-only {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+/* ---- Light theme: night-sky screens and the film strip stay dark ----
+   The Home scene, Act, Settle and the Look back film strip are drawn on a
+   dark sky, so inside them the dark theme's colours apply. */
+:root[data-theme="light"] body.scene-dark,
+:root[data-theme="light"] .strip {
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] body.scene-dark {
+  --text: #f6ecd8;
+  --text-dim: rgba(236, 239, 255, 0.78);
+  --text-faint: rgba(236, 239, 255, 0.62);
+  --glass: rgba(20, 28, 78, 0.6);
+  --glass-edge: rgba(127, 224, 240, 0.28);
+  --gold: #f3c46c;
+  --gold-light: #f8d58a;
+  --gold-text: #f3c46c;
+  --cyan: #7fe0f0;
+  --sky-top: #050823;
+  --sky-mid: #0b1240;
+  --sky-late: #141248;
+  --sky-bottom: #0a0d2c;
+  --glow-gold: rgba(243, 196, 108, 0.22);
+  --glow-indigo: rgba(106, 63, 176, 0.22);
+  --glow-cyan: rgba(31, 181, 201, 0.16);
+  --star: #ffffff;
+  --grain-opacity: 0.035;
+  --vignette: rgba(2, 3, 12, 0.5);
+  --gold-glow: rgba(226, 154, 69, 0.35);
+  --nav-bg: rgba(12, 16, 50, 0.78);
+  --amber: #e29a45;
+  --on-gold: #1a1130;
+}
+
+:root[data-theme="light"] .strip {
+  --text: #f6ecd8;
+  --text-dim: rgba(236, 239, 255, 0.78);
+  --text-faint: rgba(236, 239, 255, 0.62);
+  --glass: rgba(20, 28, 78, 0.6);
+  --glass-edge: rgba(127, 224, 240, 0.28);
+  --gold: #f3c46c;
+  --gold-light: #f8d58a;
+  --gold-text: #f3c46c;
+  --cyan: #7fe0f0;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) body.scene-dark {
+  --text: #f6ecd8;
+  --text-dim: rgba(236, 239, 255, 0.78);
+  --text-faint: rgba(236, 239, 255, 0.62);
+  --glass: rgba(20, 28, 78, 0.6);
+  --glass-edge: rgba(127, 224, 240, 0.28);
+  --gold: #f3c46c;
+  --gold-light: #f8d58a;
+  --gold-text: #f3c46c;
+  --cyan: #7fe0f0;
+  --sky-top: #050823;
+  --sky-mid: #0b1240;
+  --sky-late: #141248;
+  --sky-bottom: #0a0d2c;
+  --glow-gold: rgba(243, 196, 108, 0.22);
+  --glow-indigo: rgba(106, 63, 176, 0.22);
+  --glow-cyan: rgba(31, 181, 201, 0.16);
+  --star: #ffffff;
+  --grain-opacity: 0.035;
+  --vignette: rgba(2, 3, 12, 0.5);
+  --gold-glow: rgba(226, 154, 69, 0.35);
+  --nav-bg: rgba(12, 16, 50, 0.78);
+  --amber: #e29a45;
+  --on-gold: #1a1130;
+  }
+
+  :root:not([data-theme="dark"]) .strip {
+  --text: #f6ecd8;
+  --text-dim: rgba(236, 239, 255, 0.78);
+  --text-faint: rgba(236, 239, 255, 0.62);
+  --glass: rgba(20, 28, 78, 0.6);
+  --glass-edge: rgba(127, 224, 240, 0.28);
+  --gold: #f3c46c;
+  --gold-light: #f8d58a;
+  --gold-text: #f3c46c;
+  --cyan: #7fe0f0;
+  }
 }
