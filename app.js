@@ -7,8 +7,8 @@
   const data = Storage.load();
 
   // Screens reached from Home keep Home lit in the bottom navigation.
-  const SCREENS = ['home', 'choose', 'act', 'smaller', 'release', 'saved', 'river', 'lookback', 'about'];
-  const NAV_FOR = { choose: 'home', act: 'home', smaller: 'home', release: 'home' };
+  const SCREENS = ['home', 'choose', 'settle', 'act', 'smaller', 'release', 'saved', 'river', 'lookback', 'about'];
+  const NAV_FOR = { choose: 'home', settle: 'home', act: 'home', smaller: 'home', release: 'home' };
 
   let current = null;
 
@@ -97,11 +97,12 @@
     $('#home-scene').hidden = name !== 'home' && name !== 'act';
     $('#home-scene').classList.toggle('is-strong', name === 'act');
     if (name === 'home') renderHome();
+    if (name !== 'settle') stopSettle();
     if (name === 'choose') renderChoose();
     if (name === 'saved') renderSaved();
     if (name === 'river') renderRiver();
     if (name === 'lookback') renderLookBack();
-    if ((name === 'act' && !renderAct()) || (name === 'smaller' && !renderSmaller()) || (name === 'release' && !renderRelease())) {
+    if ((name === 'act' && !renderAct()) || (name === 'smaller' && !renderSmaller()) || (name === 'settle' && !renderSettle()) || (name === 'release' && !renderRelease())) {
       go('home');
       return;
     }
@@ -315,7 +316,64 @@
 
   function renderChoose() {
     if (!draft) draft = newDraft();
+    if (afterSettle && draft.options.length) {
+      afterSettle = false;
+      startRank();
+      return;
+    }
+    afterSettle = false;
     showEntry();
+  }
+
+  // ---- Settle first -----------------------------------------------------
+  //
+  // Three slow breaths (4 seconds in, 6 out), then the comparison begins.
+
+  let afterSettle = false;
+  let settleTimers = [];
+  const BREATHS = 3;
+
+  function stopSettle() {
+    settleTimers.forEach(clearTimeout);
+    settleTimers = [];
+  }
+
+  function leaveSettle() {
+    if (current !== 'settle') return;
+    stopSettle();
+    afterSettle = true;
+    go('choose');
+  }
+
+  function renderSettle() {
+    if (!draft || draft.options.length < 2) return false;
+    stopSettle();
+    const svg = $('#settle-svg');
+    const label = $('#settle-breath');
+    const dots = document.querySelectorAll('#settle-dots span');
+    dots.forEach((d) => d.classList.remove('is-filled'));
+    svg.classList.remove('is-in');
+
+    const later = (ms, fn) => settleTimers.push(setTimeout(fn, ms));
+    for (let n = 0; n < BREATHS; n++) {
+      const t0 = n * 10000;
+      later(t0, () => {
+        label.textContent = STRINGS.settle.breatheIn;
+        svg.classList.add('is-in');
+      });
+      later(t0 + 4000, () => {
+        label.textContent = STRINGS.settle.breatheOut;
+        svg.classList.remove('is-in');
+      });
+      later(t0 + 10000, () => {
+        dots[n].classList.add('is-filled');
+        if (n === BREATHS - 1) leaveSettle();
+      });
+    }
+    // Start the first breath once the screen has drawn, so it can animate.
+    label.textContent = STRINGS.settle.breatheIn;
+    requestAnimationFrame(() => requestAnimationFrame(() => svg.classList.add('is-in')));
+    return true;
   }
 
   function showEntry() {
@@ -1159,6 +1217,10 @@
     }
   }
 
+  function renderSettleSwitch() {
+    $('#settle-switch').setAttribute('aria-checked', String(data.settings.settle !== false));
+  }
+
   function renderThemeChoice() {
     const theme = data.settings.theme || 'dark';
     $('#theme-choice').replaceChildren(...Object.entries(STRINGS.about.themes).map(([key, label]) => {
@@ -1364,8 +1426,13 @@
         addOption(input.value);
         input.value = '';
       }
-      if (draft.options.length) startRank();
+      if (draft.options.length > 1 && data.settings.settle !== false) {
+        go('settle');
+      } else if (draft.options.length) {
+        startRank();
+      }
     });
+    $('#screen-settle').addEventListener('click', leaveSettle);
     ['pointerover', 'pointerout', 'focusin', 'focusout'].forEach((t) => $('#pair').addEventListener(t, lean));
     window.addEventListener('resize', drawThreads);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(drawThreads);
@@ -1446,6 +1513,12 @@
       persist();
       applyTheme(data.settings.theme);
       renderThemeChoice();
+    });
+    renderSettleSwitch();
+    $('#settle-switch').addEventListener('click', () => {
+      data.settings.settle = data.settings.settle === false;
+      persist();
+      renderSettleSwitch();
     });
     renderInstall();
     $('#install-app').addEventListener('click', install);

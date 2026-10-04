@@ -101,6 +101,13 @@ const STRINGS = {
     ],
   },
 
+  settle: {
+    title: 'Arrive. Then choose.',
+    breatheIn: 'Breathe in',
+    breatheOut: 'Breathe out',
+    skip: 'Skip',
+  },
+
   smaller: {
     label: 'Make it smaller',
     title: "What's the smallest piece you could do right now?",
@@ -207,6 +214,7 @@ const STRINGS = {
     creditName: 'Fragments of Coherence',
     creditAfter: ', a publication about consciousness, meaning and the bigger picture.',
     creditUrl: 'https://fragmentsofcoherence.substack.com',
+    settleSwitch: 'Settle before choosing',
     installTitle: 'Install',
     installButton: 'Install the app',
     installHint: 'Add it to your home screen so it opens like an app, even without a connection.',
