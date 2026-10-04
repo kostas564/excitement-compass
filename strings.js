@@ -2,8 +2,7 @@
 // Where a key holds a list, the app shows one line at random and never
 // the same one twice in a row.
 
-// TODO: confirm this Substack address for "Fragments of Coherence". It is the
-// address the app has used so far and has not been checked.
+// The Substack address for "Fragments of Coherence", linked from About.
 const FRAGMENTS_OF_COHERENCE_URL = 'https://fragmentsofcoherence.substack.com';
 
 const STRINGS = {
