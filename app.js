@@ -140,15 +140,27 @@
     if (session) {
       $('#home-pick').textContent = session.pick;
     } else {
-      $('#home-line').textContent = randomLine('home.idleLines');
+      showHomeLine();
     }
+  }
+
+  // About one Home screen in four asks a question instead of a prompt,
+  // never two question screens in a row.
+  let lastWasQuestion = false;
+  function showHomeLine() {
+    const asking = !lastWasQuestion && Math.random() < 0.25;
+    lastWasQuestion = asking;
+    const line = $('#home-line');
+    line.textContent = randomLine(asking ? 'home.questions' : 'home.idleLines');
+    line.classList.toggle('is-question', asking);
+    $('#home-question-label').hidden = !asking;
   }
 
   // Tapping the idle line brings the next one.
   function nextHomeLine() {
     if (activeSession()) return;
     const el = $('#home-line');
-    el.textContent = randomLine('home.idleLines');
+    showHomeLine();
     el.classList.remove('is-entering');
     void el.offsetWidth;
     el.classList.add('is-entering');

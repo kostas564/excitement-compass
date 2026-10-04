@@ -33,7 +33,7 @@
     } catch (e) {}
     if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
   </script>
-  <link rel="stylesheet" href="styles.css?v=18">
+  <link rel="stylesheet" href="styles.css?v=19">
 </head>
 <body>
   <div class="sky" id="sky" aria-hidden="true">
@@ -190,6 +190,7 @@
 
         <div class="home-center">
           <div class="home-idle" id="home-idle">
+            <p class="home-active-label" id="home-question-label" data-text="home.questionLabel" hidden></p>
             <p class="home-line" id="home-line" role="button" tabindex="0" data-label="home.nextQuote"></p>
           </div>
 
@@ -449,9 +450,9 @@
     </div>
   </dialog>
 
-  <script src="strings.js?v=18"></script>
-  <script src="storage.js?v=18"></script>
-  <script src="sky.js?v=18"></script>
-  <script src="app.js?v=18"></script>
+  <script src="strings.js?v=19"></script>
+  <script src="storage.js?v=19"></script>
+  <script src="sky.js?v=19"></script>
+  <script src="app.js?v=19"></script>
 </body>
 </html>

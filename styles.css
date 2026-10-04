@@ -497,6 +497,15 @@ h1:focus {
   user-select: none;
 }
 
+.home-line.is-question {
+  font-style: italic;
+  color: var(--gold-light);
+}
+
+#home-question-label {
+  margin-bottom: 10px;
+}
+
 .home-line.is-entering {
   animation: fade-in 0.35s var(--ease);
 }
