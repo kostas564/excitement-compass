@@ -7,8 +7,8 @@
   const data = Storage.load();
 
   // Screens reached from Home keep Home lit in the bottom navigation.
-  const SCREENS = ['home', 'choose', 'act', 'release', 'saved', 'river', 'lookback', 'about'];
-  const NAV_FOR = { choose: 'home', act: 'home', release: 'home' };
+  const SCREENS = ['home', 'choose', 'act', 'smaller', 'release', 'saved', 'river', 'lookback', 'about'];
+  const NAV_FOR = { choose: 'home', act: 'home', smaller: 'home', release: 'home' };
 
   let current = null;
 
@@ -94,13 +94,14 @@
     });
 
     document.body.classList.toggle('on-home', name === 'home');
-    $('#home-scene').hidden = name !== 'home';
+    $('#home-scene').hidden = name !== 'home' && name !== 'act';
+    $('#home-scene').classList.toggle('is-strong', name === 'act');
     if (name === 'home') renderHome();
     if (name === 'choose') renderChoose();
     if (name === 'saved') renderSaved();
     if (name === 'river') renderRiver();
     if (name === 'lookback') renderLookBack();
-    if ((name === 'act' && !renderAct()) || (name === 'release' && !renderRelease())) {
+    if ((name === 'act' && !renderAct()) || (name === 'smaller' && !renderSmaller()) || (name === 'release' && !renderRelease())) {
       go('home');
       return;
     }
@@ -566,37 +567,6 @@
 
   function showPick() {
     $('#act-pick').textContent = pending.ranking[pending.position];
-    swingNeedle();
-  }
-
-  // The needle swings in from a random angle and settles on the pick,
-  // then the geometry brightens for a moment.
-  let swing = null;
-  function swingNeedle() {
-    const needle = $('#needle');
-    const compass = $('#compass');
-    compass.classList.remove('is-lit');
-    if (swing) swing.cancel();
-
-    const settle = () => {
-      compass.classList.add('is-lit');
-      setTimeout(() => compass.classList.remove('is-lit'), 1400);
-    };
-
-    if (reducedMotion.matches || !needle.animate) {
-      settle();
-      return;
-    }
-
-    const from = (Math.random() < 0.5 ? -1 : 1) * (100 + Math.random() * 80);
-    swing = needle.animate([
-      { transform: `rotate(${from}deg)` },
-      { transform: `rotate(${-from * 0.28}deg)`, offset: 0.45 },
-      { transform: `rotate(${from * 0.1}deg)`, offset: 0.7 },
-      { transform: `rotate(${-from * 0.03}deg)`, offset: 0.87 },
-      { transform: 'rotate(0deg)' },
-    ], { duration: 1800, easing: 'cubic-bezier(0.3, 0.7, 0.4, 1)' });
-    swing.onfinish = settle;
   }
 
   function onIt() {
@@ -634,6 +604,47 @@
     pending.position += 1;
     $('#act-line').textContent = randomLine('act.nextLines');
     showPick();
+  }
+
+  // ---- Make it smaller --------------------------------------------------
+  //
+  // The person swaps the current pick for a smaller piece of it. The
+  // original stays in Saved so it can be chosen again later.
+
+  function renderSmaller() {
+    if (!pending) return false;
+    $('#smaller-pick').textContent = pending.ranking[pending.position];
+    $('#smaller-input').value = '';
+    $('#smaller-confirm').disabled = true;
+    return true;
+  }
+
+  function initSmaller() {
+    const input = $('#smaller-input');
+    $('#smaller-chips').replaceChildren(...STRINGS.smaller.examples.map((text) => chip(text, 'suggestion')));
+    $('#smaller-chips').addEventListener('click', (e) => {
+      const btn = e.target.closest('.chip');
+      if (!btn) return;
+      input.value = btn.dataset.option;
+      $('#smaller-confirm').disabled = false;
+      input.focus();
+    });
+    input.addEventListener('input', () => {
+      $('#smaller-confirm').disabled = input.value.trim() === '';
+    });
+    $('#smaller-back').addEventListener('click', () => go('act'));
+    $('#smaller-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const text = input.value.trim().replace(/\s+/g, ' ');
+      if (!text || !pending) return;
+      const original = pending.ranking[pending.position];
+      if (!sameText(text, original)) {
+        saveOption(original);
+        persist();
+        pending.ranking[pending.position] = text;
+      }
+      go('act');
+    });
   }
 
   // ---- Release ----------------------------------------------------------
@@ -1367,6 +1378,8 @@
 
     $('#act-on-it').addEventListener('click', onIt);
     $('#act-not-possible').addEventListener('click', notPossible);
+    $('#act-smaller').addEventListener('click', () => go('smaller'));
+    initSmaller();
 
     $('#release-form').addEventListener('submit', (e) => {
       e.preventDefault();

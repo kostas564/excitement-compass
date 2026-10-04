@@ -91,12 +91,24 @@ const STRINGS = {
   act: {
     onIt: "I'm on it",
     notPossible: 'Not possible right now',
+    makeSmaller: 'Make it smaller',
+    strongest: 'Your strongest pull',
     nextLines: [
       "That's fine. Here's the next strongest pull you can follow.",
       "Not now isn't never. Here's what you can do now.",
       'The path bends. Follow the next pull.',
       'Not every door opens today. This one does.',
     ],
+  },
+
+  smaller: {
+    label: 'Make it smaller',
+    title: "What's the smallest piece you could do right now?",
+    piecePrefix: 'A smaller piece of',
+    placeholder: 'The very first move',
+    examples: ['Write one sentence', 'Five minutes only', 'Just get ready'],
+    confirm: 'Make this my pull',
+    back: 'Back',
   },
 
   release: {

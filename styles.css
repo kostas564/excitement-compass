@@ -863,79 +863,135 @@ h1:focus {
    ========================================================================== */
 
 .act-center {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  padding: 16px 0 24px;
+  position: fixed;
+  top: 26.8dvh;
+  left: 50%;
+  z-index: 1;
+  width: 100%;
+  max-width: 480px;
+  transform: translateX(-50%);
+  padding: 0 30px;
+  text-align: center;
+  text-shadow: 0 0 14px #070b2e, 0 0 28px #070b2e;
+}
+
+.scene-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--text-faint);
   text-align: center;
 }
 
 .act-line {
   min-height: 1.5em;
   max-width: 24ch;
+  margin: 0 auto 8px;
   color: var(--text-dim);
   text-wrap: balance;
 }
 
 .act-pick {
+  margin-top: 12px;
   font-family: var(--font-serif);
-  font-size: 34px;
-  line-height: 1.25;
+  font-size: 44px;
+  line-height: 1.05;
   font-weight: 600;
-  color: var(--gold-text);
+  color: var(--gold-light);
   text-wrap: balance;
   overflow-wrap: anywhere;
 }
 
-/* The compass: fine gold lines, one luminous needle. */
-.compass {
-  width: min(64vw, 250px);
-  height: auto;
-  margin-top: 8px;
-  overflow: visible;
+.home-scene.is-strong .scene-gold {
+  stroke-width: 4.4;
+  stroke-opacity: 1;
 }
 
-.compass-geometry {
-  fill: none;
-  stroke: var(--compass-line);
-  stroke-width: 0.6;
-  opacity: 0.6;
-  transition: opacity 0.9s var(--ease);
+.home-scene.is-strong .scene-gold-glow {
+  stroke-width: 22;
+  stroke-opacity: 0.45;
 }
 
-.compass-geometry .faint {
-  opacity: 0.45;
+.act-row {
+  display: flex;
+  gap: 10px;
 }
 
-.compass-geometry .metatron {
-  stroke-width: 0.4;
-  opacity: 0.35;
+.act-secondary {
+  flex: 1;
+  min-height: 50px;
+  padding: 0 12px;
+  font-size: 14px;
+  border-color: rgba(127, 224, 240, 0.35);
 }
 
-.compass.is-lit .compass-geometry {
-  opacity: 1;
-  transition-duration: 0.25s;
+.act-row .act-secondary:first-child {
+  flex: 1.35;
 }
 
-.needle-north {
-  fill: url(#needle-gold);
+.act-smaller {
+  color: var(--gold-light);
+  border-color: rgba(243, 196, 108, 0.45);
 }
 
-.needle-south {
-  fill: var(--gold);
-  opacity: 0.35;
+/* ---- Make it smaller ---- */
+
+.screen--smaller {
+  align-items: stretch;
 }
 
-.needle-cross {
-  fill: var(--gold);
-  opacity: 0.5;
+.smaller-form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
-.needle-hub {
-  fill: #fff6e0;
+.smaller-title {
+  margin-top: 96px;
+  font-family: var(--font-serif);
+  font-size: 36px;
+  line-height: 1.12;
+  font-weight: 500;
+  text-align: center;
+  text-shadow: 0 0 16px #070b2e;
+  text-wrap: balance;
+}
+
+.smaller-of {
+  margin: 32px 0 14px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-faint);
+}
+
+.smaller-pick {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--gold-light);
+}
+
+.smaller-form .option-input {
+  width: 100%;
+  flex: none;
+  border-color: var(--cyan);
+}
+
+.smaller-chips {
+  justify-content: center;
+}
+
+.smaller-actions {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.smaller-actions .btn {
+  width: 100%;
 }
 
 .stack-actions {
@@ -1506,4 +1562,23 @@ h1:focus {
     animation: none !important;
     transition: none !important;
   }
+}
+
+/* Act and Make it smaller: buttons sit at the bottom, chips are plain pills. */
+#screen-act .stack-actions {
+  margin-top: auto;
+}
+
+.smaller-chips .chip {
+  min-height: 40px;
+  padding: 0 16px;
+  border-style: solid;
+  border-color: rgba(127, 224, 240, 0.28);
+  background: rgba(20, 28, 78, 0.5);
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.smaller-chips .chip svg {
+  display: none;
 }

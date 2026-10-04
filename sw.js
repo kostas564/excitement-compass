@@ -3,7 +3,7 @@
 // Bump VERSION together with the ?v= numbers in index.html on every release.
 // The new worker then caches the new files and removes the old cache.
 
-const VERSION = '20';
+const VERSION = '21';
 const CACHE = `excitement-compass-v${VERSION}`;
 const FILES = [
   './',
