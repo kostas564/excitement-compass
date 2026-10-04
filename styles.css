@@ -2289,3 +2289,18 @@ h1:focus {
     --thumb-bottom: #f6bf8a;
   }
 }
+
+/* The title sits below the area the phone blurs under the status bar. */
+.screen--home .app-name {
+  position: fixed;
+  top: calc(var(--app-height, 100dvh) * 0.215);
+  left: 50%;
+  z-index: 1;
+  width: 100%;
+  max-width: 480px;
+  margin: 0;
+  transform: translateX(-50%);
+  color: var(--text-dim);
+  text-shadow: 0 0 10px #070b2e;
+  pointer-events: none;
+}
