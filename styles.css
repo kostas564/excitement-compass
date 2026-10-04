@@ -2287,3 +2287,18 @@ h1:focus {
     --thumb-bottom: #f6bf8a;
   }
 }
+
+/* The title sits at the very top of Home. Fixed (like the quote) so the
+   phone's top-edge blur effect does not soften it. */
+.screen--home .app-name {
+  position: fixed;
+  top: calc(env(safe-area-inset-top) + 20px);
+  left: 50%;
+  z-index: 1;
+  width: 100%;
+  max-width: 480px;
+  margin: 0;
+  transform: translateX(-50%);
+  color: var(--text-dim);
+  pointer-events: none;
+}
