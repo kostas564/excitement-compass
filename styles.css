@@ -2093,55 +2093,52 @@ h1:focus {
   }
 }
 
-/* ---- Light theme: Home and Act as a sunrise ---- */
+/* ---- Light theme: Home and Act as an early dawn ---- */
 .dawn-sun {
   display: none;
 }
 
 :root[data-theme="light"] body.scene-dawn {
-  --sky-top: #a9bce8;
-  --sky-mid: #dcd0ec;
-  --sky-late: #f9d3b0;
-  --sky-bottom: #f6c08e;
-  --vignette: rgba(120, 90, 140, 0.1);
-}
-
-:root[data-theme="light"] body.scene-dawn .home-scene-svg > ellipse,
-:root[data-theme="light"] body.scene-dawn .home-scene-svg > g[fill="#ffffff"],
-:root[data-theme="light"] body.scene-dawn .home-scene-svg > g[fill="#f3c46c"],
-:root[data-theme="light"] body.scene-dawn .home-scene-svg > g[stroke="#f3c46c"]:not(.scene-star) {
-  display: none;
-}
-
-:root[data-theme="light"] body.scene-dawn .home-scene-svg [stroke="#f3c46c"] {
-  stroke: #b9791a;
+  color-scheme: dark;
+  --text: #f6ecd8;
+  --text-dim: rgba(236, 239, 255, 0.82);
+  --text-faint: rgba(236, 239, 255, 0.7);
+  --glass: rgba(20, 28, 78, 0.6);
+  --glass-edge: rgba(127, 224, 240, 0.28);
+  --nav-bg: rgba(12, 16, 50, 0.78);
+  --gold-light: #f8d58a;
+  --cyan: #7fe0f0;
+  --gold: #f3c46c;
+  --gold-text: #f3c46c;
+  --vignette: rgba(4, 6, 24, 0.35);
+  --sky-top: #1e2a66;
+  --sky-mid: #4f4690;
+  --sky-late: #cf837c;
+  --sky-bottom: #e69b66;
 }
 
 :root[data-theme="light"] body.scene-dawn .dawn-sun {
   display: inline;
 }
 
-:root[data-theme="light"] body.scene-dawn #hs-thread stop {
-  stop-color: #c98a24;
-}
-
 :root[data-theme="light"] body.scene-dawn #hs-horizon stop:nth-child(1) {
-  stop-color: #ffd7a8;
+  stop-color: #ffb48a;
+  stop-opacity: 0.05;
 }
 
 :root[data-theme="light"] body.scene-dawn #hs-horizon stop:nth-child(2) {
-  stop-color: #ffc58a;
-  stop-opacity: 0.55;
+  stop-color: #ff9a6c;
+  stop-opacity: 0.5;
 }
 
 :root[data-theme="light"] body.scene-dawn #hs-horizon stop:nth-child(3) {
-  stop-color: #ff9d5c;
-  stop-opacity: 0.7;
+  stop-color: #ff8a52;
+  stop-opacity: 0.75;
 }
 
 :root[data-theme="light"] body.scene-dawn .home-center,
 :root[data-theme="light"] body.scene-dawn .act-center {
-  text-shadow: 0 0 14px rgba(255, 255, 255, 0.7), 0 0 28px rgba(255, 244, 228, 0.7);
+  text-shadow: 0 0 14px #1a1650, 0 0 28px #1a1650;
 }
 
 :root[data-theme="light"] body.scene-dawn .sky-glow--gold {
@@ -2150,81 +2147,10 @@ h1:focus {
 
 @media (prefers-color-scheme: light) {
   :root:not([data-theme="dark"]) body.scene-dawn {
-    --sky-top: #a9bce8;
-    --sky-mid: #dcd0ec;
-    --sky-late: #f9d3b0;
-    --sky-bottom: #f6c08e;
-    --vignette: rgba(120, 90, 140, 0.1);
-  }
-
-  :root:not([data-theme="dark"]) body.scene-dawn .home-scene-svg > ellipse,
-  :root:not([data-theme="dark"]) body.scene-dawn .home-scene-svg > g[fill="#ffffff"],
-  :root:not([data-theme="dark"]) body.scene-dawn .home-scene-svg > g[fill="#f3c46c"],
-  :root:not([data-theme="dark"]) body.scene-dawn .home-scene-svg > g[stroke="#f3c46c"]:not(.scene-star) {
-    display: none;
-  }
-
-  :root:not([data-theme="dark"]) body.scene-dawn .home-scene-svg [stroke="#f3c46c"] {
-    stroke: #b9791a;
-  }
-
-  :root:not([data-theme="dark"]) body.scene-dawn .dawn-sun {
-    display: inline;
-  }
-
-  :root:not([data-theme="dark"]) body.scene-dawn #hs-thread stop {
-    stop-color: #c98a24;
-  }
-
-  :root:not([data-theme="dark"]) body.scene-dawn #hs-horizon stop:nth-child(1) {
-    stop-color: #ffd7a8;
-  }
-
-  :root:not([data-theme="dark"]) body.scene-dawn #hs-horizon stop:nth-child(2) {
-    stop-color: #ffc58a;
-    stop-opacity: 0.55;
-  }
-
-  :root:not([data-theme="dark"]) body.scene-dawn #hs-horizon stop:nth-child(3) {
-    stop-color: #ff9d5c;
-    stop-opacity: 0.7;
-  }
-
-  :root:not([data-theme="dark"]) body.scene-dawn .home-center,
-  :root:not([data-theme="dark"]) body.scene-dawn .act-center {
-    text-shadow: 0 0 14px rgba(255, 255, 255, 0.7), 0 0 28px rgba(255, 244, 228, 0.7);
-  }
-
-  :root:not([data-theme="dark"]) body.scene-dawn .sky-glow--gold {
-    opacity: 0;
-  }
-}
-
-/* The bottom of the sunrise scene is dark ground, so its controls stay dark glass. */
-:root[data-theme="light"] body.scene-dawn .nav,
-:root[data-theme="light"] body.scene-dawn .home-actions,
-:root[data-theme="light"] body.scene-dawn #screen-act .stack-actions {
-  color-scheme: dark;
-  --text: #f6ecd8;
-  --text-dim: rgba(236, 239, 255, 0.78);
-  --text-faint: rgba(236, 239, 255, 0.62);
-  --glass: rgba(20, 28, 78, 0.6);
-  --glass-edge: rgba(127, 224, 240, 0.28);
-  --nav-bg: rgba(12, 16, 50, 0.78);
-  --gold-light: #f8d58a;
-  --cyan: #7fe0f0;
-  --gold: #f3c46c;
-  --gold-text: #f3c46c;
-}
-
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) body.scene-dawn .nav,
-  :root:not([data-theme="dark"]) body.scene-dawn .home-actions,
-  :root:not([data-theme="dark"]) body.scene-dawn #screen-act .stack-actions {
     color-scheme: dark;
     --text: #f6ecd8;
-    --text-dim: rgba(236, 239, 255, 0.78);
-    --text-faint: rgba(236, 239, 255, 0.62);
+    --text-dim: rgba(236, 239, 255, 0.82);
+    --text-faint: rgba(236, 239, 255, 0.7);
     --glass: rgba(20, 28, 78, 0.6);
     --glass-edge: rgba(127, 224, 240, 0.28);
     --nav-bg: rgba(12, 16, 50, 0.78);
@@ -2232,5 +2158,38 @@ h1:focus {
     --cyan: #7fe0f0;
     --gold: #f3c46c;
     --gold-text: #f3c46c;
+    --vignette: rgba(4, 6, 24, 0.35);
+    --sky-top: #1e2a66;
+    --sky-mid: #4f4690;
+    --sky-late: #cf837c;
+    --sky-bottom: #e69b66;
+  }
+
+  :root:not([data-theme="dark"]) body.scene-dawn .dawn-sun {
+    display: inline;
+  }
+
+  :root:not([data-theme="dark"]) body.scene-dawn #hs-horizon stop:nth-child(1) {
+    stop-color: #ffb48a;
+    stop-opacity: 0.05;
+  }
+
+  :root:not([data-theme="dark"]) body.scene-dawn #hs-horizon stop:nth-child(2) {
+    stop-color: #ff9a6c;
+    stop-opacity: 0.5;
+  }
+
+  :root:not([data-theme="dark"]) body.scene-dawn #hs-horizon stop:nth-child(3) {
+    stop-color: #ff8a52;
+    stop-opacity: 0.75;
+  }
+
+  :root:not([data-theme="dark"]) body.scene-dawn .home-center,
+  :root:not([data-theme="dark"]) body.scene-dawn .act-center {
+    text-shadow: 0 0 14px #1a1650, 0 0 28px #1a1650;
+  }
+
+  :root:not([data-theme="dark"]) body.scene-dawn .sky-glow--gold {
+    opacity: 0;
   }
 }
