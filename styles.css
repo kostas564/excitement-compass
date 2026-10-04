@@ -197,7 +197,7 @@ h1:focus {
 
 .sky {
   position: fixed;
-  inset: 0;
+  inset: 8px 0 0;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
@@ -428,7 +428,7 @@ h1:focus {
 /* The illustrated night scene sits behind Home's text and buttons. */
 .home-scene {
   position: fixed;
-  top: 0;
+  top: 8px;
   bottom: 0;
   left: 50%;
   z-index: 0;
@@ -1598,7 +1598,7 @@ h1:focus {
 
 .settle-svg {
   position: fixed;
-  top: 0;
+  top: 8px;
   bottom: 0;
   left: 50%;
   z-index: -1;
@@ -2286,19 +2286,4 @@ h1:focus {
   :root:not([data-theme="dark"]) .frame--now .frame-thumb {
     --thumb-bottom: #f6bf8a;
   }
-}
-
-/* The title sits at the very top of Home. Fixed (like the quote) so the
-   phone's top-edge blur effect does not soften it. */
-.screen--home .app-name {
-  position: fixed;
-  top: calc(env(safe-area-inset-top) + 20px);
-  left: 50%;
-  z-index: 1;
-  width: 100%;
-  max-width: 480px;
-  margin: 0;
-  transform: translateX(-50%);
-  color: var(--text-dim);
-  pointer-events: none;
 }
