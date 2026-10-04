@@ -268,9 +268,10 @@ const STRINGS = {
     importDone: (n) => (n === 0
       ? 'Nothing new to add. Everything in that backup is already here.'
       : `Restored ${n} ${n === 1 ? 'item' : 'items'}.`),
-    downloadTitle: (name) => `Your backup is ready: ${name}`,
+    downloadTitle: 'Download your backup',
+    downloadDone: 'Backup downloaded.',
     downloadSteps: [
-      'On an iPhone, a preview may open. Tap the share button, then Save to Files. On Android or a computer, the file goes to your Downloads.',
+      'Tap Download backup below. On an iPhone a preview may open: tap the share button, then Save to Files. On Android or a computer, the file goes to your Downloads.',
       'Keep it somewhere safe, such as iCloud Drive or Google Drive, or email it to yourself.',
       'It holds everything you have written here, so only share it with people you trust.',
     ],

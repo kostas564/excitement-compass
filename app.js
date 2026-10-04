@@ -1462,20 +1462,20 @@
 
   // ---- Backup -----------------------------------------------------------
 
-  // A short how-to under the backup buttons: a heading, numbered steps and,
-  // optionally, one button.
-  function showDataGuide(title, steps, action) {
-    const box = $('#data-status');
-    const heading = el('p', 'data-guide-title', title);
+  // A pop-up with a short how-to, shown before a backup is downloaded or
+  // restored. The main button carries on; Close cancels.
+  function openDataSheet(title, steps, confirmLabel, run) {
     const list = el('ol', 'data-guide-steps');
     steps.forEach((text) => list.append(el('li', null, text)));
-    box.replaceChildren(heading, list);
-    if (action) {
-      const btn = el('button', 'btn btn--ghost data-guide-action', action.label);
-      btn.type = 'button';
-      btn.addEventListener('click', action.run);
-      box.append(btn);
-    }
+    $('#data-status').textContent = '';
+    openSheet(
+      title,
+      list,
+      sheetButton(confirmLabel, 'btn btn--gold', () => {
+        closeSheet();
+        run();
+      }),
+    );
   }
 
   function exportData() {
@@ -1492,7 +1492,7 @@
     a.click();
     a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
-    showDataGuide(STRINGS.about.downloadTitle(name), STRINGS.about.downloadSteps);
+    $('#data-status').textContent = STRINGS.about.downloadDone;
   }
 
   // Add anything from a backup that isn't here yet. Matching is by id, and
@@ -1745,12 +1745,11 @@
       renderInstall();
     });
 
-    $('#export-data').addEventListener('click', exportData);
+    $('#export-data').addEventListener('click', () => {
+      openDataSheet(STRINGS.about.downloadTitle, STRINGS.about.downloadSteps, STRINGS.about.export, exportData);
+    });
     $('#import-data').addEventListener('click', () => {
-      showDataGuide(STRINGS.about.restoreTitle, STRINGS.about.restoreSteps, {
-        label: STRINGS.about.chooseFile,
-        run: () => $('#import-file').click(),
-      });
+      openDataSheet(STRINGS.about.restoreTitle, STRINGS.about.restoreSteps, STRINGS.about.chooseFile, () => $('#import-file').click());
     });
     $('#import-file').addEventListener('change', (e) => {
       const file = e.target.files[0];
