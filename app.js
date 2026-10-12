@@ -328,6 +328,26 @@
     showEntry();
   }
 
+  // ---- Anonymous visit count ----------------------------------------------
+  //
+  // Off unless ANALYTICS_CODE is set in strings.js. It sends one tiny request
+  // per visit to GoatCounter: no cookies, no ID, nothing the person wrote.
+  // It is skipped on a developer's machine and when the browser asks not to
+  // be tracked.
+
+  function countVisit() {
+    if (!ANALYTICS_CODE) return;
+    if (!/\.github\.io$/.test(location.hostname)) return;
+    if (navigator.doNotTrack === '1' || window.doNotTrack === '1') return;
+    if (navigator.onLine === false) return;
+    try {
+      if (sessionStorage.getItem('counted')) return;
+      sessionStorage.setItem('counted', '1');
+    } catch (e) { /* counting once per visit is a nicety */ }
+    const params = new URLSearchParams({ p: '/', t: document.title, r: document.referrer || '' });
+    new Image().src = `https://${ANALYTICS_CODE}.goatcounter.com/count?${params}`;
+  }
+
   // ---- Settle first -----------------------------------------------------
   //
   // One slow breath (2 seconds in, 3 out), then the comparison begins.
@@ -1582,6 +1602,7 @@
 
   function start() {
     fillText();
+    countVisit();
     ensureLibrary();
     applyTheme(data.settings.theme);
     renderThemeChoice();
