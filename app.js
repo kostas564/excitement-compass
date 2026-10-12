@@ -19,8 +19,20 @@
   const standalone = window.navigator.standalone === true ||
     window.matchMedia('(display-mode: standalone)').matches;
 
+  // Above 820px wide the app is a phone-shaped frame (see styles.css): its
+  // height is fixed and it is scaled to fit the window.
+  const desktopQuery = window.matchMedia('(min-width: 820px)');
+
   function settleViewport() {
     const root = document.documentElement;
+    if (desktopQuery.matches) {
+      const scale = Math.min(1.3, Math.max(0.5, Math.min((window.innerHeight - 48) / 844, (window.innerWidth - 48) / 390)));
+      root.style.setProperty('--app-height', '844px');
+      root.style.setProperty('--frame-scale', scale);
+      const nav = $('.nav');
+      if (nav) { nav.style.top = ''; nav.style.bottom = ''; }
+      return;
+    }
     const inner = window.innerHeight;
     const vv = window.visualViewport ? window.visualViewport.height : inner;
     const full = standalone ? Math.max(inner, vv, screen.height) : Math.max(inner, vv);
@@ -118,6 +130,7 @@
         heading.focus({ preventScroll: true });
       }
       window.scrollTo(0, 0);
+      $('.app').scrollTop = 0;
     }
   }
 
@@ -526,9 +539,10 @@
     if (!box || box.hidden || !svg) return;
     const cards = [...document.querySelectorAll('#pair .card')];
     const b = box.getBoundingClientRect();
+    const k = (box.offsetWidth ? b.width / box.offsetWidth : 1) || 1; // the desktop frame is scaled
     const title = $('#compare-title').getBoundingClientRect();
-    const ox = b.width / 2;
-    const oy = title.bottom - b.top + 40;
+    const ox = b.width / k / 2;
+    const oy = (title.bottom - b.top) / k + 40;
     const stacked = cards[1].getBoundingClientRect().top > cards[0].getBoundingClientRect().bottom - 4;
 
     const setC = (id, cx, cy) => { const c = $(id); c.setAttribute('cx', cx); c.setAttribute('cy', cy); };
@@ -552,12 +566,12 @@
 
     const paths = cards.map((card, i) => {
       const r = card.getBoundingClientRect();
-      let tx = r.left + r.width / 2 - b.left;
-      let ty = r.top - b.top;
+      let tx = (r.left + r.width / 2 - b.left) / k;
+      let ty = (r.top - b.top) / k;
       if (stacked && i === 1) {
         // Run down the left margin to the second card's edge.
-        tx = r.left - b.left;
-        ty = r.top + r.height / 2 - b.top;
+        tx = (r.left - b.left) / k;
+        ty = (r.top + r.height / 2 - b.top) / k;
         return `M${ox} ${oy} C${ox - 40} ${oy + 30} ${-4} ${oy + 60} ${-4} ${ty - 40} S${-4} ${ty} ${tx} ${ty}`;
       }
       const dy = Math.max(ty - oy, 20);
@@ -570,8 +584,8 @@
     });
     const glow = $('#thread-glow');
     glow.setAttribute('d', leanSide === null ? '' : paths[leanSide]);
-    svg.setAttribute('width', b.width);
-    svg.setAttribute('height', b.height);
+    svg.setAttribute('width', b.width / k);
+    svg.setAttribute('height', b.height / k);
   }
 
   function lean(e) {

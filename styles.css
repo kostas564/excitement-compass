@@ -200,7 +200,7 @@ h1:focus {
   top: 8px;
   left: 0;
   right: 0;
-  height: calc(var(--app-height, 100dvh) - 8px);
+  height: calc(var(--sky-height, var(--app-height, 100dvh)) - 8px);
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
@@ -2501,3 +2501,60 @@ h1:focus {
 }
 
 
+
+/* ---- Desktop: the app is a phone-shaped frame, scaled to fit the window ----
+   Everything inside the frame keeps its phone layout. The frame is the
+   containing block for the fixed scene and bottom bar, so they stay inside it. */
+
+.frame {
+  display: contents;
+}
+
+@media (min-width: 820px) {
+  :root {
+    --sky-height: 100dvh;
+  }
+
+  .frame {
+    display: block;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    top: 50%;
+    width: 390px;
+    height: 844px;
+    transform: translate(-50%, -50%) scale(var(--frame-scale, 1));
+    border-radius: 34px;
+    overflow: hidden;
+    border: 1px solid rgba(127, 224, 240, 0.2);
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.45), 0 0 90px rgba(106, 63, 176, 0.18);
+    background: linear-gradient(180deg, var(--sky-top), var(--sky-mid) 45%, var(--sky-late) 80%, var(--sky-bottom));
+  }
+
+  .frame .app {
+    height: 100%;
+    max-width: none;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+
+  .frame .app::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* No need to keep clear of a phone's top edge inside the frame. */
+  .frame .home-scene,
+  .frame .settle-svg {
+    top: 0;
+    height: var(--app-height);
+  }
+}
+
+#compare-tie {
+  margin-bottom: 0;
+}
+
+#compare-coin {
+  margin-bottom: auto;
+}
