@@ -19,26 +19,31 @@
   const standalone = window.navigator.standalone === true ||
     window.matchMedia('(display-mode: standalone)').matches;
 
-  // Above 820px wide the app is a phone-shaped frame (see styles.css): its
-  // height is fixed and it is scaled to fit the window.
-  const desktopQuery = window.matchMedia('(min-width: 820px)');
+  // Above 900px wide the app uses its desktop layout (see styles.css): the
+  // bar moves to the top and the scenes fit the window's height.
+  const desktopQuery = window.matchMedia('(min-width: 900px)');
+
+  function applyDesktop() {
+    const fit = desktopQuery.matches ? 'xMidYMid meet' : 'xMidYMid slice';
+    ['.home-scene-svg', '#settle-svg'].forEach((sel) => {
+      const svg = $(sel);
+      if (svg) svg.setAttribute('preserveAspectRatio', fit);
+    });
+  }
+  desktopQuery.addEventListener('change', () => { applyDesktop(); settleViewport(); });
+  applyDesktop();
 
   function settleViewport() {
     const root = document.documentElement;
-    if (desktopQuery.matches) {
-      const scale = Math.min(1.3, Math.max(0.5, Math.min((window.innerHeight - 48) / 844, (window.innerWidth - 48) / 390)));
-      root.style.setProperty('--app-height', '844px');
-      root.style.setProperty('--frame-scale', scale);
-      const nav = $('.nav');
-      if (nav) { nav.style.top = ''; nav.style.bottom = ''; }
-      return;
-    }
     const inner = window.innerHeight;
     const vv = window.visualViewport ? window.visualViewport.height : inner;
     const full = standalone ? Math.max(inner, vv, screen.height) : Math.max(inner, vv);
     root.style.setProperty('--app-height', `${full}px`);
     const nav = $('.nav');
-    if (nav) {
+    if (nav && desktopQuery.matches) {
+      nav.style.top = '';
+      nav.style.bottom = '';
+    } else if (nav) {
       // Pin the bar to the real bottom edge even if the viewport reads short.
       nav.style.bottom = 'auto';
       nav.style.top = `${full - nav.offsetHeight}px`;

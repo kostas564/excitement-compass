@@ -2502,52 +2502,147 @@ h1:focus {
 
 
 
-/* ---- Desktop: the app is a phone-shaped frame, scaled to fit the window ----
-   Everything inside the frame keeps its phone layout. The frame is the
-   containing block for the fixed scene and bottom bar, so they stay inside it. */
+/* ---- Desktop layout (900px and wider) ----
+   The bar moves to the top, the Home and Settle scenes fit the window's height
+   with the ground running out past the sides, and content gets a wider,
+   centred column. Phones and small tablets keep the phone layout. */
 
-.frame {
-  display: contents;
-}
-
-@media (min-width: 820px) {
-  :root {
-    --sky-height: 100dvh;
-  }
-
-  .frame {
-    display: block;
-    position: fixed;
-    z-index: 1;
-    left: 50%;
-    top: 50%;
-    width: 390px;
-    height: 844px;
-    transform: translate(-50%, -50%) scale(var(--frame-scale, 1));
-    border-radius: 34px;
-    overflow: hidden;
-    border: 1px solid rgba(127, 224, 240, 0.2);
-    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.45), 0 0 90px rgba(106, 63, 176, 0.18);
-    background: linear-gradient(180deg, var(--sky-top), var(--sky-mid) 45%, var(--sky-late) 80%, var(--sky-bottom));
-  }
-
-  .frame .app {
-    height: 100%;
-    max-width: none;
-    overflow-x: hidden;
-    overflow-y: auto;
-    scrollbar-width: none;
-  }
-
-  .frame .app::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* No need to keep clear of a phone's top edge inside the frame. */
-  .frame .home-scene,
-  .frame .settle-svg {
+@media (min-width: 900px) {
+  .sky {
     top: 0;
     height: var(--app-height);
+  }
+
+  .nav {
+    top: 18px;
+    bottom: auto;
+    width: auto;
+    max-width: none;
+    padding: 4px 12px;
+    grid-template-columns: repeat(5, auto);
+    gap: 4px;
+    border: 1px solid var(--glass-edge);
+    border-radius: 999px;
+  }
+
+  .nav-item {
+    flex-direction: row;
+    gap: 8px;
+    min-height: 48px;
+    padding: 0 18px;
+    font-size: 15px;
+  }
+
+  .nav-item:hover {
+    color: var(--text);
+  }
+
+  .app {
+    max-width: 800px;
+    padding-top: 108px;
+    padding-bottom: 56px;
+  }
+
+  .home-scene,
+  .settle-svg {
+    left: 0;
+    top: 0;
+    width: 100%;
+    max-width: none;
+    height: var(--app-height);
+    transform: none;
+  }
+
+  .home-scene-svg,
+  .settle-svg {
+    overflow: visible;
+  }
+
+  .home-center,
+  .act-center,
+  .settle-text {
+    max-width: 760px;
+  }
+
+  .home-line {
+    max-width: 18ch;
+    font-size: 44px;
+  }
+
+  .home-pick,
+  .act-pick {
+    font-size: 54px;
+  }
+
+  .screen--home .app-name {
+    top: calc(var(--app-height) * 0.19);
+  }
+
+  .home-actions,
+  #screen-act .stack-actions,
+  .outcome-options,
+  .smaller-form,
+  .release-form,
+  .choose-entry {
+    width: 100%;
+    max-width: 540px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .settle-skip {
+    bottom: 40px;
+  }
+
+  #screen-choose .screen-title,
+  .smaller-title,
+  .outcome-pick {
+    text-align: center;
+  }
+
+  .pair {
+    gap: 28px;
+    margin-top: 150px;
+  }
+
+  .card {
+    min-height: 260px;
+    font-size: 32px;
+  }
+
+  .strip {
+    width: 100%;
+    max-width: 780px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .item.frame {
+    display: flex;
+    align-items: stretch;
+  }
+
+  .frame-thumb {
+    flex: none;
+    width: 230px;
+    height: auto;
+    min-height: 130px;
+  }
+
+  .frame-body {
+    flex: 1;
+    align-self: center;
+    padding: 16px 22px;
+  }
+
+  .frame-text {
+    font-size: 26px;
+  }
+
+  .sheet {
+    margin: auto;
+    border-radius: 24px;
+    border-bottom: 1px solid var(--glass-edge);
   }
 }
 
