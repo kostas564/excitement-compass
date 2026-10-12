@@ -7,7 +7,7 @@ const FRAGMENTS_OF_COHERENCE_URL = 'https://fragmentsofcoherence.substack.com';
 
 // Your GoatCounter site code (the part before .goatcounter.com).
 // Set it to an empty string to switch counting off.
-const ANALYTICS_CODE = 'kostas564';
+const ANALYTICS_CODE = 'excitmentcompass';
 
 const STRINGS = {
   appName: 'Excitement Compass',
