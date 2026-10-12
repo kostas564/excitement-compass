@@ -328,12 +328,13 @@
     showEntry();
   }
 
-  // ---- Anonymous visit count ----------------------------------------------
+  // ---- Anonymous count of devices ------------------------------------------
   //
-  // Off unless ANALYTICS_CODE is set in strings.js. It sends one tiny request
-  // per visit to GoatCounter: no cookies, no ID, nothing the person wrote.
-  // It is skipped on a developer's machine and when the browser asks not to
-  // be tracked.
+  // Off unless ANALYTICS_CODE is set in strings.js. The first time the app
+  // opens on a device it sends one tiny request to GoatCounter and remembers
+  // that it did, so each device is counted once and never again. There is no
+  // ID, no cookie and nothing the person wrote. It is skipped on a developer's
+  // machine and when the browser asks not to be tracked.
 
   function countVisit() {
     if (!ANALYTICS_CODE) return;
@@ -341,11 +342,16 @@
     if (navigator.doNotTrack === '1' || window.doNotTrack === '1') return;
     if (navigator.onLine === false) return;
     try {
-      if (sessionStorage.getItem('counted')) return;
-      sessionStorage.setItem('counted', '1');
-    } catch (e) { /* counting once per visit is a nicety */ }
-    const params = new URLSearchParams({ p: '/', t: document.title, r: document.referrer || '' });
-    new Image().src = `https://${ANALYTICS_CODE}.goatcounter.com/count?${params}`;
+      if (localStorage.getItem('excitement-compass-counted')) return;
+    } catch (e) {
+      return; // can't remember it, so don't risk counting every visit
+    }
+    const params = new URLSearchParams({ p: 'first-open', t: 'First open on a device', e: 'true' });
+    const beacon = new Image();
+    beacon.onload = () => {
+      try { localStorage.setItem('excitement-compass-counted', '1'); } catch (e) { /* ignore */ }
+    };
+    beacon.src = `https://${ANALYTICS_CODE}.goatcounter.com/count?${params}`;
   }
 
   // ---- Settle first -----------------------------------------------------

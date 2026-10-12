@@ -303,5 +303,5 @@ const STRINGS = {
 // With the counter switched on, About says so plainly.
 if (ANALYTICS_CODE) {
   STRINGS.about.body[STRINGS.about.body.length - 1] =
-    'Everything you write stays on this device. The only thing counted is an anonymous visit: no cookies, nothing about you and nothing you write.';
+    'Everything you write stays on this device. The only thing counted is the first time the app is opened on a device: no cookies, nothing about you and nothing you write.';
 }
