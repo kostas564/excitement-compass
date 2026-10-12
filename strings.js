@@ -5,9 +5,9 @@
 // The Substack address for "Fragments of Coherence", linked from About.
 const FRAGMENTS_OF_COHERENCE_URL = 'https://fragmentsofcoherence.substack.com';
 
-// TODO: paste your GoatCounter site code here (the part before .goatcounter.com).
-// While this is empty the app counts nothing and sends nothing.
-const ANALYTICS_CODE = '';
+// Your GoatCounter site code (the part before .goatcounter.com).
+// Set it to an empty string to switch counting off.
+const ANALYTICS_CODE = 'kostas564';
 
 const STRINGS = {
   appName: 'Excitement Compass',
