@@ -300,8 +300,11 @@ const STRINGS = {
   },
 };
 
-// With the counter switched on, About says so plainly.
+// With the counter switched on, About gets its own short Privacy area that
+// says so plainly, and the main text no longer claims nothing is sent.
 if (ANALYTICS_CODE) {
-  STRINGS.about.body[STRINGS.about.body.length - 1] =
-    'Everything you write stays on this device. The first time the app is opened on a device, it sends one anonymous signal, so we can see roughly how many people it reaches. No account, no cookies, and never anything you write.';
+  STRINGS.about.body[STRINGS.about.body.length - 1] = 'Everything you write stays on this device.';
+  STRINGS.about.privacyTitle = 'Privacy';
+  STRINGS.about.privacy =
+    'The first time the app is opened on a device, it sends one anonymous signal, so we can see roughly how many people it reaches. No account, no cookies, and never anything you write.';
 }

@@ -1596,6 +1596,11 @@
     });
 
     const a = STRINGS.about;
+    if (a.privacy) {
+      $('#about-privacy-title').textContent = a.privacyTitle;
+      $('#about-privacy-text').textContent = a.privacy;
+      $('#about-privacy').hidden = false;
+    }
     const link = document.createElement('a');
     link.href = a.creditUrl;
     link.target = '_blank';
