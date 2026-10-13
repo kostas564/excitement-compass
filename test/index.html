@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Excitement Compass (test)</title>
+  <meta name="description" content="A free, private compass for following your excitement, a gift from Fragments of Coherence. No account, nothing leaves your device.">
+  <meta name="theme-color" content="#0b1240" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#eef1f8" media="(prefers-color-scheme: light)">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Compass TEST">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Excitement Compass">
+  <meta property="og:description" content="A free, private compass for following your excitement, a gift from Fragments of Coherence. No account, nothing leaves your device.">
+  <meta property="og:url" content="https://kostas564.github.io/excitement-compass/">
+  <meta property="og:image" content="https://kostas564.github.io/excitement-compass/share.png?v=5">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="A glowing star over a small figure on a night hill, with the words Excitement Compass">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Excitement Compass">
+  <meta name="twitter:description" content="A free, private compass for following your excitement, a gift from Fragments of Coherence. No account, nothing leaves your device.">
+  <meta name="twitter:image" content="https://kostas564.github.io/excitement-compass/share.png?v=5">
+
+  <!-- Apply the saved theme (dark unless chosen otherwise) before the page draws, to avoid a flash. -->
+  <script>
+    var t = 'dark';
+    try {
+      t = JSON.parse(localStorage.getItem('ec-test-v1')).settings.theme || 'dark';
+    } catch (e) {}
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  </script>
+  <!-- Fix the app's height before the first paint. iOS can open an installed
+       app with a short viewport and correct it later, which made everything
+       jump down; the screen's own height does not change. -->
+  <script>
+    (function () {
+      // Only an iPhone or iPad home-screen app opens with a short viewport.
+      // On Windows and Android the screen is taller than the app window, so
+      // the window's own height is the right one.
+      // A Mac's "Add to Dock" app also reports standalone, but has no touch screen.
+      var iosApp = navigator.standalone === true && navigator.maxTouchPoints > 0;
+      var h = Math.max(window.innerHeight, iosApp ? screen.height : 0);
+      document.documentElement.style.setProperty('--app-height', h + 'px');
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css?v=93">
+  <style>body::after{content:"TEST VERSION";position:fixed;top:calc(env(safe-area-inset-top) + 2px);left:50%;transform:translateX(-50%);z-index:50;padding:2px 10px;border-radius:0 0 8px 8px;background:#e29a45;color:#1a1130;font:700 10px/1.6 system-ui,sans-serif;letter-spacing:.12em;pointer-events:none}</style>
+</head>
+<body>
+  <div class="sky" id="sky" aria-hidden="true">
+    <div class="sky-glow sky-glow--gold"></div>
+    <div class="sky-glow sky-glow--indigo"></div>
+    <div class="sky-glow sky-glow--cyan"></div>
+    <div class="sky-stars" id="sky-stars"></div>
+    <div class="sky-grain" id="sky-grain"></div>
+    <div class="sky-vignette"></div>
+  </div>
+
+  <div class="home-scene" id="home-scene" aria-hidden="true">
+<svg class="home-scene-svg" viewBox="0 0 390 844" preserveAspectRatio="xMidYMid slice" focusable="false" aria-hidden="true">
+<defs>
+<radialGradient id="hs-halo" cx="195" cy="112" r="190" gradientUnits="userSpaceOnUse">
+<stop offset="0" stop-color="#f3c46c" stop-opacity="0.5"/>
+<stop offset="0.3" stop-color="#e29a45" stop-opacity="0.16"/>
+<stop offset="1" stop-color="#e29a45" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="hs-orb" cx="0.4" cy="0.35" r="0.7">
+<stop offset="0" stop-color="#fffaf0"/>
+<stop offset="0.5" stop-color="#fbdf9a"/>
+<stop offset="1" stop-color="#e29a45"/>
+</radialGradient>
+<radialGradient id="hs-dot" cx="0.5" cy="0.5" r="0.5">
+<stop offset="0" stop-color="#fff3d2" stop-opacity="1"/>
+<stop offset="0.35" stop-color="#f3c46c" stop-opacity="0.7"/>
+<stop offset="1" stop-color="#f3c46c" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="hs-cooldot" cx="0.5" cy="0.5" r="0.5">
+<stop offset="0" stop-color="#bfeaf5" stop-opacity="0.9"/>
+<stop offset="1" stop-color="#7fe0f0" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="hs-sunhalo"><stop offset="0" stop-color="#ffe2a8" stop-opacity="0.95"/><stop offset="0.35" stop-color="#ffbf80" stop-opacity="0.5"/><stop offset="1" stop-color="#ffb26b" stop-opacity="0"/></radialGradient>
+<linearGradient id="hs-horizon" x1="0" y1="410" x2="0" y2="492" gradientUnits="userSpaceOnUse">
+<stop offset="0" stop-color="#2fc3d0" stop-opacity="0"/>
+<stop offset="0.6" stop-color="#2fc3d0" stop-opacity="0.3"/>
+<stop offset="1" stop-color="#e29a45" stop-opacity="0.4"/>
+</linearGradient>
+<linearGradient id="hs-thread" x1="0" y1="118" x2="0" y2="576" gradientUnits="userSpaceOnUse">
+<stop offset="0" stop-color="#f8d58a" stop-opacity="0.95"/>
+<stop offset="0.14" stop-color="#f8d58a" stop-opacity="0.9"/>
+<stop offset="0.22" stop-color="#f8d58a" stop-opacity="0.12"/>
+<stop offset="0.5" stop-color="#f8d58a" stop-opacity="0.12"/>
+<stop offset="0.62" stop-color="#f8d58a" stop-opacity="0.85"/>
+<stop offset="1" stop-color="#fff3d2" stop-opacity="1"/>
+</linearGradient>
+<linearGradient id="hs-floor" x1="0" y1="640" x2="0" y2="844" gradientUnits="userSpaceOnUse">
+<stop offset="0" stop-color="#05071a" stop-opacity="0"/>
+<stop offset="0.5" stop-color="#05071a" stop-opacity="0.75"/>
+<stop offset="1" stop-color="#05071a" stop-opacity="0.95"/>
+</linearGradient>
+<filter id="hs-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="26"/></filter>
+<filter id="hs-glowblur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5"/></filter>
+</defs>
+
+<ellipse cx="38" cy="230" rx="70" ry="150" fill="#1fb5c9" opacity="0.2" filter="url(#hs-soft)" transform="rotate(-18 38 230)"/>
+<ellipse cx="356" cy="200" rx="64" ry="140" fill="#6a3fb0" opacity="0.26" filter="url(#hs-soft)" transform="rotate(16 356 200)"/>
+<ellipse cx="336" cy="320" rx="50" ry="100" fill="#1fb5c9" opacity="0.14" filter="url(#hs-soft)" transform="rotate(20 336 320)"/>
+<circle cx="195" cy="112" r="190" fill="url(#hs-halo)"/>
+
+<g fill="#ffffff">
+<circle cx="24" cy="96" r="1" opacity="0.7"/><circle cx="58" cy="152" r="0.7" opacity="0.5"/><circle cx="88" cy="64" r="1.1" opacity="0.8"/>
+<circle cx="120" cy="118" r="0.8" opacity="0.6"/><circle cx="150" cy="44" r="0.9" opacity="0.7"/><circle cx="46" cy="232" r="0.8" opacity="0.5"/>
+<circle cx="78" cy="296" r="1" opacity="0.6"/><circle cx="16" cy="340" r="0.7" opacity="0.5"/><circle cx="134" cy="262" r="0.8" opacity="0.55"/>
+<circle cx="40" cy="400" r="0.8" opacity="0.5"/><circle cx="230" cy="52" r="1" opacity="0.7"/><circle cx="266" cy="108" r="0.8" opacity="0.6"/>
+<circle cx="304" cy="70" r="1.2" opacity="0.8"/><circle cx="340" cy="132" r="0.8" opacity="0.55"/><circle cx="366" cy="84" r="1" opacity="0.7"/>
+<circle cx="326" cy="214" r="0.9" opacity="0.6"/><circle cx="352" cy="288" r="0.7" opacity="0.5"/><circle cx="288" cy="266" r="1.1" opacity="0.7"/>
+<circle cx="372" cy="380" r="1" opacity="0.6"/><circle cx="318" cy="400" r="0.8" opacity="0.5"/><circle cx="108" cy="22" r="0.8" opacity="0.6"/>
+<circle cx="278" cy="22" r="0.9" opacity="0.6"/><circle cx="12" cy="44" r="0.7" opacity="0.5"/><circle cx="378" cy="30" r="0.8" opacity="0.5"/>
+<circle cx="64" cy="440" r="0.8" opacity="0.45"/><circle cx="352" cy="436" r="0.8" opacity="0.45"/>
+</g>
+
+<g fill="none" stroke="#f3c46c" stroke-width="0.5" stroke-opacity="0.28">
+<polyline points="30,170 74,142 120,158 150,106"/><polyline points="74,142 66,204 28,244"/>
+<polyline points="262,102 308,80 350,110 330,172"/><polyline points="308,80 296,40"/>
+</g>
+<g fill="#f3c46c" opacity="0.7">
+<circle cx="30" cy="170" r="1.4"/><circle cx="74" cy="142" r="1.7"/><circle cx="120" cy="158" r="1.3"/><circle cx="150" cy="106" r="1.3"/><circle cx="66" cy="204" r="1.3"/><circle cx="28" cy="244" r="1.1"/>
+<circle cx="262" cy="102" r="1.3"/><circle cx="308" cy="80" r="1.7"/><circle cx="350" cy="110" r="1.3"/><circle cx="330" cy="172" r="1.3"/><circle cx="296" cy="40" r="1.1"/>
+</g>
+
+<g fill="none" stroke="#f3c46c" stroke-width="0.6" stroke-opacity="0.26">
+<circle cx="195" cy="112" r="28"/><circle cx="195" cy="84" r="28"/><circle cx="219" cy="98" r="28"/><circle cx="219" cy="126" r="28"/>
+<circle cx="195" cy="140" r="28"/><circle cx="171" cy="126" r="28"/><circle cx="171" cy="98" r="28"/>
+<circle cx="195" cy="112" r="56" stroke-opacity="0.15"/>
+</g>
+
+
+<g class="dawn-sun"><circle cx="304" cy="470" r="150" fill="url(#hs-sunhalo)"/><circle cx="304" cy="470" r="30" fill="#fff3d2"/></g>
+<rect x="-3000" y="410" width="6390" height="90" fill="url(#hs-horizon)"/>
+<path d="M0 494 C60 472 110 480 170 488 C230 496 280 470 340 476 C365 478 380 482 390 480 L390 844 L0 844Z" fill="#0c1240"/>
+<path d="M0 506 C100 492 290 492 390 506 L390 844 L0 844Z" fill="#070a22"/>
+<rect x="-3000" y="494" width="3000" height="1400" fill="#0c1240"/><rect x="390" y="480" width="3000" height="1400" fill="#0c1240"/><rect x="-3000" y="506" width="3000" height="1400" fill="#070a22"/><rect x="390" y="506" width="3000" height="1400" fill="#070a22"/>
+
+<g fill="none" stroke-linecap="round">
+<g stroke="#7fe0f0" stroke-width="0.6" stroke-opacity="0.2">
+<path d="M195 636 C160 580 40 560 -4 520"/>
+<path d="M195 636 C250 580 380 558 394 524"/>
+<path d="M195 636 C168 586 56 540 -10 506"/>
+<path d="M195 636 C176 594 112 556 78 500"/>
+<path d="M195 636 C182 598 130 552 110 496"/>
+<path d="M195 636 C187 602 150 550 140 494"/>
+<path d="M195 636 C192 606 166 556 158 492"/>
+<path d="M195 636 C198 606 224 556 232 492"/>
+<path d="M195 636 C203 602 244 552 252 494"/>
+<path d="M195 636 C212 598 268 552 280 494"/>
+<path d="M195 636 C224 592 322 552 330 498"/>
+<path d="M195 636 C238 586 350 548 366 502"/>
+<path d="M195 636 C244 580 396 546 400 510"/>
+</g>
+<g stroke="#7fe0f0" stroke-width="1" stroke-opacity="0.34">
+<path d="M195 636 C165 590 70 548 22 500"/>
+<path d="M195 636 C180 596 124 548 96 496"/>
+<path d="M195 636 C189 604 158 548 176 490"/>
+<path d="M195 636 C201 604 226 548 214 490"/>
+<path d="M195 636 C232 586 330 548 346 500"/>
+</g>
+<path class="scene-gold-glow" d="M195 636 C218 590 288 548 304 496" stroke="#f3c46c" stroke-width="11" stroke-opacity="0.16" filter="url(#hs-glowblur)"/>
+<path class="scene-gold" d="M195 636 C218 590 288 548 304 496" stroke="#f8d58a" stroke-width="2.4" stroke-opacity="0.95"/>
+</g>
+<g>
+<circle cx="22" cy="500" r="5" fill="url(#hs-cooldot)"/><circle cx="96" cy="496" r="5" fill="url(#hs-cooldot)"/><circle cx="176" cy="490" r="5" fill="url(#hs-cooldot)"/>
+<circle cx="214" cy="490" r="5" fill="url(#hs-cooldot)"/><circle cx="346" cy="500" r="5" fill="url(#hs-cooldot)"/>
+<circle cx="78" cy="500" r="3" fill="url(#hs-cooldot)"/><circle cx="110" cy="496" r="3" fill="url(#hs-cooldot)"/><circle cx="140" cy="494" r="3" fill="url(#hs-cooldot)"/>
+<circle cx="158" cy="492" r="3" fill="url(#hs-cooldot)"/><circle cx="232" cy="492" r="3" fill="url(#hs-cooldot)"/><circle cx="252" cy="494" r="3" fill="url(#hs-cooldot)"/>
+<circle cx="280" cy="494" r="3" fill="url(#hs-cooldot)"/><circle cx="330" cy="498" r="3" fill="url(#hs-cooldot)"/><circle cx="366" cy="502" r="3" fill="url(#hs-cooldot)"/>
+<circle cx="304" cy="496" r="13" fill="url(#hs-dot)"/>
+</g>
+
+<path d="M195 118 L195 574" stroke="url(#hs-thread)" stroke-width="1.2" fill="none"/>
+
+<ellipse cx="195" cy="600" rx="30" ry="26" fill="#f3c46c" opacity="0.14" filter="url(#hs-glowblur)"/>
+<circle cx="195" cy="586" r="6.6" fill="#04061a"/>
+<path d="M188.6 584 Q195 576 201.4 584" stroke="#f3c46c" stroke-width="0.6" stroke-opacity="0.6" fill="none"/>
+<path d="M181 603 Q195 593 209 603 L212 628 L208 628 L207 644 L199 644 L198 629 L192 629 L191 644 L183 644 L182 628 L178 628Z" fill="#070a24"/>
+<path d="M181 603 Q195 593 209 603 L212 628" stroke="#f3c46c" stroke-width="0.7" stroke-opacity="0.55" fill="none"/>
+<circle cx="195" cy="608" r="14" fill="url(#hs-dot)"/>
+<circle cx="195" cy="608" r="2.2" fill="#fff8e6"/>
+<circle cx="195" cy="574" r="2.4" fill="#fff3d2"/>
+
+<rect x="-3000" y="640" width="6390" height="1200" fill="url(#hs-floor)"/>
+</svg>
+  <svg class="home-scene-svg home-star" viewBox="0 0 390 844" preserveAspectRatio="xMidYMid slice" focusable="false" aria-hidden="true">
+<g class="scene-star"><circle cx="195" cy="112" r="42" fill="url(#hs-dot)" opacity="0.55"/><circle cx="195" cy="112" r="8" fill="url(#hs-orb)"/>
+<circle cx="195" cy="112" r="17" fill="#f8d58a" opacity="0.22"/>
+<g stroke="#fff3d2" stroke-width="0.8" stroke-opacity="0.8" stroke-linecap="round">
+<line x1="195" y1="88" x2="195" y2="136"/><line x1="171" y1="112" x2="219" y2="112"/>
+</g></g>
+  </svg>
+  </div>
+
+  <div class="app">
+    <p class="notice" id="storage-notice" hidden data-text="storage.unavailable"></p>
+
+    <main class="screens">
+      <!-- Home -->
+      <section class="screen screen--home" id="screen-home" data-screen="home" aria-labelledby="home-title">
+        <h1 class="app-name" id="home-title" data-text="appName"></h1>
+
+        <div class="home-center">
+          <div class="home-idle" id="home-idle">
+            <p class="home-active-label" id="home-question-label" data-text="home.questionLabel" hidden></p>
+            <p class="home-line" id="home-line" role="button" tabindex="0"></p>
+            <p class="home-hint" id="home-hint" hidden data-text="home.tapHint"></p>
+          </div>
+
+          <div class="home-active" id="home-active" hidden>
+            <p class="home-active-label" data-text="home.activeLabel"></p>
+            <p class="home-pick" id="home-pick"></p>
+          </div>
+        </div>
+
+        <div class="home-actions">
+          <button class="btn btn--gold btn--large" id="find-pull" type="button" data-text="home.findPull"></button>
+          <button class="btn btn--gold btn--large" id="done-let-go" type="button" data-text="home.doneLetGo" hidden></button>
+          <button class="btn-round" id="home-add-river" type="button" data-label="home.addRiver">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- Choose: option entry, then the pair comparison -->
+      <section class="screen" id="screen-choose" data-screen="choose" aria-labelledby="choose-title" hidden>
+        <div class="choose-entry" id="choose-entry">
+          <h1 class="screen-title"><label id="choose-title" for="option-input" data-text="choose.title"></label></h1>
+
+          <form class="option-form" id="option-form" autocomplete="off">
+            <input class="option-input" id="option-input" type="text" maxlength="80"
+                   enterkeyhint="enter">
+            <button class="option-add" id="option-add" type="submit" data-label="choose.add">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+          </form>
+
+          <ul class="chips" id="option-chips" aria-live="polite"></ul>
+          <p class="hint" id="option-limit" data-text="choose.limit" hidden></p>
+
+          <div class="suggestions" id="suggestions" hidden>
+            <p class="suggestions-label" data-text="choose.saved"></p>
+            <div class="tags tags--small" id="suggestion-cats" role="group" data-label="saved.title"></div>
+            <ul class="chips" id="suggestion-chips"></ul>
+          </div>
+
+          <div class="screen-actions">
+            <button class="btn btn--gold btn--large" id="start-compare" type="button" data-text="choose.findPull" disabled></button>
+          </div>
+        </div>
+
+        <div class="compare" id="compare" hidden>
+          <svg class="threads" id="threads" aria-hidden="true" focusable="false">
+            <defs>
+              <radialGradient id="th-orb-grad" cx="0.4" cy="0.35" r="0.7">
+                <stop offset="0" stop-color="#fffaf0"/><stop offset="0.5" stop-color="#fbdf9a"/><stop offset="1" stop-color="#e29a45"/>
+              </radialGradient>
+              <radialGradient id="th-halo-grad">
+                <stop offset="0" stop-color="#f3c46c" stop-opacity="0.34"/><stop offset="1" stop-color="#f3c46c" stop-opacity="0"/>
+              </radialGradient>
+              <filter id="th-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5"/></filter>
+            </defs>
+            <circle id="th-halo-c" r="150" fill="url(#th-halo-grad)"/>
+            <g id="th-flower" fill="none" stroke="#f3c46c" stroke-width="0.6" stroke-opacity="0.26"></g>
+            <path class="thread thread--0" id="thread-0" fill="none" stroke-linecap="round"/>
+            <path class="thread thread--1" id="thread-1" fill="none" stroke-linecap="round"/>
+            <path class="thread-glow" id="thread-glow" fill="none" stroke-linecap="round" filter="url(#th-blur)"/>
+            <circle id="th-ring" r="14" fill="#f8d58a" opacity="0.25"/>
+            <circle id="th-orb" r="7" fill="url(#th-orb-grad)"/>
+          </svg>
+
+          <div class="compare-top">
+            <button class="icon-btn" id="compare-undo" type="button" data-label="choose.back">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+            </button>
+            <div class="progress" aria-hidden="true"><div class="progress-fill" id="progress-fill"></div></div>
+          </div>
+
+          <h1 class="screen-title compare-title" id="compare-title" data-text="choose.comparePrompt"></h1>
+
+          <div class="pair" id="pair">
+            <button class="card" type="button" data-side="0"></button>
+            <button class="card" type="button" data-side="1"></button>
+          </div>
+
+          <button class="link-btn" id="compare-tie" type="button" data-text="choose.aboutTheSame"></button>
+          <button class="link-btn link-btn--quiet" id="compare-coin" type="button" data-text="coin.link"></button>
+
+          <div class="coin-layer" id="coin-layer" role="dialog" aria-modal="true" aria-labelledby="coin-title" hidden>
+            <h2 class="coin-title" id="coin-title" data-text="coin.title"></h2>
+            <div class="coin-stage" aria-hidden="true">
+              <div class="coin" id="coin">
+                <div class="coin-face coin-face--heads"><svg viewBox="-20 -20 40 40"><polygon points="0,-15 3,-3 15,0 3,3 0,15 -3,3 -15,0 -3,-3"/><circle r="2.2"/></svg></div>
+                <div class="coin-face coin-face--tails"><svg viewBox="-20 -20 40 40"><circle r="14"/><circle r="6"/><circle cx="0" cy="-14" r="1.6"/><circle cx="12.1" cy="7" r="1.6"/><circle cx="-12.1" cy="7" r="1.6"/></svg></div>
+              </div>
+            </div>
+            <ul class="coin-sides" id="coin-sides"></ul>
+            <div class="coin-result" id="coin-result" aria-live="polite" hidden>
+              <p class="coin-landed"><span data-text="coin.landed"></span> <span class="coin-pick" id="coin-pick"></span></p>
+              <p class="coin-notice" data-text="coin.notice"></p>
+              <div class="stack-actions">
+                <button class="btn btn--gold btn--large" id="coin-keep" type="button" data-text="coin.keep"></button>
+                <button class="btn btn--ghost" id="coin-other" type="button" data-text="coin.other"></button>
+              </div>
+            </div>
+            <button class="link-btn" id="coin-back" type="button" data-text="coin.back"></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Act: the top pick, with the compass pointing at it -->
+      <section class="screen" id="screen-act" data-screen="act" aria-labelledby="act-pick" hidden>
+        <div class="act-center">
+          <p class="act-line" id="act-line" aria-live="polite"></p>
+          <p class="scene-label" data-text="act.strongest"></p>
+          <h1 class="act-pick" id="act-pick"></h1>
+        </div>
+
+        <div class="stack-actions">
+          <button class="btn btn--gold btn--large" id="act-on-it" type="button" data-text="act.onIt"></button>
+          <div class="act-row">
+            <button class="btn btn--ghost act-secondary" id="act-not-possible" type="button" data-text="act.notPossible"></button>
+            <button class="btn btn--ghost act-secondary act-smaller" id="act-smaller" type="button" data-text="act.makeSmaller"></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Where is this now? -->
+      <section class="screen screen--outcome" id="screen-outcome" data-screen="outcome" aria-labelledby="outcome-pick" hidden>
+        <h1 class="outcome-pick" id="outcome-pick"></h1>
+        <p class="outcome-question" data-text="outcome.question"></p>
+        <div class="outcome-options" role="group" aria-labelledby="outcome-pick">
+          <button class="outcome-btn" type="button" data-outcome="complete"><span class="outcome-name" data-text="outcome.complete"></span><span class="outcome-hint" data-text="outcome.completeHint"></span></button>
+          <button class="outcome-btn" type="button" data-outcome="pulling"><span class="outcome-name" data-text="outcome.pulling"></span><span class="outcome-hint" data-text="outcome.pullingHint"></span></button>
+          <button class="outcome-btn" type="button" data-outcome="faded"><span class="outcome-name" data-text="outcome.faded"></span><span class="outcome-hint" data-text="outcome.fadedHint"></span></button>
+        </div>
+        <button class="link-btn outcome-back" id="outcome-back" type="button" data-text="outcome.back"></button>
+      </section>
+
+      <!-- Settle first -->
+      <section class="screen screen--settle" id="screen-settle" data-screen="settle" aria-labelledby="settle-title" hidden>
+        <svg class="settle-svg" id="settle-svg" viewBox="0 0 390 844" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+<defs>
+<radialGradient id="st-halo" cx="195" cy="330" r="230" gradientUnits="userSpaceOnUse">
+<stop offset="0" stop-color="#f3c46c" stop-opacity="0.5"/><stop offset="0.35" stop-color="#e29a45" stop-opacity="0.16"/><stop offset="1" stop-color="#e29a45" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="st-orb" cx="0.4" cy="0.35" r="0.7">
+<stop offset="0" stop-color="#fffaf0"/><stop offset="0.5" stop-color="#fbdf9a"/><stop offset="1" stop-color="#e29a45"/>
+</radialGradient>
+<filter id="st-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="26"/></filter>
+</defs>
+<ellipse cx="40" cy="220" rx="70" ry="150" fill="#1fb5c9" opacity="0.18" filter="url(#st-soft)" transform="rotate(-18 40 220)"/>
+<ellipse cx="352" cy="560" rx="64" ry="140" fill="#6a3fb0" opacity="0.24" filter="url(#st-soft)" transform="rotate(16 352 560)"/>
+<circle class="settle-halo" cx="195" cy="330" r="230" fill="url(#st-halo)"/>
+<g fill="#ffffff">
+<circle cx="24" cy="96" r="1" opacity="0.7"/><circle cx="58" cy="152" r="0.7" opacity="0.5"/><circle cx="88" cy="64" r="1.1" opacity="0.8"/>
+<circle cx="300" cy="90" r="0.8" opacity="0.6"/><circle cx="340" cy="140" r="1" opacity="0.7"/><circle cx="360" cy="70" r="0.8" opacity="0.55"/>
+<circle cx="46" cy="232" r="0.8" opacity="0.5"/><circle cx="352" cy="228" r="0.9" opacity="0.6"/><circle cx="20" cy="470" r="0.8" opacity="0.5"/>
+<circle cx="370" cy="470" r="1" opacity="0.6"/><circle cx="60" cy="600" r="0.8" opacity="0.45"/><circle cx="330" cy="610" r="0.8" opacity="0.45"/>
+<circle cx="150" cy="40" r="0.9" opacity="0.6"/><circle cx="250" cy="30" r="0.9" opacity="0.6"/><circle cx="120" cy="740" r="0.7" opacity="0.4"/>
+<circle cx="280" cy="760" r="0.8" opacity="0.45"/><circle cx="30" cy="700" r="0.7" opacity="0.4"/>
+</g>
+<g class="settle-spin"><g class="settle-flower">
+<g fill="none" stroke="#f3c46c" stroke-width="0.9" stroke-opacity="0.5">
+<circle cx="195" cy="330" r="46"/>
+<circle cx="195" cy="284" r="46"/><circle cx="234.8" cy="307" r="46"/><circle cx="234.8" cy="353" r="46"/>
+<circle cx="195" cy="376" r="46"/><circle cx="155.2" cy="353" r="46"/><circle cx="155.2" cy="307" r="46"/>
+</g>
+<g fill="none" stroke="#f3c46c" stroke-width="0.7">
+<circle cx="195" cy="330" r="92" stroke-opacity="0.3"/><circle cx="195" cy="330" r="138" stroke-opacity="0.18"/><circle cx="195" cy="330" r="184" stroke-opacity="0.1"/>
+</g>
+<circle cx="195" cy="330" r="12" fill="url(#st-orb)"/>
+<circle cx="195" cy="330" r="26" fill="#f8d58a" opacity="0.28"/>
+</g></g>
+</svg>
+        <div class="settle-text">
+          <h1 class="settle-title" id="settle-title" data-text="settle.title"></h1>
+          <p class="scene-label settle-breath" id="settle-breath"></p>
+          <div class="settle-dots" id="settle-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+        </div>
+        <div class="settle-skip"><button class="link-btn" id="settle-skip" type="button" data-text="settle.skip"></button></div>
+      </section>
+
+      <!-- Make it smaller -->
+      <section class="screen screen--smaller" id="screen-smaller" data-screen="smaller" aria-labelledby="smaller-title" hidden>
+        <p class="scene-label" data-text="smaller.label"></p>
+        <form class="smaller-form" id="smaller-form" autocomplete="off">
+          <h1 class="smaller-title" id="smaller-title" data-text="smaller.title"></h1>
+          <p class="smaller-of"><span data-text="smaller.piecePrefix"></span> <span class="smaller-pick" id="smaller-pick"></span></p>
+          <label class="visually-hidden" for="smaller-input" data-text="smaller.title"></label>
+          <input class="option-input" id="smaller-input" type="text" maxlength="80" enterkeyhint="done" data-placeholder="smaller.placeholder">
+          <ul class="chips smaller-chips" id="smaller-chips"></ul>
+
+          <div class="smaller-actions">
+            <button class="btn btn--gold btn--large" id="smaller-confirm" type="submit" data-text="smaller.confirm" disabled></button>
+            <button class="link-btn" id="smaller-back" type="button" data-text="smaller.back"></button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Release: an optional note, then a short closing line -->
+      <section class="screen" id="screen-release" data-screen="release" aria-labelledby="release-title" hidden>
+        <form class="release-form" id="release-form" autocomplete="off">
+          <p class="release-pick" id="release-pick"></p>
+          <h1 class="screen-title"><label id="release-title" for="release-note" data-text="release.prompt"></label></h1>
+          <input class="option-input release-input" id="release-note" type="text" maxlength="200"
+                 enterkeyhint="done" data-placeholder="release.placeholder">
+
+          <div class="stack-actions">
+            <button class="btn btn--gold btn--large" type="submit" data-text="release.letGo"></button>
+            <button class="link-btn" id="release-skip" type="button" data-text="release.skip"></button>
+          </div>
+        </form>
+
+        <div class="release-closing" id="release-closing" hidden>
+          <p class="release-line" id="release-line" tabindex="-1"></p>
+        </div>
+      </section>
+
+      <!-- Saved: every option written, sorted into categories -->
+      <section class="screen" id="screen-saved" data-screen="saved" aria-labelledby="saved-title" hidden>
+        <h1 class="screen-title" id="saved-title" data-text="saved.title"></h1>
+        <p class="screen-subtitle" data-text="saved.subtitle"></p>
+
+        <form class="option-form" id="saved-form" autocomplete="off">
+          <input class="option-input" id="saved-input" type="text" maxlength="80"
+                 enterkeyhint="enter" data-placeholder="saved.placeholder" data-label="saved.placeholder">
+          <button class="option-add" type="submit" data-label="saved.add">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+        </form>
+        <div class="tags" id="saved-target" role="group" data-label="saved.addTo"></div>
+
+        <div id="saved-groups"></div>
+
+        <button class="btn btn--ghost new-category" id="new-category" type="button" data-text="saved.newCategory"></button>
+      </section>
+
+      <!-- River log -->
+      <section class="screen" id="screen-river" data-screen="river" aria-labelledby="river-title" hidden>
+        <h1 class="screen-title" id="river-title" data-text="river.title"></h1>
+
+        <form class="option-form" id="river-form" autocomplete="off">
+          <input class="option-input" id="river-input" type="text" maxlength="200"
+                 enterkeyhint="done" data-placeholder="river.placeholder" data-label="river.placeholder">
+          <button class="option-add" id="river-add" type="submit" data-label="river.add">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+        </form>
+
+        <div class="tags" id="river-tags" role="group" data-label="river.tagLabel"></div>
+        <p class="river-linked" id="river-linked" hidden></p>
+
+        <p class="empty" id="river-empty" data-text="river.empty"></p>
+        <ol class="timeline" id="river-list"></ol>
+      </section>
+
+      <!-- Look back -->
+      <section class="screen" id="screen-lookback" data-screen="lookback" aria-labelledby="lookback-title" hidden>
+        <h1 class="screen-title" id="lookback-title" data-text="lookBack.title"></h1>
+        <p class="screen-subtitle" data-text="lookBack.subtitle"></p>
+
+        <div class="lookback-filters" id="lookback-filters">
+          <input class="option-input search-input" id="lookback-search" type="search"
+                 enterkeyhint="search" data-placeholder="lookBack.search" data-label="lookBack.search">
+          <div class="tags" id="lookback-tags" role="group" data-label="lookBack.filterLabel"></div>
+        </div>
+
+        <div class="strip" id="lookback-days"></div>
+        <p class="empty" id="lookback-empty"></p>
+      </section>
+
+      <!-- About -->
+      <section class="screen screen--about" id="screen-about" data-screen="about" aria-labelledby="about-title" hidden>
+        <h1 class="visually-hidden" id="about-title" data-text="about.title"></h1>
+        <aside class="credit-card" id="credit-card" aria-labelledby="credit-name">
+          <div class="credit-content">
+            <p class="credit-label" id="credit-label"></p>
+            <p class="credit-name" id="credit-name"></p>
+            <p class="credit-text" id="credit-text"></p>
+            <a class="btn btn--gold credit-button" id="credit-button" target="_blank" rel="noopener"></a>
+          </div>
+        </aside>
+
+        <div class="about-lines" id="about-lines"></div>
+        <div class="about-body" id="about-body"></div>
+
+        <section class="about-data" id="install-section" aria-labelledby="about-install-title">
+          <h2 class="group-title" id="about-install-title" data-text="about.installTitle"></h2>
+          <div class="data-action">
+            <button class="btn btn--gold" id="install-app" type="button" data-text="about.installButton"></button>
+            <p class="data-hint" data-text="about.installHint"></p>
+          </div>
+        </section>
+
+        <section class="about-data about-share" aria-labelledby="about-share-title">
+          <h2 class="group-title" id="about-share-title" data-text="about.shareTitle"></h2>
+          <p class="data-hint" data-text="about.shareHint"></p>
+          <button class="btn btn--ghost" id="share-app" type="button" data-text="about.shareButton"></button>
+          <p class="data-status" id="share-status" role="status"></p>
+        </section>
+
+        <section class="about-data" aria-labelledby="about-theme-title">
+          <h2 class="group-title" id="about-theme-title" data-text="about.themeTitle"></h2>
+          <div class="tags" id="theme-choice" role="group" data-label="about.themeTitle"></div>
+        </section>
+
+        <div class="switch-row">
+          <span id="settle-switch-label" data-text="about.settleSwitch"></span>
+          <button class="switch" id="settle-switch" type="button" role="switch" aria-labelledby="settle-switch-label" aria-checked="true"><span></span></button>
+        </div>
+
+        <section class="about-data" aria-labelledby="about-data-title">
+          <h2 class="group-title" id="about-data-title" data-text="about.dataTitle"></h2>
+          <p class="data-hint" data-text="about.backupHint"></p>
+          <div class="data-row">
+            <button class="btn btn--ghost" id="export-data" type="button" data-text="about.export"></button>
+            <button class="btn btn--ghost" id="import-data" type="button" data-text="about.import"></button>
+            <input type="file" id="import-file" accept="application/json,.json" hidden>
+          </div>
+          <div class="data-status" id="data-status" role="status"></div>
+          <div class="data-action">
+            <button class="btn btn--ghost" id="clear-history" type="button" data-text="about.clearHistory"></button>
+            <p class="data-hint" data-text="about.clearHistoryHint"></p>
+          </div>
+          <div class="data-action">
+            <button class="btn btn--danger" id="reset-app" type="button" data-text="about.reset"></button>
+            <p class="data-hint" data-text="about.resetHint"></p>
+          </div>
+        </section>
+
+        <section class="about-data about-privacy" id="about-privacy" aria-labelledby="about-privacy-title" hidden>
+          <h2 class="group-title" id="about-privacy-title"></h2>
+          <p class="data-hint" id="about-privacy-text"></p>
+        </section>
+
+      </section>
+    </main>
+
+    <button class="scroll-hint" id="scroll-hint" type="button" hidden>
+      <span data-text="about.scrollHint"></span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+
+    <nav class="nav" aria-label="Main">
+      <a class="nav-item" href="#home" data-nav="home">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 5.5l2 6.5-2 6.5-2-6.5z"/></svg>
+        <span data-text="nav.home"></span>
+      </a>
+      <a class="nav-item" href="#saved" data-nav="saved">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>
+        <span data-text="nav.saved"></span>
+      </a>
+      <a class="nav-item" href="#river" data-nav="river">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9c3-2.5 6 2.5 9 0s6 2.5 9 0M3 15c3-2.5 6 2.5 9 0s6 2.5 9 0"/></svg>
+        <span data-text="nav.river"></span>
+      </a>
+      <a class="nav-item" href="#lookback" data-nav="lookback">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4.5v4h4"/><path d="M12 8v4.5l3 2"/></svg>
+        <span data-text="nav.lookBack"></span>
+      </a>
+      <a class="nav-item" href="#about" data-nav="about">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.6v.1"/></svg>
+        <span data-text="nav.about"></span>
+      </a>
+    </nav>
+  </div>
+
+  <!-- Bump ?v= on every release so browsers never mix old and new files. -->
+  <!-- One sheet, filled in by app.js, for moving, renaming and deleting. -->
+  <dialog class="sheet" id="sheet" aria-labelledby="sheet-title">
+    <div class="sheet-inner">
+      <h2 class="sheet-title" id="sheet-title"></h2>
+      <div class="sheet-body" id="sheet-body"></div>
+      <button class="link-btn" id="sheet-close" type="button" data-text="saved.close"></button>
+    </div>
+  </dialog>
+
+  <script src="strings.js?v=93"></script>
+  <script src="storage.js?v=93"></script>
+  <script src="sky.js?v=93"></script>
+  <script src="app.js?v=93"></script>
+</body>
+</html>

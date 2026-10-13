@@ -1,0 +1,321 @@
+// All interface text lives here, so another language can be added later.
+// Where a key holds a list, the app shows one line at random and never
+// the same one twice in a row.
+
+// The Substack address for "Fragments of Coherence", linked from About.
+const FRAGMENTS_OF_COHERENCE_URL = 'https://fragmentsofcoherence.substack.com';
+
+// Your GoatCounter site code (the part before .goatcounter.com).
+// Set it to an empty string to switch counting off.
+const ANALYTICS_CODE = '';
+
+const STRINGS = {
+  appName: 'Excitement Compass',
+
+  nav: {
+    home: 'Home',
+    saved: 'Saved',
+    river: 'River',
+    lookBack: 'Look back',
+    about: 'About',
+  },
+
+  home: {
+    findPull: 'Find my pull',
+    addRiver: 'Add to the river log',
+    nextQuote: 'Show another line',
+    tapHint: 'Tap for another',
+    activeLabel: 'Your pull',
+    doneLetGo: 'Done, let go',
+    idleLines: [
+      'What feels most alive right now?',
+      "You don't need the whole map. Just the next step.",
+      'Small steps count. Follow the pull you can follow.',
+      'Excitement is a direction, not a destination.',
+      'Infinite timelines already exist. Feel which one pulls you.',
+      'Your inner compass already knows the way. Feel for it.',
+      'Somewhere in the infinite, the best timeline for you is waiting.',
+      'Every timeline exists. One of them feels like home.',
+      "Your compass doesn't need a reason. It only needs your attention.",
+      "Follow the pull, even when you can't see where it leads.",
+      'Pause. Breathe. Notice where you lean.',
+      "Not what's expected. What's calling you?",
+      'The best path rarely feels loud. It feels alive.',
+      'What would feel most like you right now?',
+      'The next frame is yours to choose.',
+      'You are already connected. Just listen.',
+      'Let your excitement point the way.',
+      'Trust the brightest pull you can act on.',
+      'A small step is still a step. A walk counts.',
+      "It doesn't have to be big. Even a coffee can be your next frame.",
+      'Small and true beats big and forced.',
+      "You don't need a grand plan. Making coffee is a fine place to start.",
+      'The smallest pull is still a pull.',
+      'Going for a walk can change the timeline.',
+      'Nothing is too small for your compass.',
+      'Small steps, followed honestly, add up to a whole path.',
+      "Begin with what's in front of you.",
+      'If nothing excites you, choose what feels lightest.',
+      'Step back. See the whole film. Then choose the next frame.',
+      'Every choice opens a different path. Which one is calling you?',
+      'What would you do if you trusted the bigger picture?',
+    ],
+    questions: [
+      'What seeks to emerge through you?',
+      'What would you do if you trusted the pull?',
+      'Where are you saying yes out of fear?',
+      'Where are you saying no out of fear?',
+      'What are you doing today only because you should?',
+      'What lights you up that you keep putting off?',
+      'If this were the best timeline, what would you do next?',
+      'What would feel lighter right now?',
+      'Where does your body lean?',
+      'What do you want, and what do you need?',
+      'What would you choose if nobody were watching?',
+      'What is the smallest true thing you could do today?',
+      "What would you choose if you couldn't fail?",
+      'What are you curious about right now?',
+      'When did you last lose track of time?',
+      'Which of these options feels like home?',
+    ],
+    questionLabel: 'A question',
+  },
+
+  choose: {
+    title: 'What could you do next?',
+    placeholder: 'Type an option',
+    placeholderExamples: ['Make a coffee', 'Go for a walk', 'Call a friend', 'Water the plants', 'Write one line'],
+    add: 'Add',
+    remove: 'Remove',
+    saved: 'Saved',
+    all: 'all',
+    limit: 'Seven is enough to choose from.',
+    findPull: 'Find my pull',
+    comparePrompt: 'Which pulls you more?',
+    aboutTheSame: 'About the same',
+    back: 'Back',
+  },
+
+  act: {
+    onIt: "I'm on it",
+    notPossible: 'Not possible right now',
+    makeSmaller: 'Make it smaller',
+    strongest: 'Your strongest pull',
+    nextLines: [
+      "That's fine. Here's the next strongest pull you can follow.",
+      "Not now isn't never. Here's what you can do now.",
+      'The path bends. Follow the next pull.',
+      'Not every door opens today. This one does.',
+    ],
+  },
+
+  coin: {
+    link: 'Not sure? Flip a coin',
+    title: 'Let the coin decide',
+    heads: 'Heads',
+    tails: 'Tails',
+    flipping: 'Flipping…',
+    landed: 'The coin says',
+    notice: 'Notice how that feels. Relief? Or a small "oh, I wanted the other one"?',
+    keep: 'Go with it',
+    other: 'I wanted the other one',
+    back: 'Back',
+  },
+
+  settle: {
+    title: 'Arrive. Then choose.',
+    breatheIn: 'Breathe in',
+    breatheOut: 'Breathe out',
+    skip: 'Skip',
+  },
+
+  smaller: {
+    label: 'Make it smaller',
+    title: "What's the smallest piece you could do right now?",
+    piecePrefix: 'A smaller piece of',
+    placeholder: 'The very first move',
+    examples: ['Write one sentence', 'Five minutes only', 'Just get ready'],
+    confirm: 'Make this my pull',
+    back: 'Back',
+  },
+
+  outcome: {
+    question: 'Where is this now?',
+    complete: 'Complete',
+    completeHint: 'I did it, or did what I could.',
+    pulling: 'Still pulling',
+    pullingHint: "It's not finished with me.",
+    faded: 'It faded',
+    fadedHint: "The pull has gone, and that's fine.",
+    back: 'Back',
+  },
+
+  release: {
+    prompt: 'What happened?',
+    placeholder: 'One line, if you like',
+    letGo: 'Let go',
+    skip: 'Skip',
+    closingLines: [
+      'Released.',
+      'Done. Let it land wherever it lands.',
+      "You showed up fully. The rest isn't yours to carry.",
+      'Let it go. Notice what comes back.',
+      "The outcome isn't the measure. The doing was.",
+      'Open hands.',
+      'One more fragment falls into place.',
+      "You don't need to see the whole picture. You're part of it.",
+    ],
+  },
+
+  saved: {
+    title: 'Saved',
+    subtitle: 'Everything you write is kept here, ready for next time.',
+    placeholder: 'Add an option',
+    add: 'Add to saved',
+    addTo: 'Save to',
+    unsorted: 'Unsorted',
+    emptyGroup: 'Nothing here yet.',
+    newCategory: 'New category',
+    categoryName: 'Category name',
+    create: 'Create',
+    save: 'Save',
+    rename: 'Rename',
+    moveTo: 'Move to',
+    delete: 'Delete',
+    deleteCategory: 'Delete category',
+    confirmDeleteCategory: (name) => `Delete "${name}"? Its options move to Unsorted.`,
+    categoryOptions: (name) => `Options for ${name}`,
+    close: 'Close',
+    defaultCategories: ['Daily goals', 'Long-term goals'],
+  },
+
+  edit: {
+    riverTitle: 'River entry',
+    text: 'Text',
+    note: 'What happened?',
+    notePlaceholder: 'One line, if you like',
+    save: 'Save',
+    delete: 'Delete',
+    confirmDeleteRiver: "Delete this entry? This can't be undone.",
+    confirmDeletePick: "Delete this pick and its note from your history? This can't be undone.",
+  },
+
+  river: {
+    title: 'River',
+    placeholder: 'What did you notice?',
+    add: 'Add to the river',
+    tagLabel: 'Tag',
+    linked: 'While following',
+    empty: 'Small coincidences are where the pieces start to connect. Note them here.',
+    tags: {
+      sign: 'sign',
+      synchronicity: 'synchronicity',
+      feeling: 'feeling',
+      idea: 'idea',
+    },
+  },
+
+  lookBack: {
+    title: 'Look back',
+    subtitle: 'Step back and see the whole film.',
+    empty: "Your path will appear here as you walk it. Later, you'll see the whole film.",
+    noMatch: 'Nothing here matches.',
+    search: 'Search',
+    filterLabel: 'Filter by tag',
+    all: 'all',
+    today: 'Today',
+    yesterday: 'Yesterday',
+    notNow: 'Not now:',
+    following: 'Following now',
+    now: 'Now',
+    faded: 'faded',
+    ghostLabel: 'Already there',
+    ghostText: 'Countless frames, not yet seen',
+  },
+
+  about: {
+    title: 'About',
+    lines: [
+      'Do what lights you up.',
+      'Give it everything.',
+      'Let go of how it turns out.',
+    ],
+    body: [
+      "Excitement is information. The pull you feel toward one thing over another is your own inner compass. You don't need to know where it leads. You only need to follow the strongest pull you can act on right now, one step at a time.",
+      "When you can't do the most exciting thing, do the next one you can. When something is done, let it go. What comes back, like a coincidence, a new idea or an open door, often shows you the next step.",
+      "People across many traditions have pointed to this same simple practice: act fully, and don't cling to the results. This app is a small tool to help you remember it.",
+      'Everything you write stays on this device. Nothing is sent anywhere.',
+    ],
+    scrollHint: 'Scroll for more',
+    shareTitle: 'Share',
+    shareHint: 'Know someone who might like it? Send them the link.',
+    shareButton: 'Share Excitement Compass',
+    shareText: 'Excitement Compass: a free, private compass for following your excitement.',
+    shareCopied: 'Link copied. Paste it into a message.',
+    shareFailed: 'Copy this link to share it:',
+    creditLabel: 'A free gift from',
+    creditText: 'A publication about consciousness, meaning and the bigger picture.',
+    creditButton: 'Read Fragments of Coherence',
+    creditBefore: 'A free gift from ',
+    creditName: 'Fragments of Coherence',
+    creditAfter: ', a publication about consciousness, meaning and the bigger picture.',
+    creditUrl: FRAGMENTS_OF_COHERENCE_URL,
+    settleSwitch: 'Settle before choosing',
+    installTitle: 'Install',
+    installButton: 'Install the app',
+    installHint: 'Add it to your home screen so it opens like an app, even without a connection.',
+    installStepsTitle: 'Add to Home Screen',
+    installIos: [
+      'Tap the Share button in your browser.',
+      'Scroll down and tap Add to Home Screen.',
+      'Tap Add.',
+    ],
+    installOther: [
+      "Open your browser's menu.",
+      'Tap Install app or Add to Home screen.',
+    ],
+    themeTitle: 'Theme',
+    themes: { system: 'Match phone', dark: 'Dark', light: 'Light' },
+    dataTitle: 'Your data',
+    backupHint: 'Everything lives in this browser only. Clearing your browser data erases it, so download a backup now and then.',
+    export: 'Download backup',
+    import: 'Restore backup',
+    importDone: (n) => (n === 0
+      ? 'Nothing new to add. Everything in that backup is already here.'
+      : `Restored ${n} ${n === 1 ? 'item' : 'items'}.`),
+    downloadTitle: 'Download your backup',
+    downloadDone: 'Backup downloaded.',
+    downloadSteps: [
+      'Tap Download backup below. On an iPhone a preview may open: tap the share button, then Save to Files. On Android or a computer, the file goes to your Downloads.',
+      'Keep it somewhere safe, such as iCloud Drive or Google Drive, or email it to yourself.',
+      'It holds everything you have written here, so only share it with people you trust.',
+    ],
+    restoreTitle: 'To restore a backup',
+    restoreSteps: [
+      'Tap Choose backup file below.',
+      'Find the file you saved earlier. Its name looks like excitement-compass-2026-01-01.json.',
+      'Select it. Anything new in the backup is added; nothing you have now is removed or replaced.',
+    ],
+    chooseFile: 'Choose backup file',
+    importFailed: "That file isn't an Excitement Compass backup.",
+    clearHistory: 'Clear history',
+    clearHistoryHint: 'Removes your picks, notes and river entries. Your saved options stay.',
+    confirmClearHistory: "Clear all picks, notes and river entries? Your saved options stay. This can't be undone.",
+    reset: 'Reset the app',
+    resetHint: 'Removes everything, including saved options and categories, and starts fresh.',
+    confirmReset: "Remove everything and start fresh? This can't be undone.",
+  },
+
+  storage: {
+    unavailable: "This browser isn't letting the app save. You can still use it, but nothing will be kept after you close it.",
+  },
+};
+
+// With the counter switched on, About gets its own short Privacy area that
+// says so plainly, and the main text no longer claims nothing is sent.
+if (ANALYTICS_CODE) {
+  STRINGS.about.body[STRINGS.about.body.length - 1] = 'Everything you write stays on this device.';
+  STRINGS.about.privacyTitle = 'Privacy';
+  STRINGS.about.privacy =
+    'The first time the app is opened on a device, it sends one anonymous signal, so we can see roughly how many people it reaches. No account, no cookies, and never anything you write.';
+}
