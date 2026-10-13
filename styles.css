@@ -3009,13 +3009,13 @@ h1:focus {
 .home-line .word {
   display: inline-block;
   /* Only opacity and a small lift: both run on the graphics chip, so it stays smooth. */
-  animation: word-in 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
-  animation-delay: calc(var(--i, 0) * 90ms);
+  animation: word-in 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
+  animation-delay: calc(var(--i, 0) * 45ms);
   will-change: opacity, transform;
 }
 
 @keyframes word-in {
-  from { opacity: 0; transform: translate3d(0, 8px, 0); }
+  from { opacity: 0; transform: translate3d(0, 6px, 0); }
   to { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 
@@ -3024,7 +3024,7 @@ h1:focus {
   font-size: 13px;
   letter-spacing: 0.04em;
   color: var(--text-faint);
-  animation: hint-in 1.2s 1.6s var(--ease) backwards;
+  animation: hint-in 0.8s 0.9s var(--ease) backwards;
 }
 
 @keyframes hint-in {
