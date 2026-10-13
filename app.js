@@ -28,11 +28,28 @@
 
   function applyDesktop() {
     const fit = wideSceneQuery.matches ? 'xMidYMid meet' : 'xMidYMid slice';
-    ['.home-scene-svg', '#settle-svg'].forEach((sel) => {
-      const svg = $(sel);
-      if (svg) svg.setAttribute('preserveAspectRatio', fit);
+    document.querySelectorAll('.home-scene-svg, #settle-svg').forEach((svg) => {
+      svg.setAttribute('preserveAspectRatio', fit);
     });
+    placeStarOrigin();
   }
+  // The star breathes around its own centre. Work out where that is on screen
+  // (the picture is scaled to fit the window) so the pulse grows from the star.
+  function placeStarOrigin() {
+    const svg = $('.home-star');
+    if (!svg) return;
+    const w = svg.clientWidth;
+    const h = svg.clientHeight;
+    if (!w || !h) return;
+    const s = wideSceneQuery.matches ? Math.min(w / 390, h / 844) : Math.max(w / 390, h / 844);
+    const x = (w - 390 * s) / 2 + 195 * s;
+    const y = (h - 844 * s) / 2 + 112 * s;
+    svg.style.setProperty('--star-x', `${x.toFixed(1)}px`);
+    svg.style.setProperty('--star-y', `${y.toFixed(1)}px`);
+  }
+  window.addEventListener('resize', placeStarOrigin);
+  window.addEventListener('load', placeStarOrigin);
+
   desktopQuery.addEventListener('change', () => { applyDesktop(); settleViewport(); });
   wideSceneQuery.addEventListener('change', applyDesktop);
   applyDesktop();
