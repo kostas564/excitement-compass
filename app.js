@@ -361,32 +361,26 @@
     if (!/\.github\.io$/.test(location.hostname)) return;
     if (navigator.doNotTrack === '1' || window.doNotTrack === '1') return;
     if (navigator.onLine === false) return;
-
-    // Two plain page views: /first-open once per device, and /opened once each
-    // time the app is opened (once per browser session, not per screen).
-    // The remembered flags are per counter, so pointing the app at a new
+    // The remembered flag is per counter, so pointing the app at a new
     // counter counts each device again once.
-    const send = (path, title, store, flag) => {
-      try {
-        if (store.getItem(flag)) return;
-      } catch (e) {
-        return; // can't remember it, so don't risk counting every page load
-      }
-      const params = new URLSearchParams({
-        p: path,
-        t: title,
-        r: document.referrer || '',
-        rnd: String(Math.random()).slice(2, 8),
-      });
-      const beacon = new Image();
-      beacon.onload = () => {
-        try { store.setItem(flag, '1'); } catch (e) { /* ignore */ }
-      };
-      beacon.src = `https://${ANALYTICS_CODE}.goatcounter.com/count?${params}`;
+    const flag = `excitement-compass-counted-${ANALYTICS_CODE}`;
+    try {
+      if (localStorage.getItem(flag)) return;
+    } catch (e) {
+      return; // can't remember it, so don't risk counting every visit
+    }
+    // A plain page view at /first-open.
+    const params = new URLSearchParams({
+      p: '/first-open',
+      t: 'First open on a device',
+      r: document.referrer || '',
+      rnd: String(Math.random()).slice(2, 8),
+    });
+    const beacon = new Image();
+    beacon.onload = () => {
+      try { localStorage.setItem(flag, '1'); } catch (e) { /* ignore */ }
     };
-
-    send('/first-open', 'First open on a device', localStorage, `excitement-compass-counted-${ANALYTICS_CODE}`);
-    send('/opened', 'App opened', sessionStorage, `excitement-compass-opened-${ANALYTICS_CODE}`);
+    beacon.src = `https://${ANALYTICS_CODE}.goatcounter.com/count?${params}`;
   }
 
   // ---- Settle first -----------------------------------------------------
