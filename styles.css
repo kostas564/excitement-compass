@@ -2663,7 +2663,7 @@ h1:focus {
 .credit-card {
   container-type: inline-size;
   position: relative;
-  margin-top: 40px;
+  margin-top: 8px;
   min-height: 380px;
   display: flex;
   border-radius: 22px;
@@ -2841,4 +2841,8 @@ h1:focus {
   font-family: var(--font-label);
   font-weight: 900;
   font-variation-settings: "opsz" 32;
+}
+
+.credit-card + .about-lines {
+  margin-top: 36px;
 }
