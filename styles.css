@@ -3113,12 +3113,12 @@ h1:focus {
   50% { transform: scale(1.4); opacity: 1; }
 }
 
-/* ---- Home quotes: back to Cormorant Garamond, the app's original quote font ---- */
+/* ---- Home quotes: Cormorant Garamond at its original size (34px on a phone, 44px on desktop) ---- */
 .home-line {
   font-family: var(--font-home-quote);
   font-weight: 500;
-  font-size: clamp(32px, calc(var(--app-height, 100dvh) * 0.056), 46px);
-  line-height: 1.12;
+  font-size: clamp(26px, calc(var(--app-height, 100dvh) * 0.042), 34px);
+  line-height: 1.15;
   letter-spacing: 0;
   max-width: 16ch;
 }
@@ -3129,7 +3129,7 @@ h1:focus {
 
 @media (min-width: 700px) {
   .home-line {
-    font-size: clamp(36px, calc(var(--app-height, 100dvh) * 0.074), 58px);
+    font-size: clamp(34px, calc(var(--app-height, 100dvh) * 0.055), 44px);
     max-width: 18ch;
   }
 }
