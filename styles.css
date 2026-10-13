@@ -3037,7 +3037,7 @@ h1:focus {
   }
 }
 
-/* ---- About: the three big lines in Instrument Serif, the paragraphs in Inter Light Italic ---- */
+/* ---- About: the three big lines in Instrument Serif, the paragraphs in standard Inter ---- */
 .about-lines p {
   font-family: var(--font-quote);
   font-style: normal;
@@ -3049,11 +3049,12 @@ h1:focus {
 
 .about-body {
   font-family: var(--font-sans);
-  font-style: italic;
-  font-weight: 300;
+  font-style: normal;
+  font-weight: 400;
   font-size: 17px;
   line-height: 1.55;
   letter-spacing: normal;
+  color: var(--text-dim);
 }
 
 @media (min-width: 700px) {
