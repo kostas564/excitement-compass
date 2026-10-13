@@ -2753,20 +2753,3 @@ h1:focus {
     gap: 6px;
   }
 }
-
-.counter-note {
-  position: fixed;
-  left: 50%;
-  top: 80px;
-  z-index: 20;
-  width: min(92vw, 420px);
-  margin: 0;
-  padding: 14px 18px;
-  border-radius: 16px;
-  border: 1px solid var(--cyan);
-  background: rgba(8, 12, 44, 0.95);
-  color: #f6ecd8;
-  font-size: 15px;
-  text-align: center;
-  transform: translateX(-50%);
-}

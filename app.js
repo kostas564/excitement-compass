@@ -348,58 +348,6 @@
     showEntry();
   }
 
-  // ---- Anonymous count of devices ------------------------------------------
-  //
-  // Off unless ANALYTICS_CODE is set in strings.js. The first time the app
-  // opens on a device it sends one tiny request to GoatCounter and remembers
-  // that it did, so each device is counted once and never again. There is no
-  // ID, no cookie and nothing the person wrote. It is skipped on a developer's
-  // machine and when the browser asks not to be tracked.
-
-  function countVisit() {
-    if (!ANALYTICS_CODE) return;
-    const debug = /[?&]gc-debug\b/.test(location.search);
-    if (!debug) {
-      if (!/\.github\.io$/.test(location.hostname)) return;
-      if (navigator.doNotTrack === '1' || window.doNotTrack === '1') return;
-      if (navigator.onLine === false) return;
-    }
-    // The remembered flag is per counter, so pointing the app at a new
-    // counter counts each device again once.
-    const flag = `excitement-compass-counted-${ANALYTICS_CODE}`;
-    try {
-      if (!debug && localStorage.getItem(flag)) return;
-    } catch (e) {
-      if (!debug) return; // can't remember it, so don't risk counting every visit
-    }
-    // A plain page view at /first-open (or /gc-debug when testing).
-    const params = new URLSearchParams({
-      p: debug ? '/gc-debug' : '/first-open',
-      t: debug ? 'Counter test' : 'First open on a device',
-      r: document.referrer || '',
-      rnd: String(Math.random()).slice(2, 8),
-    });
-    const beacon = new Image();
-    beacon.onload = () => {
-      if (debug) {
-        showCounterNote('The counter answered. Look for /gc-debug in your GoatCounter dashboard.');
-        return;
-      }
-      try { localStorage.setItem(flag, '1'); } catch (e) { /* ignore */ }
-    };
-    beacon.onerror = () => {
-      if (debug) showCounterNote('The counter could not be reached. Your browser or an extension is blocking it.');
-    };
-    beacon.src = `https://${ANALYTICS_CODE}.goatcounter.com/count?${params}`;
-  }
-
-  // Only used by the ?gc-debug test link.
-  function showCounterNote(text) {
-    const note = el('p', 'counter-note', text);
-    note.setAttribute('role', 'status');
-    document.body.append(note);
-  }
-
   // ---- Settle first -----------------------------------------------------
   //
   // One slow breath (2 seconds in, 3 out), then the comparison begins.
@@ -1679,11 +1627,6 @@
     });
 
     const a = STRINGS.about;
-    if (a.privacy) {
-      $('#about-privacy-title').textContent = a.privacyTitle;
-      $('#about-privacy-text').textContent = a.privacy;
-      $('#about-privacy').hidden = false;
-    }
     $('#credit-label').textContent = a.creditLabel;
     $('#credit-name').textContent = a.creditName;
     $('#credit-text').textContent = a.creditText;
@@ -1696,7 +1639,6 @@
 
   function start() {
     fillText();
-    countVisit();
     ensureLibrary();
     applyTheme(data.settings.theme);
     renderThemeChoice();
