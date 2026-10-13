@@ -1597,6 +1597,29 @@
     }
   }
 
+  // ---- Share the app ------------------------------------------------------
+  //
+  // Uses the phone's own share sheet where there is one; otherwise copies the
+  // link. Nothing is sent to anyone but the person chosen.
+
+  async function shareApp() {
+    const status = $('#share-status');
+    const url = location.origin + location.pathname;
+    status.textContent = '';
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: STRINGS.appName, text: STRINGS.about.shareText, url });
+      } catch (e) { /* closed without sharing */ }
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      status.textContent = STRINGS.about.shareCopied;
+    } catch (e) {
+      status.textContent = `${STRINGS.about.shareFailed} ${url}`;
+    }
+  }
+
   // ---- About ------------------------------------------------------------
 
   function renderAbout() {
@@ -1778,6 +1801,7 @@
       applyTheme(data.settings.theme);
       renderThemeChoice();
     });
+    $('#share-app').addEventListener('click', shareApp);
     renderSettleSwitch();
     $('#settle-switch').addEventListener('click', () => {
       data.settings.settle = data.settings.settle === false;

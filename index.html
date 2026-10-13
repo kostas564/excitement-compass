@@ -47,7 +47,7 @@
       document.documentElement.style.setProperty('--app-height', h + 'px');
     })();
   </script>
-  <link rel="stylesheet" href="styles.css?v=59">
+  <link rel="stylesheet" href="styles.css?v=60">
 </head>
 <body>
   <div class="sky" id="sky" aria-hidden="true">
@@ -487,6 +487,13 @@
           <a class="btn btn--gold credit-button" id="credit-button" target="_blank" rel="noopener"></a>
         </aside>
 
+        <section class="about-data about-share" aria-labelledby="about-share-title">
+          <h2 class="group-title" id="about-share-title" data-text="about.shareTitle"></h2>
+          <p class="data-hint" data-text="about.shareHint"></p>
+          <button class="btn btn--ghost" id="share-app" type="button" data-text="about.shareButton"></button>
+          <p class="data-status" id="share-status" role="status"></p>
+        </section>
+
         <section class="about-data" id="install-section" aria-labelledby="about-install-title">
           <h2 class="group-title" id="about-install-title" data-text="about.installTitle"></h2>
           <div class="data-action">
@@ -566,9 +573,9 @@
     </div>
   </dialog>
 
-  <script src="strings.js?v=59"></script>
-  <script src="storage.js?v=59"></script>
-  <script src="sky.js?v=59"></script>
-  <script src="app.js?v=59"></script>
+  <script src="strings.js?v=60"></script>
+  <script src="storage.js?v=60"></script>
+  <script src="sky.js?v=60"></script>
+  <script src="app.js?v=60"></script>
 </body>
 </html>
