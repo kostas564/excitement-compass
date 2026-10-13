@@ -2516,10 +2516,11 @@ h1:focus {
   .nav {
     top: 18px;
     bottom: auto;
-    width: auto;
-    max-width: none;
+    /* left: 50% would otherwise squeeze the bar to half the window's width. */
+    width: max-content;
+    max-width: calc(100vw - 24px);
     padding: 4px 12px;
-    grid-template-columns: repeat(5, auto);
+    grid-template-columns: repeat(5, max-content);
     gap: 4px;
     border: 1px solid var(--glass-edge);
     border-radius: 999px;
@@ -2531,6 +2532,7 @@ h1:focus {
     min-height: 48px;
     padding: 0 18px;
     font-size: 15px;
+    white-space: nowrap;
   }
 
   .nav-item:hover {
@@ -2741,5 +2743,13 @@ h1:focus {
 @media (min-width: 900px) {
   .scroll-hint {
     top: calc(var(--app-height) - 76px);
+  }
+}
+
+/* Windows just over 900px wide: tighter spacing so the whole bar always fits. */
+@media (min-width: 900px) and (max-width: 1099px) {
+  .nav-item {
+    padding: 0 12px;
+    gap: 6px;
   }
 }
