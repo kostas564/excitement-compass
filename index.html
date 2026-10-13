@@ -44,12 +44,13 @@
       // Only an iPhone or iPad home-screen app opens with a short viewport.
       // On Windows and Android the screen is taller than the app window, so
       // the window's own height is the right one.
-      var iosApp = navigator.standalone === true;
+      // A Mac's "Add to Dock" app also reports standalone, but has no touch screen.
+      var iosApp = navigator.standalone === true && navigator.maxTouchPoints > 0;
       var h = Math.max(window.innerHeight, iosApp ? screen.height : 0);
       document.documentElement.style.setProperty('--app-height', h + 'px');
     })();
   </script>
-  <link rel="stylesheet" href="styles.css?v=70">
+  <link rel="stylesheet" href="styles.css?v=71">
 </head>
 <body>
   <div class="sky" id="sky" aria-hidden="true">
@@ -580,9 +581,9 @@
     </div>
   </dialog>
 
-  <script src="strings.js?v=70"></script>
-  <script src="storage.js?v=70"></script>
-  <script src="sky.js?v=70"></script>
-  <script src="app.js?v=70"></script>
+  <script src="strings.js?v=71"></script>
+  <script src="storage.js?v=71"></script>
+  <script src="sky.js?v=71"></script>
+  <script src="app.js?v=71"></script>
 </body>
 </html>

@@ -17,7 +17,8 @@
   // forces a re-layout. Size the app from the real screen height instead,
   // and re-check a few times right after opening.
   // Only an iPhone or iPad home-screen app needs the real screen height.
-  const iosApp = window.navigator.standalone === true;
+  // (A Mac's "Add to Dock" app also reports standalone, but has no touch screen.)
+  const iosApp = window.navigator.standalone === true && window.navigator.maxTouchPoints > 0;
 
   // Above 900px wide the app uses its desktop layout (see styles.css): the
   // bar moves to the top and the scenes fit the window's height.
