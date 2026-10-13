@@ -9,185 +9,84 @@
 @font-face { font-family: 'Cormorant Garamond'; font-weight: 600; src: url('fonts/cormorant-garamond-latin-600-normal.woff2') format('woff2'); }
 @font-face { font-family: 'Manrope'; font-weight: 600; src: url('fonts/manrope-latin-600-normal.woff2') format('woff2'); }
 html, body { margin: 0; background: #050823; }
-.card {
-  position: relative; width: 1200px; height: 630px; overflow: hidden;
-  background: linear-gradient(180deg, #050823 0%, #0b1240 45%, #141248 80%, #0a0d2c 100%);
-  color: #f6ecd8; font-family: 'Manrope', sans-serif;
-}
-.glow { position: absolute; border-radius: 50%; filter: blur(80px); }
-.glow--teal { left: -120px; top: 60px; width: 520px; height: 520px; background: #1fb5c9; opacity: 0.2; }
-.glow--violet { right: -80px; top: 20px; width: 520px; height: 520px; background: #6a3fb0; opacity: 0.28; }
-.glow--gold { left: 330px; top: 140px; width: 460px; height: 360px; background: #f3c46c; opacity: 0.1; }
-.stars { position: absolute; inset: 0; }
-.scene {
-  position: absolute; left: 700px; top: 0; width: 420px; height: 630px;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 22%, #000 78%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 22%, #000 78%, transparent);
-}
-.text { position: absolute; left: 84px; top: 0; bottom: 0; width: 640px; display: flex; flex-direction: column; justify-content: center; }
-.label { font-size: 15px; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(236, 239, 255, 0.62); }
-h1 { margin: 22px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 112px; line-height: 0.98; text-shadow: 0 0 24px #070b2e; }
-p { margin: 30px 0 0; font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 36px; line-height: 1.2; color: #f8d58a; white-space: nowrap; }
+svg { display: block; }
+.title { font-family: 'Cormorant Garamond', serif; font-weight: 500; }
+.tag { font-family: 'Cormorant Garamond', serif; font-weight: 600; }
+.label { font-family: 'Manrope', sans-serif; font-weight: 600; }
 </style>
 </head>
 <body>
-<div class="card">
-  <div class="glow glow--teal"></div>
-  <div class="glow glow--violet"></div>
-  <div class="glow glow--gold"></div>
-  <svg class="stars" viewBox="0 0 1200 630" aria-hidden="true" id="stars"></svg>
-  <svg class="scene" viewBox="0 20 390 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-<defs>
-<radialGradient id="hs-halo" cx="195" cy="112" r="190" gradientUnits="userSpaceOnUse">
-<stop offset="0" stop-color="#f3c46c" stop-opacity="0.5"/>
-<stop offset="0.3" stop-color="#e29a45" stop-opacity="0.16"/>
-<stop offset="1" stop-color="#e29a45" stop-opacity="0"/>
-</radialGradient>
-<radialGradient id="hs-orb" cx="0.4" cy="0.35" r="0.7">
-<stop offset="0" stop-color="#fffaf0"/>
-<stop offset="0.5" stop-color="#fbdf9a"/>
-<stop offset="1" stop-color="#e29a45"/>
-</radialGradient>
-<radialGradient id="hs-dot" cx="0.5" cy="0.5" r="0.5">
-<stop offset="0" stop-color="#fff3d2" stop-opacity="1"/>
-<stop offset="0.35" stop-color="#f3c46c" stop-opacity="0.7"/>
-<stop offset="1" stop-color="#f3c46c" stop-opacity="0"/>
-</radialGradient>
-<radialGradient id="hs-cooldot" cx="0.5" cy="0.5" r="0.5">
-<stop offset="0" stop-color="#bfeaf5" stop-opacity="0.9"/>
-<stop offset="1" stop-color="#7fe0f0" stop-opacity="0"/>
-</radialGradient>
-<linearGradient id="hs-horizon" x1="0" y1="410" x2="0" y2="492" gradientUnits="userSpaceOnUse">
-<stop offset="0" stop-color="#2fc3d0" stop-opacity="0"/>
-<stop offset="0.6" stop-color="#2fc3d0" stop-opacity="0.3"/>
-<stop offset="1" stop-color="#e29a45" stop-opacity="0.4"/>
-</linearGradient>
-<linearGradient id="hs-thread" x1="0" y1="118" x2="0" y2="576" gradientUnits="userSpaceOnUse">
-<stop offset="0" stop-color="#f8d58a" stop-opacity="0.95"/>
-<stop offset="0.14" stop-color="#f8d58a" stop-opacity="0.9"/>
-<stop offset="0.22" stop-color="#f8d58a" stop-opacity="0.12"/>
-<stop offset="0.5" stop-color="#f8d58a" stop-opacity="0.12"/>
-<stop offset="0.62" stop-color="#f8d58a" stop-opacity="0.85"/>
-<stop offset="1" stop-color="#fff3d2" stop-opacity="1"/>
-</linearGradient>
-<linearGradient id="hs-floor" x1="0" y1="640" x2="0" y2="844" gradientUnits="userSpaceOnUse">
-<stop offset="0" stop-color="#05071a" stop-opacity="0"/>
-<stop offset="0.5" stop-color="#05071a" stop-opacity="0.75"/>
-<stop offset="1" stop-color="#05071a" stop-opacity="0.95"/>
-</linearGradient>
-<filter id="hs-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="26"/></filter>
-<filter id="hs-glowblur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5"/></filter>
-</defs>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#050823"/><stop offset="0.45" stop-color="#0b1240"/><stop offset="0.8" stop-color="#141248"/><stop offset="1" stop-color="#0a0d2c"/>
+    </linearGradient>
+    <radialGradient id="halo"><stop offset="0" stop-color="#f3c46c" stop-opacity="0.5"/><stop offset="0.4" stop-color="#e29a45" stop-opacity="0.16"/><stop offset="1" stop-color="#e29a45" stop-opacity="0"/></radialGradient>
+    <radialGradient id="orb" cx="0.4" cy="0.35" r="0.7"><stop offset="0" stop-color="#fffaf0"/><stop offset="0.5" stop-color="#fbdf9a"/><stop offset="1" stop-color="#e29a45"/></radialGradient>
+    <radialGradient id="cool"><stop offset="0" stop-color="#bfeaf5" stop-opacity="0.9"/><stop offset="1" stop-color="#7fe0f0" stop-opacity="0"/></radialGradient>
+    <radialGradient id="sun"><stop offset="0" stop-color="#fff3d2" stop-opacity="1"/><stop offset="0.3" stop-color="#f3c46c" stop-opacity="0.7"/><stop offset="1" stop-color="#f3c46c" stop-opacity="0"/></radialGradient>
+    <linearGradient id="horizon" x1="0" y1="380" x2="0" y2="490" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2fc3d0" stop-opacity="0"/><stop offset="0.65" stop-color="#2fc3d0" stop-opacity="0.26"/><stop offset="1" stop-color="#e29a45" stop-opacity="0.4"/>
+    </linearGradient>
+    <radialGradient id="vignette" cx="0.5" cy="0.45" r="0.75"><stop offset="0.55" stop-color="#02030c" stop-opacity="0"/><stop offset="1" stop-color="#02030c" stop-opacity="0.6"/></radialGradient>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="70"/></filter>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+  </defs>
 
-<ellipse cx="38" cy="230" rx="70" ry="150" fill="#1fb5c9" opacity="0.2" filter="url(#hs-soft)" transform="rotate(-18 38 230)"/>
-<ellipse cx="356" cy="200" rx="64" ry="140" fill="#6a3fb0" opacity="0.26" filter="url(#hs-soft)" transform="rotate(16 356 200)"/>
-<ellipse cx="336" cy="320" rx="50" ry="100" fill="#1fb5c9" opacity="0.14" filter="url(#hs-soft)" transform="rotate(20 336 320)"/>
-<circle cx="195" cy="112" r="190" fill="url(#hs-halo)"/>
+  <rect width="1200" height="630" fill="url(#sky)"/>
+  <ellipse cx="170" cy="250" rx="230" ry="170" fill="#1fb5c9" opacity="0.2" filter="url(#soft)"/>
+  <ellipse cx="1040" cy="230" rx="230" ry="170" fill="#6a3fb0" opacity="0.28" filter="url(#soft)"/>
+  <circle cx="600" cy="108" r="300" fill="url(#halo)" opacity="0.55"/>
+  <g fill="#ffffff"><circle cx="80" cy="70" r="1.2" opacity="0.7"/><circle cx="190" cy="150" r="1" opacity="0.5"/><circle cx="310" cy="60" r="1.4" opacity="0.8"/><circle cx="420" cy="130" r="0.9" opacity="0.5"/><circle cx="250" cy="230" r="0.9" opacity="0.45"/><circle cx="120" cy="300" r="1" opacity="0.45"/><circle cx="880" cy="70" r="1.3" opacity="0.75"/><circle cx="980" cy="160" r="1" opacity="0.5"/><circle cx="1090" cy="90" r="1.3" opacity="0.7"/><circle cx="800" cy="200" r="0.9" opacity="0.45"/><circle cx="1130" cy="260" r="1" opacity="0.45"/><circle cx="720" cy="40" r="1" opacity="0.6"/><circle cx="500" cy="30" r="0.9" opacity="0.5"/><circle cx="60" cy="210" r="0.9" opacity="0.4"/></g>
 
-<g fill="#ffffff">
-<circle cx="24" cy="96" r="1" opacity="0.7"/><circle cx="58" cy="152" r="0.7" opacity="0.5"/><circle cx="88" cy="64" r="1.1" opacity="0.8"/>
-<circle cx="120" cy="118" r="0.8" opacity="0.6"/><circle cx="150" cy="44" r="0.9" opacity="0.7"/><circle cx="46" cy="232" r="0.8" opacity="0.5"/>
-<circle cx="78" cy="296" r="1" opacity="0.6"/><circle cx="16" cy="340" r="0.7" opacity="0.5"/><circle cx="134" cy="262" r="0.8" opacity="0.55"/>
-<circle cx="40" cy="400" r="0.8" opacity="0.5"/><circle cx="230" cy="52" r="1" opacity="0.7"/><circle cx="266" cy="108" r="0.8" opacity="0.6"/>
-<circle cx="304" cy="70" r="1.2" opacity="0.8"/><circle cx="340" cy="132" r="0.8" opacity="0.55"/><circle cx="366" cy="84" r="1" opacity="0.7"/>
-<circle cx="326" cy="214" r="0.9" opacity="0.6"/><circle cx="352" cy="288" r="0.7" opacity="0.5"/><circle cx="288" cy="266" r="1.1" opacity="0.7"/>
-<circle cx="372" cy="380" r="1" opacity="0.6"/><circle cx="318" cy="400" r="0.8" opacity="0.5"/><circle cx="108" cy="22" r="0.8" opacity="0.6"/>
-<circle cx="278" cy="22" r="0.9" opacity="0.6"/><circle cx="12" cy="44" r="0.7" opacity="0.5"/><circle cx="378" cy="30" r="0.8" opacity="0.5"/>
-<circle cx="64" cy="440" r="0.8" opacity="0.45"/><circle cx="352" cy="436" r="0.8" opacity="0.45"/>
-</g>
+  <!-- the star and the flower of life around it -->
+  <g fill="none" stroke="#f3c46c" stroke-width="0.9" stroke-opacity="0.4"><circle cx="622.0" cy="108.0" r="22"/><circle cx="611.0" cy="127.1" r="22"/><circle cx="589.0" cy="127.1" r="22"/><circle cx="578.0" cy="108.0" r="22"/><circle cx="589.0" cy="88.9" r="22"/><circle cx="611.0" cy="88.9" r="22"/><circle cx="600" cy="108" r="44" stroke-opacity="0.22"/></g>
+  <circle cx="600" cy="108" r="20" fill="#f8d58a" opacity="0.25"/>
+  <circle cx="600" cy="108" r="8" fill="url(#orb)"/>
+  <g stroke="#fff3d2" stroke-width="1" stroke-opacity="0.8" stroke-linecap="round"><line x1="600" y1="78" x2="600" y2="138"/><line x1="570" y1="108" x2="630" y2="108"/></g>
 
-<g fill="none" stroke="#f3c46c" stroke-width="0.5" stroke-opacity="0.28">
-<polyline points="30,170 74,142 120,158 150,106"/><polyline points="74,142 66,204 28,244"/>
-<polyline points="262,102 308,80 350,110 330,172"/><polyline points="308,80 296,40"/>
-</g>
-<g fill="#f3c46c" opacity="0.7">
-<circle cx="30" cy="170" r="1.4"/><circle cx="74" cy="142" r="1.7"/><circle cx="120" cy="158" r="1.3"/><circle cx="150" cy="106" r="1.3"/><circle cx="66" cy="204" r="1.3"/><circle cx="28" cy="244" r="1.1"/>
-<circle cx="262" cy="102" r="1.3"/><circle cx="308" cy="80" r="1.7"/><circle cx="350" cy="110" r="1.3"/><circle cx="330" cy="172" r="1.3"/><circle cx="296" cy="40" r="1.1"/>
-</g>
+  <!-- title -->
+  <text class="label" x="600" y="214" text-anchor="middle" font-size="15" letter-spacing="6" fill="#ecefff" fill-opacity="0.62">A FREE, PRIVATE COMPASS</text>
+  <text class="title" x="600" y="312" text-anchor="middle" font-size="104" fill="#f6ecd8">Excitement Compass</text>
+  <text class="tag" x="600" y="372" text-anchor="middle" font-size="36" fill="#f8d58a">Follow your excitement. Let go of the outcome.</text>
 
-<g fill="none" stroke="#f3c46c" stroke-width="0.6" stroke-opacity="0.26">
-<circle cx="195" cy="112" r="28"/><circle cx="195" cy="84" r="28"/><circle cx="219" cy="98" r="28"/><circle cx="219" cy="126" r="28"/>
-<circle cx="195" cy="140" r="28"/><circle cx="171" cy="126" r="28"/><circle cx="171" cy="98" r="28"/>
-<circle cx="195" cy="112" r="56" stroke-opacity="0.15"/>
-</g>
-<g class="scene-star"><circle cx="195" cy="112" r="8" fill="url(#hs-orb)"/>
-<circle cx="195" cy="112" r="17" fill="#f8d58a" opacity="0.22"/>
-<g stroke="#fff3d2" stroke-width="0.8" stroke-opacity="0.8" stroke-linecap="round">
-<line x1="195" y1="88" x2="195" y2="136"/><line x1="171" y1="112" x2="219" y2="112"/>
-</g></g>
+  <!-- the hill, the figure and the paths -->
+  <rect x="0" y="380" width="1200" height="110" fill="url(#horizon)"/>
+  <circle cx="868" cy="470" r="18" fill="url(#sun)"/>
+  <path d="M0 492 C170 466 340 480 520 478 C700 476 860 452 1040 462 C1120 466 1170 474 1200 470 L1200 630 L0 630Z" fill="#0c1240"/>
+  <path d="M0 520 C300 502 900 502 1200 520 L1200 630 L0 630Z" fill="#070a22"/>
+  <g fill="none" stroke-linecap="round">
+    <g stroke="#7fe0f0" stroke-width="0.9" stroke-opacity="0.3">
+    <path d="M600 580 C519 526 249 534 60 479"/>
+    <path d="M600 580 C529 526 290 534 124 480"/>
+    <path d="M600 580 C538 526 332 535 187 480"/>
+    <path d="M600 580 C548 526 373 536 251 481"/>
+    <path d="M600 580 C557 526 414 536 314 481"/>
+    <path d="M600 580 C567 526 455 537 378 482"/>
+    <path d="M600 580 C576 526 497 538 441 482"/>
+    <path d="M600 580 C586 526 538 538 505 483"/>
+    <path d="M600 580 C595 526 579 539 568 484"/>
+    <path d="M600 580 C605 526 621 539 632 484"/>
+    <path d="M600 580 C614 526 662 538 695 483"/>
+    <path d="M600 580 C643 526 786 536 886 481"/>
+    <path d="M600 580 C652 526 827 536 949 481"/>
+    <path d="M600 580 C662 526 868 535 1013 480"/>
+    <path d="M600 580 C671 526 910 534 1076 480"/>
+    <path d="M600 580 C681 526 951 534 1140 479"/>
+    </g>
+    <path d="M600 580 C640 526 774 525 868 470" stroke="#f3c46c" stroke-width="12" stroke-opacity="0.2" filter="url(#glow)"/>
+    <path d="M600 580 C640 526 774 525 868 470" stroke="#f8d58a" stroke-width="2.6" stroke-opacity="0.95"/>
+  </g>
+  <circle cx="60" cy="479" r="4" fill="url(#cool)"/><circle cx="124" cy="480" r="2.6" fill="url(#cool)"/><circle cx="187" cy="480" r="2.6" fill="url(#cool)"/><circle cx="251" cy="481" r="4" fill="url(#cool)"/><circle cx="314" cy="481" r="2.6" fill="url(#cool)"/><circle cx="378" cy="482" r="2.6" fill="url(#cool)"/><circle cx="441" cy="482" r="4" fill="url(#cool)"/><circle cx="505" cy="483" r="2.6" fill="url(#cool)"/><circle cx="568" cy="484" r="2.6" fill="url(#cool)"/><circle cx="632" cy="484" r="4" fill="url(#cool)"/><circle cx="695" cy="483" r="2.6" fill="url(#cool)"/><circle cx="886" cy="481" r="2.6" fill="url(#cool)"/><circle cx="949" cy="481" r="2.6" fill="url(#cool)"/><circle cx="1013" cy="480" r="4" fill="url(#cool)"/><circle cx="1076" cy="480" r="2.6" fill="url(#cool)"/><circle cx="1140" cy="479" r="2.6" fill="url(#cool)"/>
+  <circle cx="868" cy="470" r="12" fill="url(#sun)"/>
+  <g transform="translate(0,-16)"><ellipse cx="600" cy="610" rx="34" ry="20" fill="#f3c46c" opacity="0.14" filter="url(#glow)"/>
+  <circle cx="600" cy="572" r="7" fill="#04061a"/>
+  <path d="M588 596 Q600 580 612 596 L615 622 L585 622Z" fill="#070a24"/>
+  <path d="M588 596 Q600 580 612 596" stroke="#f3c46c" stroke-opacity="0.5" stroke-width="0.8" fill="none"/>
+  <circle cx="600" cy="596" r="12" fill="url(#sun)"/>
+  <circle cx="600" cy="596" r="2" fill="#fff8e6"/></g>
 
-<rect x="0" y="410" width="390" height="90" fill="url(#hs-horizon)"/>
-<path d="M0 494 C60 472 110 480 170 488 C230 496 280 470 340 476 C365 478 380 482 390 480 L390 844 L0 844Z" fill="#0c1240"/>
-<path d="M0 506 C100 492 290 492 390 506 L390 844 L0 844Z" fill="#070a22"/>
-
-<g fill="none" stroke-linecap="round">
-<g stroke="#7fe0f0" stroke-width="0.6" stroke-opacity="0.2">
-<path d="M195 636 C160 580 40 560 -4 520"/>
-<path d="M195 636 C250 580 380 558 394 524"/>
-<path d="M195 636 C168 586 56 540 -10 506"/>
-<path d="M195 636 C176 594 112 556 78 500"/>
-<path d="M195 636 C182 598 130 552 110 496"/>
-<path d="M195 636 C187 602 150 550 140 494"/>
-<path d="M195 636 C192 606 166 556 158 492"/>
-<path d="M195 636 C198 606 224 556 232 492"/>
-<path d="M195 636 C203 602 244 552 252 494"/>
-<path d="M195 636 C212 598 268 552 280 494"/>
-<path d="M195 636 C224 592 322 552 330 498"/>
-<path d="M195 636 C238 586 350 548 366 502"/>
-<path d="M195 636 C244 580 396 546 400 510"/>
-</g>
-<g stroke="#7fe0f0" stroke-width="1" stroke-opacity="0.34">
-<path d="M195 636 C165 590 70 548 22 500"/>
-<path d="M195 636 C180 596 124 548 96 496"/>
-<path d="M195 636 C189 604 158 548 176 490"/>
-<path d="M195 636 C201 604 226 548 214 490"/>
-<path d="M195 636 C232 586 330 548 346 500"/>
-</g>
-<path class="scene-gold-glow" d="M195 636 C218 590 288 548 304 496" stroke="#f3c46c" stroke-width="11" stroke-opacity="0.16" filter="url(#hs-glowblur)"/>
-<path class="scene-gold" d="M195 636 C218 590 288 548 304 496" stroke="#f8d58a" stroke-width="2.4" stroke-opacity="0.95"/>
-</g>
-<g>
-<circle cx="22" cy="500" r="5" fill="url(#hs-cooldot)"/><circle cx="96" cy="496" r="5" fill="url(#hs-cooldot)"/><circle cx="176" cy="490" r="5" fill="url(#hs-cooldot)"/>
-<circle cx="214" cy="490" r="5" fill="url(#hs-cooldot)"/><circle cx="346" cy="500" r="5" fill="url(#hs-cooldot)"/>
-<circle cx="78" cy="500" r="3" fill="url(#hs-cooldot)"/><circle cx="110" cy="496" r="3" fill="url(#hs-cooldot)"/><circle cx="140" cy="494" r="3" fill="url(#hs-cooldot)"/>
-<circle cx="158" cy="492" r="3" fill="url(#hs-cooldot)"/><circle cx="232" cy="492" r="3" fill="url(#hs-cooldot)"/><circle cx="252" cy="494" r="3" fill="url(#hs-cooldot)"/>
-<circle cx="280" cy="494" r="3" fill="url(#hs-cooldot)"/><circle cx="330" cy="498" r="3" fill="url(#hs-cooldot)"/><circle cx="366" cy="502" r="3" fill="url(#hs-cooldot)"/>
-<circle cx="304" cy="496" r="13" fill="url(#hs-dot)"/>
-</g>
-
-<path d="M195 118 L195 574" stroke="url(#hs-thread)" stroke-width="1.2" fill="none"/>
-
-<ellipse cx="195" cy="600" rx="30" ry="26" fill="#f3c46c" opacity="0.14" filter="url(#hs-glowblur)"/>
-<circle cx="195" cy="586" r="6.6" fill="#04061a"/>
-<path d="M188.6 584 Q195 576 201.4 584" stroke="#f3c46c" stroke-width="0.6" stroke-opacity="0.6" fill="none"/>
-<path d="M181 603 Q195 593 209 603 L212 628 L208 628 L207 644 L199 644 L198 629 L192 629 L191 644 L183 644 L182 628 L178 628Z" fill="#070a24"/>
-<path d="M181 603 Q195 593 209 603 L212 628" stroke="#f3c46c" stroke-width="0.7" stroke-opacity="0.55" fill="none"/>
-<circle cx="195" cy="608" r="14" fill="url(#hs-dot)"/>
-<circle cx="195" cy="608" r="2.2" fill="#fff8e6"/>
-<circle cx="195" cy="574" r="2.4" fill="#fff3d2"/>
-
-<rect x="0" y="640" width="390" height="204" fill="url(#hs-floor)"/>
+  <rect width="1200" height="630" fill="url(#vignette)"/>
 </svg>
-  <div class="text">
-    <div class="label">A free, private compass</div>
-    <h1>Excitement<br>Compass</h1>
-    <p>Follow your excitement. Let go of the outcome.</p>
-  </div>
-</div>
-<script>
-// A fixed scatter of stars (seeded, so the picture is the same every time).
-let a = 12345;
-const rand = () => { a = (a * 1664525 + 1013904223) >>> 0; return a / 4294967296; };
-const s = document.getElementById('stars');
-for (let i = 0; i < 90; i++) {
-  const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-  c.setAttribute('cx', (rand() * 1200).toFixed(0));
-  c.setAttribute('cy', (rand() * 630).toFixed(0));
-  c.setAttribute('r', (0.6 + rand() * 1.3).toFixed(1));
-  c.setAttribute('fill', '#fff');
-  c.setAttribute('opacity', (0.2 + rand() * 0.6).toFixed(2));
-  s.append(c);
-}
-</script>
 </body>
 </html>
