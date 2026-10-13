@@ -3130,3 +3130,9 @@ h1:focus {
     max-width: 18ch;
   }
 }
+
+/* The tap hint stays readable over the sunrise glow in the light theme. */
+.home-hint {
+  color: rgba(246, 236, 216, 0.92);
+  text-shadow: 0 0 10px #070b2e, 0 0 18px #070b2e;
+}
