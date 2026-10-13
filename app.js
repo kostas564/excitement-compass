@@ -358,20 +358,46 @@
 
   function countVisit() {
     if (!ANALYTICS_CODE) return;
-    if (!/\.github\.io$/.test(location.hostname)) return;
-    if (navigator.doNotTrack === '1' || window.doNotTrack === '1') return;
-    if (navigator.onLine === false) return;
-    try {
-      if (localStorage.getItem('excitement-compass-counted')) return;
-    } catch (e) {
-      return; // can't remember it, so don't risk counting every visit
+    const debug = /[?&]gc-debug\b/.test(location.search);
+    if (!debug) {
+      if (!/\.github\.io$/.test(location.hostname)) return;
+      if (navigator.doNotTrack === '1' || window.doNotTrack === '1') return;
+      if (navigator.onLine === false) return;
     }
-    const params = new URLSearchParams({ p: 'first-open', t: 'First open on a device', e: 'true' });
+    // The remembered flag is per counter, so pointing the app at a new
+    // counter counts each device again once.
+    const flag = `excitement-compass-counted-${ANALYTICS_CODE}`;
+    try {
+      if (!debug && localStorage.getItem(flag)) return;
+    } catch (e) {
+      if (!debug) return; // can't remember it, so don't risk counting every visit
+    }
+    // A plain page view at /first-open (or /gc-debug when testing).
+    const params = new URLSearchParams({
+      p: debug ? '/gc-debug' : '/first-open',
+      t: debug ? 'Counter test' : 'First open on a device',
+      r: document.referrer || '',
+      rnd: String(Math.random()).slice(2, 8),
+    });
     const beacon = new Image();
     beacon.onload = () => {
-      try { localStorage.setItem('excitement-compass-counted', '1'); } catch (e) { /* ignore */ }
+      if (debug) {
+        showCounterNote('The counter answered. Look for /gc-debug in your GoatCounter dashboard.');
+        return;
+      }
+      try { localStorage.setItem(flag, '1'); } catch (e) { /* ignore */ }
+    };
+    beacon.onerror = () => {
+      if (debug) showCounterNote('The counter could not be reached. Your browser or an extension is blocking it.');
     };
     beacon.src = `https://${ANALYTICS_CODE}.goatcounter.com/count?${params}`;
+  }
+
+  // Only used by the ?gc-debug test link.
+  function showCounterNote(text) {
+    const note = el('p', 'counter-note', text);
+    note.setAttribute('role', 'status');
+    document.body.append(note);
   }
 
   // ---- Settle first -----------------------------------------------------
