@@ -20,18 +20,21 @@
   // (A Mac's "Add to Dock" app also reports standalone, but has no touch screen.)
   const iosApp = window.navigator.standalone === true && window.navigator.maxTouchPoints > 0;
 
-  // Above 900px wide the app uses its desktop layout (see styles.css): the
-  // bar moves to the top and the scenes fit the window's height.
-  const desktopQuery = window.matchMedia('(min-width: 900px)');
+  // From 700px wide the app uses its desktop layout (see styles.css): the bar
+  // moves to the top. From 481px the scenes fit the window's height, with the
+  // ground running out past the sides.
+  const desktopQuery = window.matchMedia('(min-width: 700px)');
+  const wideSceneQuery = window.matchMedia('(min-width: 481px)');
 
   function applyDesktop() {
-    const fit = desktopQuery.matches ? 'xMidYMid meet' : 'xMidYMid slice';
+    const fit = wideSceneQuery.matches ? 'xMidYMid meet' : 'xMidYMid slice';
     ['.home-scene-svg', '#settle-svg'].forEach((sel) => {
       const svg = $(sel);
       if (svg) svg.setAttribute('preserveAspectRatio', fit);
     });
   }
   desktopQuery.addEventListener('change', () => { applyDesktop(); settleViewport(); });
+  wideSceneQuery.addEventListener('change', applyDesktop);
   applyDesktop();
 
   function settleViewport() {

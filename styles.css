@@ -2502,12 +2502,12 @@ h1:focus {
 
 
 
-/* ---- Desktop layout (900px and wider) ----
+/* ---- Desktop layout (700px and wider) ----
    The bar moves to the top, the Home and Settle scenes fit the window's height
    with the ground running out past the sides, and content gets a wider,
    centred column. Phones and small tablets keep the phone layout. */
 
-@media (min-width: 900px) {
+@media (min-width: 700px) {
   .sky {
     top: 0;
     height: var(--app-height);
@@ -2740,16 +2740,51 @@ h1:focus {
   50% { transform: translateY(3px); }
 }
 
-@media (min-width: 900px) {
+@media (min-width: 700px) {
   .scroll-hint {
     top: calc(var(--app-height) - 76px);
   }
 }
 
 /* Windows just over 900px wide: tighter spacing so the whole bar always fits. */
-@media (min-width: 900px) and (max-width: 1099px) {
+@media (min-width: 700px) and (max-width: 1099px) {
   .nav-item {
     padding: 0 12px;
     gap: 6px;
+  }
+}
+
+/* ---- Windows between a phone and the wide layout (481 to 699px) ----
+   Still the phone layout, but the night scene, sky and bottom bar stretch
+   across the whole window so there is no visible column. */
+@media (min-width: 481px) and (max-width: 699px) {
+  .sky {
+    top: 0;
+    height: var(--app-height);
+  }
+
+  .home-scene,
+  .settle-svg {
+    left: 0;
+    top: 0;
+    width: 100%;
+    max-width: none;
+    height: var(--app-height);
+    transform: none;
+  }
+
+  .home-scene-svg,
+  .settle-svg {
+    overflow: visible;
+  }
+
+  .nav {
+    left: 0;
+    width: 100%;
+    max-width: none;
+    transform: none;
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
   }
 }
