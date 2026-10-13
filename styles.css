@@ -2963,3 +2963,16 @@ h1:focus {
     font-size: 23px;
   }
 }
+
+/* ---- Home quotes and the About text: Inter Thin Italic ---- */
+.home-line,
+.about-lines p,
+.about-body {
+  font-weight: 100;
+  font-style: italic;
+}
+
+/* Thin strokes are faint, so the About paragraphs use the full text colour. */
+.about-body {
+  color: var(--text);
+}
