@@ -16,8 +16,8 @@
   // leaves the bottom bar floating above the screen edge until something
   // forces a re-layout. Size the app from the real screen height instead,
   // and re-check a few times right after opening.
-  const standalone = window.navigator.standalone === true ||
-    window.matchMedia('(display-mode: standalone)').matches;
+  // Only an iPhone or iPad home-screen app needs the real screen height.
+  const iosApp = window.navigator.standalone === true;
 
   // Above 900px wide the app uses its desktop layout (see styles.css): the
   // bar moves to the top and the scenes fit the window's height.
@@ -37,7 +37,7 @@
     const root = document.documentElement;
     const inner = window.innerHeight;
     const vv = window.visualViewport ? window.visualViewport.height : inner;
-    const full = standalone ? Math.max(inner, vv, screen.height) : Math.max(inner, vv);
+    const full = iosApp ? Math.max(inner, vv, screen.height) : Math.max(inner, vv);
     root.style.setProperty('--app-height', `${full}px`);
     const nav = $('.nav');
     if (nav && desktopQuery.matches) {
