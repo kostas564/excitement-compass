@@ -245,6 +245,7 @@ const STRINGS = {
       "People across many traditions have pointed to this same simple practice: act fully, and don't cling to the results. This app is a small tool to help you remember it.",
       'Everything you write stays on this device. Nothing is sent anywhere.',
     ],
+    scrollHint: 'Scroll for more',
     shareTitle: 'Share',
     shareHint: 'Know someone who might like it? Send them the link.',
     shareButton: 'Share Excitement Compass',

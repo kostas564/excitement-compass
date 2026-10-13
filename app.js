@@ -116,6 +116,7 @@
     $('#home-scene').hidden = name !== 'home' && name !== 'act';
     $('#home-scene').classList.toggle('is-strong', name === 'act');
     if (name === 'home') renderHome();
+    requestAnimationFrame(updateScrollHint);
     if (name !== 'settle') stopSettle();
     if (name !== 'choose') { clearTimeout(coinTimer); $('#coin-layer').hidden = true; }
     if (name === 'choose') renderChoose();
@@ -1597,6 +1598,17 @@
     }
   }
 
+  // ---- "Scroll for more" on About ------------------------------------------
+  //
+  // The intro fills the first screen, so a small pill points down until the
+  // person scrolls. Tapping it scrolls down a little.
+
+  function updateScrollHint() {
+    const hint = $('#scroll-hint');
+    const room = document.documentElement.scrollHeight - window.innerHeight;
+    hint.hidden = !(current === 'about' && window.scrollY < 24 && room > 80);
+  }
+
   // ---- Share the app ------------------------------------------------------
   //
   // Uses the phone's own share sheet where there is one; otherwise copies the
@@ -1802,6 +1814,11 @@
       renderThemeChoice();
     });
     $('#share-app').addEventListener('click', shareApp);
+    $('#scroll-hint').addEventListener('click', () => {
+      window.scrollBy({ top: Math.round(window.innerHeight * 0.7), behavior: reducedMotion.matches ? 'auto' : 'smooth' });
+    });
+    window.addEventListener('scroll', updateScrollHint, { passive: true });
+    window.addEventListener('resize', updateScrollHint);
     renderSettleSwitch();
     $('#settle-switch').addEventListener('click', () => {
       data.settings.settle = data.settings.settle === false;
