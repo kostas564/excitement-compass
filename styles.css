@@ -2702,8 +2702,9 @@ h1:focus {
 .scroll-hint {
   position: fixed;
   left: 50%;
-  bottom: calc(env(safe-area-inset-bottom) + var(--nav-height) + 14px);
-  z-index: 1;
+  /* Anchored from the top like the bottom bar, so it sits right on iPhones too. */
+  top: calc(var(--app-height, 100dvh) - var(--nav-height) - env(safe-area-inset-bottom) - 14px - 48px);
+  z-index: 3;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -2739,6 +2740,6 @@ h1:focus {
 
 @media (min-width: 900px) {
   .scroll-hint {
-    bottom: 28px;
+    top: calc(var(--app-height) - 76px);
   }
 }

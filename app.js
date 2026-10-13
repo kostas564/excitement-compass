@@ -117,6 +117,7 @@
     $('#home-scene').classList.toggle('is-strong', name === 'act');
     if (name === 'home') renderHome();
     requestAnimationFrame(updateScrollHint);
+    [250, 900].forEach((ms) => setTimeout(updateScrollHint, ms));
     if (name !== 'settle') stopSettle();
     if (name !== 'choose') { clearTimeout(coinTimer); $('#coin-layer').hidden = true; }
     if (name === 'choose') renderChoose();
@@ -1605,8 +1606,10 @@
 
   function updateScrollHint() {
     const hint = $('#scroll-hint');
-    const room = document.documentElement.scrollHeight - window.innerHeight;
-    hint.hidden = !(current === 'about' && window.scrollY < 24 && room > 80);
+    const height = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+    const room = height - window.innerHeight;
+    const top = window.pageYOffset || document.documentElement.scrollTop || 0;
+    hint.hidden = !(current === 'about' && top < 24 && room > 80);
   }
 
   // ---- Share the app ------------------------------------------------------
@@ -1818,6 +1821,8 @@
       window.scrollBy({ top: Math.round(window.innerHeight * 0.7), behavior: reducedMotion.matches ? 'auto' : 'smooth' });
     });
     window.addEventListener('scroll', updateScrollHint, { passive: true });
+    document.addEventListener('scroll', updateScrollHint, { passive: true });
+    window.addEventListener('pageshow', updateScrollHint);
     window.addEventListener('resize', updateScrollHint);
     renderSettleSwitch();
     $('#settle-switch').addEventListener('click', () => {
