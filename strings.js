@@ -316,5 +316,5 @@ if (ANALYTICS_CODE) {
   STRINGS.about.body[STRINGS.about.body.length - 1] = 'Everything you write stays on this device.';
   STRINGS.about.privacyTitle = 'Privacy';
   STRINGS.about.privacy =
-    'The first time the app is opened on a device, it sends one anonymous signal, so we can see roughly how many people it reaches. No account, no cookies, and never anything you write.';
+    'Each time the app is opened it sends one anonymous signal, and one extra the first time it is opened on a device, so we can see roughly how many people use it and how often. No account, no cookies, and never anything you write.';
 }
