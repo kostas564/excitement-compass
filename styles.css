@@ -3131,8 +3131,12 @@ h1:focus {
   }
 }
 
-/* The tap hint stays readable over the sunrise glow in the light theme. */
+/* The tap hint sits on a soft dark pill, so it stays readable over the sunrise glow. */
 .home-hint {
-  color: rgba(246, 236, 216, 0.92);
-  text-shadow: 0 0 10px #070b2e, 0 0 18px #070b2e;
+  display: inline-block;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: rgba(9, 13, 48, 0.6);
+  color: rgba(246, 236, 216, 0.95);
+  text-shadow: none;
 }
