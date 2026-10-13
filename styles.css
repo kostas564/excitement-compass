@@ -39,7 +39,6 @@
   --nav-bg: rgba(12, 16, 50, 0.78);
 
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-apple: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", sans-serif;
   --font-label: "Inter", var(--font-sans);
   --font-serif: "Inter", var(--font-sans);
 
@@ -2963,18 +2962,4 @@ h1:focus {
   .frame-text {
     font-size: 23px;
   }
-}
-
-/* ---- Home quotes and the About text in SF Pro ----
-   SF Pro is Apple's own font and cannot be bundled, so it shows on iPhone, iPad
-   and Mac. Everywhere else these fall back to Inter. */
-.home-line,
-.about-lines p,
-.about-body {
-  font-family: var(--font-apple);
-}
-
-.home-line,
-.about-lines p {
-  letter-spacing: -0.012em;
 }
