@@ -7,12 +7,13 @@
 <style>
 @font-face { font-family: 'Cormorant Garamond'; font-weight: 500; src: url('fonts/cormorant-garamond-latin-500-normal.woff2') format('woff2'); }
 @font-face { font-family: 'Cormorant Garamond'; font-weight: 600; src: url('fonts/cormorant-garamond-latin-600-normal.woff2') format('woff2'); }
-@font-face { font-family: 'Manrope'; font-weight: 600; src: url('fonts/manrope-latin-600-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Inter Display'; font-weight: 100 900; src: url('fonts/inter-display-opsz.woff2') format('woff2'); }
 html, body { margin: 0; background: #050823; }
 svg { display: block; }
 .title { font-family: 'Cormorant Garamond', serif; font-weight: 500; }
 .tag { font-family: 'Cormorant Garamond', serif; font-weight: 600; }
-.label { font-family: 'Manrope', sans-serif; font-weight: 600; }
+.label { font-family: 'Inter Display', sans-serif; font-weight: 900; font-variation-settings: 'opsz' 32; }
+.mark { font-family: 'Inter Display', sans-serif; font-weight: 900; font-variation-settings: 'opsz' 32; }
 </style>
 </head>
 <body>
@@ -50,8 +51,6 @@ svg { display: block; }
   <text class="title" x="600" y="312" text-anchor="middle" font-size="104" fill="#f6ecd8">Excitement Compass</text>
   <text class="tag" x="600" y="372" text-anchor="middle" font-size="36" fill="#f8d58a">Follow your excitement. Let go of the outcome.</text>
 
-  <text class="label" x="600" y="428" text-anchor="middle" font-size="14" letter-spacing="5" fill="#ecefff" fill-opacity="0.72">A FREE GIFT FROM FRAGMENTS OF COHERENCE</text>
-
   <!-- the hill, the figure and the paths -->
   <rect x="0" y="380" width="1200" height="110" fill="url(#horizon)"/>
   <circle cx="868" cy="470" r="18" fill="url(#sun)"/>
@@ -87,6 +86,9 @@ svg { display: block; }
   <path d="M588 596 Q600 580 612 596" stroke="#f3c46c" stroke-opacity="0.5" stroke-width="0.8" fill="none"/>
   <circle cx="600" cy="596" r="12" fill="url(#sun)"/>
   <circle cx="600" cy="596" r="2" fill="#fff8e6"/></g>
+
+  <text class="label" x="600" y="412" text-anchor="middle" font-size="12" letter-spacing="5" fill="#ecefff" fill-opacity="0.72">A FREE GIFT FROM</text>
+  <text class="mark" x="600" y="446" text-anchor="middle" font-size="27" letter-spacing="-0.5" fill="#f2e8d3">FRAGMENTS OF COHERENCE<tspan fill="#e8a850">.</tspan></text>
 
   <rect width="1200" height="630" fill="url(#vignette)"/>
 </svg>
