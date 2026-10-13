@@ -3008,13 +3008,15 @@ h1:focus {
 
 .home-line .word {
   display: inline-block;
-  animation: word-in 0.9s var(--ease) backwards;
-  animation-delay: calc(var(--i, 0) * 110ms);
+  /* Only opacity and a small lift: both run on the graphics chip, so it stays smooth. */
+  animation: word-in 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
+  animation-delay: calc(var(--i, 0) * 90ms);
+  will-change: opacity, transform;
 }
 
 @keyframes word-in {
-  from { opacity: 0; filter: blur(8px); transform: translateY(4px); }
-  to { opacity: 1; filter: blur(0); transform: none; }
+  from { opacity: 0; transform: translate3d(0, 8px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 
 .home-hint {
@@ -3065,4 +3067,30 @@ h1:focus {
   .about-body {
     font-size: 18px;
   }
+}
+
+
+/* ---- Smoothness: no always-moving blurs ----
+   The big blurred glows, the twinkling stars and the star inside the scene
+   were all repainting every frame, which made the quote's arrival stutter on
+   phones. The glows now hold still (they are soft gradients already), the
+   small stars twinkle with opacity only, and the scene's star holds still. */
+.sky-glow {
+  animation: none;
+  filter: none;
+  will-change: auto;
+}
+
+.star--twinkle {
+  animation: star-fade 6s ease-in-out infinite;
+  will-change: opacity;
+}
+
+@keyframes star-fade {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 0.25; }
+}
+
+.scene-star {
+  animation: none;
 }
