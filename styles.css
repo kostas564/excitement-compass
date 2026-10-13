@@ -2976,3 +2976,8 @@ h1:focus {
 .about-body {
   color: var(--text);
 }
+
+/* About paragraphs: Light, italic. The big lines and the Home quotes stay Thin. */
+.about-body {
+  font-weight: 300;
+}
