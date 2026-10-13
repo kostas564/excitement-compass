@@ -5,6 +5,10 @@
 // The Substack address for "Fragments of Coherence", linked from About.
 const FRAGMENTS_OF_COHERENCE_URL = 'https://fragmentsofcoherence.substack.com';
 
+// Your GoatCounter site code (the part before .goatcounter.com).
+// Set it to an empty string to switch counting off.
+const ANALYTICS_CODE = 'excitmentcompass';
+
 const STRINGS = {
   appName: 'Excitement Compass',
 
@@ -305,3 +309,12 @@ const STRINGS = {
     unavailable: "This browser isn't letting the app save. You can still use it, but nothing will be kept after you close it.",
   },
 };
+
+// With the counter switched on, About gets its own short Privacy area that
+// says so plainly, and the main text no longer claims nothing is sent.
+if (ANALYTICS_CODE) {
+  STRINGS.about.body[STRINGS.about.body.length - 1] = 'Everything you write stays on this device.';
+  STRINGS.about.privacyTitle = 'Privacy';
+  STRINGS.about.privacy =
+    'The first time the app is opened on a device, it sends one anonymous signal, so we can see roughly how many people it reaches. No account, no cookies, and never anything you write.';
+}
