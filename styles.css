@@ -3036,3 +3036,33 @@ h1:focus {
     max-width: 15ch;
   }
 }
+
+/* ---- About text in Instrument Serif, like the Home quotes ---- */
+.about-lines p,
+.about-body {
+  font-family: var(--font-quote);
+  font-style: normal;
+  font-weight: 400;
+}
+
+.about-lines p {
+  font-size: 40px;
+  line-height: 1.1;
+  letter-spacing: -0.005em;
+}
+
+.about-body {
+  font-size: 21px;
+  line-height: 1.38;
+  letter-spacing: 0.005em;
+}
+
+@media (min-width: 700px) {
+  .about-lines p {
+    font-size: 48px;
+  }
+
+  .about-body {
+    font-size: 23px;
+  }
+}
