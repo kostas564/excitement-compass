@@ -50,7 +50,7 @@
       document.documentElement.style.setProperty('--app-height', h + 'px');
     })();
   </script>
-  <link rel="stylesheet" href="styles.css?v=80">
+  <link rel="stylesheet" href="styles.css?v=81">
 </head>
 <body>
   <div class="sky" id="sky" aria-hidden="true">
@@ -211,7 +211,8 @@
         <div class="home-center">
           <div class="home-idle" id="home-idle">
             <p class="home-active-label" id="home-question-label" data-text="home.questionLabel" hidden></p>
-            <p class="home-line" id="home-line" role="button" tabindex="0" data-label="home.nextQuote"></p>
+            <p class="home-line" id="home-line" role="button" tabindex="0"></p>
+            <p class="home-hint" id="home-hint" hidden data-text="home.tapHint"></p>
           </div>
 
           <div class="home-active" id="home-active" hidden>
@@ -583,9 +584,9 @@
     </div>
   </dialog>
 
-  <script src="strings.js?v=80"></script>
-  <script src="storage.js?v=80"></script>
-  <script src="sky.js?v=80"></script>
-  <script src="app.js?v=80"></script>
+  <script src="strings.js?v=81"></script>
+  <script src="storage.js?v=81"></script>
+  <script src="sky.js?v=81"></script>
+  <script src="app.js?v=81"></script>
 </body>
 </html>

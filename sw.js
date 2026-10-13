@@ -3,7 +3,7 @@
 // Bump VERSION together with the ?v= numbers in index.html on every release.
 // The new worker then caches the new files and removes the old cache.
 
-const VERSION = '80';
+const VERSION = '81';
 const CACHE = `excitement-compass-v${VERSION}`;
 const FILES = [
   './',
@@ -18,6 +18,8 @@ const FILES = [
   'images/fragments-banner.webp',
   'fonts/inter-opsz-normal.woff2',
   'fonts/inter-opsz-italic.woff2',
+  'fonts/instrument-serif-normal.woff2',
+  'fonts/instrument-serif-italic.woff2',
   'icons/icon-192.png',
   'icons/icon-512.png',
   'icons/icon-maskable-512.png',

@@ -24,6 +24,7 @@ const STRINGS = {
     findPull: 'Find my pull',
     addRiver: 'Add to the river log',
     nextQuote: 'Show another line',
+    tapHint: 'Tap for another',
     activeLabel: 'Your pull',
     doneLetGo: 'Done, let go',
     idleLines: [

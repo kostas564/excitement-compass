@@ -180,23 +180,56 @@
     const asking = !lastWasQuestion && Math.random() < 0.25;
     lastWasQuestion = asking;
     const line = $('#home-line');
-    line.textContent = randomLine(asking ? 'home.questions' : 'home.idleLines');
+    const text = randomLine(asking ? 'home.questions' : 'home.idleLines');
+    // Each word is its own span so the words can fade in one after another.
+    line.replaceChildren(...text.split(' ').flatMap((word, i) => {
+      const span = el('span', 'word', word);
+      span.style.setProperty('--i', i);
+      return i ? [document.createTextNode(' '), span] : [span];
+    }));
+    line.setAttribute('aria-label', `${text}. ${STRINGS.home.nextQuote}`);
     line.classList.toggle('is-question', asking);
     $('#home-question-label').hidden = !asking;
+    showTapHint();
+  }
+
+  // A quiet "Tap for another" until the person has changed the line once.
+  const HINT_KEY = 'excitement-compass-line-hint';
+  function hintSeen() {
+    try { return localStorage.getItem(HINT_KEY) === '1'; } catch (e) { return true; }
+  }
+  function showTapHint() {
+    $('#home-hint').hidden = hintSeen() || !!activeSession();
+  }
+  function markHintSeen() {
+    try { localStorage.setItem(HINT_KEY, '1'); } catch (e) { /* ignore */ }
+    $('#home-hint').hidden = true;
   }
 
   // Tapping the idle line brings the next one.
   function nextHomeLine() {
     if (activeSession()) return;
-    const el = $('#home-line');
+    markHintSeen();
     showHomeLine();
-    el.classList.remove('is-entering');
-    void el.offsetWidth;
-    el.classList.add('is-entering');
   }
   $('#home-line').addEventListener('click', nextHomeLine);
+
+  // Swiping sideways anywhere on Home also brings the next line.
+  let swipeStart = null;
+  const homeScreen = $('#screen-home');
+  homeScreen.addEventListener('touchstart', (e) => {
+    swipeStart = e.touches.length === 1 ? { x: e.touches[0].clientX, y: e.touches[0].clientY } : null;
+  }, { passive: true });
+  homeScreen.addEventListener('touchend', (e) => {
+    if (!swipeStart) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - swipeStart.x;
+    const dy = t.clientY - swipeStart.y;
+    swipeStart = null;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.6) nextHomeLine();
+  }, { passive: true });
   $('#home-line').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
       e.preventDefault();
       nextHomeLine();
     }
