@@ -2653,3 +2653,46 @@ h1:focus {
 #compare-coin {
   margin-bottom: auto;
 }
+
+/* ---- About: Fragments of Coherence ---- */
+
+.credit-card {
+  margin-top: 40px;
+  padding: 24px 22px;
+  border-radius: 22px;
+  border: 1px solid rgba(243, 196, 108, 0.4);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(243, 196, 108, 0.16), transparent 70%),
+    var(--glass);
+  text-align: center;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.credit-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.credit-name {
+  margin-top: 8px;
+  font-family: var(--font-serif);
+  font-size: 32px;
+  line-height: 1.1;
+  font-weight: 600;
+  color: var(--gold-light);
+}
+
+.credit-text {
+  margin: 10px auto 18px;
+  max-width: 30ch;
+  font-size: 15px;
+  color: var(--text-dim);
+}
+
+.credit-button {
+  text-decoration: none;
+}

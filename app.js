@@ -1620,12 +1620,12 @@
       $('#about-privacy-text').textContent = a.privacy;
       $('#about-privacy').hidden = false;
     }
-    const link = document.createElement('a');
-    link.href = a.creditUrl;
-    link.target = '_blank';
-    link.rel = 'noopener';
-    link.textContent = a.creditName;
-    $('#about-credit').append(a.creditBefore, link, a.creditAfter);
+    $('#credit-label').textContent = a.creditLabel;
+    $('#credit-name').textContent = a.creditName;
+    $('#credit-text').textContent = a.creditText;
+    const button = $('#credit-button');
+    button.textContent = a.creditButton;
+    button.href = a.creditUrl;
   }
 
   // ---- Start ------------------------------------------------------------
