@@ -1721,6 +1721,7 @@
       $('#about-privacy-text').textContent = a.privacy;
       $('#about-privacy').hidden = false;
     }
+    $('#about-helpline').textContent = a.helpline;
     $('#credit-label').textContent = a.creditLabel;
     $('#credit-name').textContent = a.creditName;
     $('#credit-text').textContent = a.creditText;
