@@ -5,8 +5,6 @@
 // The Substack address for "Fragments of Coherence", linked from About.
 const FRAGMENTS_OF_COHERENCE_URL = 'https://fragmentsofcoherence.substack.com';
 
-// Where the gentle note at the bottom of About points people who are struggling.
-const HELPLINE_URL = 'https://findahelpline.com';
 
 // Your GoatCounter site code (the part before .goatcounter.com).
 // Set it to an empty string to switch counting off.
@@ -251,10 +249,7 @@ const STRINGS = {
       "People across many traditions have pointed to this same simple practice: act fully, and don't cling to the results. This app is a small tool to help you remember it.",
       'Everything you write stays on this device. Nothing is sent anywhere.',
     ],
-    helplineBefore: "If life feels heavy right now, you don't have to carry it alone. Talking to someone you trust, or ",
-    helplineLink: 'a free helpline in your country',
-    helplineAfter: ', can help.',
-    helplineUrl: HELPLINE_URL,
+    helpline: "If life feels heavy right now, you don't have to carry it alone. Talking to someone you trust, or a free helpline in your country, can help.",
     scrollHint: 'Scroll for more',
     shareTitle: 'Share',
     shareHint: 'Know someone who might like it? Send them the link.',
