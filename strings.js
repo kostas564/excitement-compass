@@ -5,6 +5,9 @@
 // The Substack address for "Fragments of Coherence", linked from About.
 const FRAGMENTS_OF_COHERENCE_URL = 'https://fragmentsofcoherence.substack.com';
 
+// Where the gentle note at the bottom of About points people who are struggling.
+const HELPLINE_URL = 'https://findahelpline.com';
+
 // Your GoatCounter site code (the part before .goatcounter.com).
 // Set it to an empty string to switch counting off.
 const ANALYTICS_CODE = 'excitmentcompass';
@@ -238,14 +241,20 @@ const STRINGS = {
     lines: [
       'Do what lights you up.',
       'Give it everything.',
+      'Keep it honest and kind.',
       'Let go of how it turns out.',
     ],
     body: [
       "Excitement is information. The pull you feel toward one thing over another is your own inner compass. You don't need to know where it leads. You only need to follow the strongest pull you can act on right now, one step at a time.",
       "When you can't do the most exciting thing, do the next one you can. When something is done, let it go. What comes back, like a coincidence, a new idea or an open door, often shows you the next step.",
+      "Real excitement is never at anyone's expense, including your own.",
       "People across many traditions have pointed to this same simple practice: act fully, and don't cling to the results. This app is a small tool to help you remember it.",
       'Everything you write stays on this device. Nothing is sent anywhere.',
     ],
+    helplineBefore: "If life feels heavy right now, you don't have to carry it alone. Talking to someone you trust, or ",
+    helplineLink: 'a free helpline in your country',
+    helplineAfter: ', can help.',
+    helplineUrl: HELPLINE_URL,
     scrollHint: 'Scroll for more',
     shareTitle: 'Share',
     shareHint: 'Know someone who might like it? Send them the link.',
