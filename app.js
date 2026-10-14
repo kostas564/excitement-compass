@@ -1721,6 +1721,12 @@
       $('#about-privacy-text').textContent = a.privacy;
       $('#about-privacy').hidden = false;
     }
+    const helpLink = document.createElement('a');
+    helpLink.href = a.helplineUrl;
+    helpLink.target = '_blank';
+    helpLink.rel = 'noopener';
+    helpLink.textContent = a.helplineLink;
+    $('#about-helpline').append(a.helplineBefore, helpLink, a.helplineAfter);
     $('#credit-label').textContent = a.creditLabel;
     $('#credit-name').textContent = a.creditName;
     $('#credit-text').textContent = a.creditText;

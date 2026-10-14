@@ -3140,3 +3140,12 @@ h1:focus {
   color: rgba(246, 236, 216, 0.95);
   text-shadow: none;
 }
+
+/* ---- About: a gentle note at the very bottom ---- */
+.about-helpline {
+  margin: 48px 0 0;
+  max-width: 44ch;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-faint);
+}
