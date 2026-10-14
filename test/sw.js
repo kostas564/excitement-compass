@@ -3,7 +3,7 @@
 // Bump VERSION together with the ?v= numbers in index.html on every release.
 // The new worker then caches the new files and removes the old cache.
 
-const VERSION = '93';
+const VERSION = '95';
 const CACHE = `ec-test-v${VERSION}`;
 const FILES = [
   './',
